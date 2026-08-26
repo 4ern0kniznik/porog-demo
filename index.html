@@ -1,0 +1,1418 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Бесплатная диагностика ОГЭ по математике за 20 минут и тренажёр по геометрии. Без регистрации.">
+<title>Порог · тренажёр ОГЭ по математике</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F6F8F6; --surface:#FFFFFF; --surface-2:#EFF3F1;
+  --ink:#14201C; --ink-2:#41524C; --ink-3:#6E817A;
+  --rule:#DCE3E0; --rule-strong:#C3CFCA;
+  --accent:#0F6E62; --accent-ink:#0B5249; --accent-soft:#DBEAE6; --on-accent:#FFFFFF;
+  --moss:#3D7A33; --moss-soft:#E0EEDC;
+  --ochre:#9C6209; --ochre-soft:#F6ECD9;
+  --clay:#A33A2C; --clay-soft:#F7E4E0;
+  --grid:rgba(15,110,98,.055);
+  --shadow:0 1px 2px rgba(20,32,28,.05), 0 8px 24px -12px rgba(20,32,28,.18);
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --ground:#0F1513; --surface:#171F1C; --surface-2:#1E2724;
+  --ink:#E7EDEA; --ink-2:#AFBEB8; --ink-3:#83958E;
+  --rule:#27322E; --rule-strong:#36443F;
+  --accent:#54C3AF; --accent-ink:#7FD8C7; --accent-soft:#16332E; --on-accent:#0F1513;
+  --moss:#82BC70; --moss-soft:#1B2A18;
+  --ochre:#D9A24A; --ochre-soft:#2C2314;
+  --clay:#DE8375; --clay-soft:#2E1B17;
+  --grid:rgba(84,195,175,.05);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}}
+:root[data-theme="dark"]{
+  --ground:#0F1513; --surface:#171F1C; --surface-2:#1E2724;
+  --ink:#E7EDEA; --ink-2:#AFBEB8; --ink-3:#83958E;
+  --rule:#27322E; --rule-strong:#36443F;
+  --accent:#54C3AF; --accent-ink:#7FD8C7; --accent-soft:#16332E; --on-accent:#0F1513;
+  --moss:#82BC70; --moss-soft:#1B2A18;
+  --ochre:#D9A24A; --ochre-soft:#2C2314;
+  --clay:#DE8375; --clay-soft:#2E1B17;
+  --grid:rgba(84,195,175,.05);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -12px rgba(0,0,0,.6);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--ink);
+  font-family:"Golos Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:26px 26px;}
+h1,h2,h3{font-family:Bitter,Georgia,serif;text-wrap:balance;margin:0;letter-spacing:-.01em}
+sup{font-size:.72em}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px 80px}
+.narrow{max-width:760px}
+
+/* ── шапка ── */
+header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--ground) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--rule);margin-bottom:26px}
+.top-in{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
+.brand{display:flex;gap:11px;align-items:center;margin-right:auto;cursor:pointer;background:none;border:0;padding:0;text-align:left;color:inherit;font:inherit}
+.mark{width:30px;height:30px;border-radius:7px;background:var(--accent);color:var(--on-accent);
+  display:grid;place-items:center;font-family:Bitter,serif;font-weight:700;font-size:15px;flex:none}
+.brand b{font-family:Bitter,serif;font-size:16px;font-weight:700;display:block;line-height:1.2}
+.brand span{font-size:12px;color:var(--ink-3);display:block}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:99px;
+  border:1px solid var(--rule-strong);background:var(--surface);font-size:12.5px;color:var(--ink-2)}
+.chip b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.chip.pred{border-color:var(--accent);background:var(--accent-soft);color:var(--accent-ink)}
+.chip.pred b{color:var(--accent-ink)}
+
+/* ── карточки ── */
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:10px;box-shadow:var(--shadow)}
+.pad{padding:22px 24px}
+@media(max-width:520px){.pad{padding:18px 16px}}
+.eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.tag{font-size:11px;padding:3px 8px;border-radius:5px;background:var(--surface-2);color:var(--ink-2);
+  font-family:"JetBrains Mono",monospace;letter-spacing:.02em}
+.tag.geo{background:var(--accent-soft);color:var(--accent-ink)}
+
+/* ── главный экран ── */
+.hero{padding:34px 0 8px}
+.hero h1{font-size:clamp(28px,4.4vw,42px);line-height:1.12;margin-bottom:14px}
+.hero p{font-size:17.5px;color:var(--ink-2);max-width:62ch;margin:0 0 8px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px;margin:26px 0}
+.tile{display:flex;flex-direction:column;gap:12px;padding:24px;border:1px solid var(--rule);border-radius:12px;
+  background:var(--surface);box-shadow:var(--shadow);text-align:left;font:inherit;color:inherit;cursor:pointer;
+  transition:transform .14s,border-color .14s}
+.tile:hover{transform:translateY(-2px);border-color:var(--accent)}
+.tile h2{font-size:20px}
+.tile p{margin:0;color:var(--ink-2);font-size:14.5px;flex:1}
+.tile .go{color:var(--accent-ink);font-weight:600;font-size:14.5px}
+.tile .badge{align-self:flex-start;font-size:11px;padding:3px 9px;border-radius:99px;background:var(--accent-soft);
+  color:var(--accent-ink);font-weight:600;letter-spacing:.03em;text-transform:uppercase}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);
+  border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-top:8px}
+.fact{background:var(--surface);padding:16px 18px}
+.fact b{display:block;font-family:Bitter,serif;font-size:22px;line-height:1.1;font-variant-numeric:tabular-nums}
+.fact span{font-size:12.5px;color:var(--ink-3)}
+
+/* ── задание ── */
+.stem{font-size:18.5px;line-height:1.5;margin:0 0 6px}
+.stem b{font-weight:600}
+.hintline{color:var(--ink-3);font-size:13.5px;margin-top:2px}
+.answer{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
+input[type=text]{flex:1 1 200px;min-width:0;padding:11px 14px;border:1.5px solid var(--rule-strong);border-radius:8px;
+  background:var(--surface);color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:16px}
+input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+button{font-family:inherit;font-size:14.5px;font-weight:600;padding:11px 20px;border-radius:8px;
+  border:1.5px solid transparent;background:var(--accent);color:var(--on-accent);cursor:pointer;transition:filter .15s}
+button:hover{filter:brightness(1.08)}
+button:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+button.ghost{background:transparent;color:var(--ink-2);border-color:var(--rule-strong)}
+button.ghost:hover{background:var(--surface-2);filter:none}
+button.link{background:none;border:0;color:var(--ink-3);padding:4px 0;font-size:13px;text-decoration:underline;
+  text-underline-offset:3px;font-weight:400}
+button.link:hover{color:var(--accent-ink);filter:none}
+button:disabled{opacity:.45;cursor:not-allowed}
+.opts{display:grid;gap:9px;margin-top:18px}
+.opt{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;border:1.5px solid var(--rule);border-radius:8px;
+  background:var(--surface);cursor:pointer;text-align:left;font-size:15.5px;color:var(--ink);font-family:inherit;
+  font-weight:400;transition:border-color .12s,background .12s}
+.opt:hover{border-color:var(--rule-strong);background:var(--surface-2)}
+.opt .k{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3);padding-top:3px;flex:none;width:15px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}
+.opt.correct{border-color:var(--moss);background:var(--moss-soft)}
+.opt.wrong{border-color:var(--clay);background:var(--clay-soft)}
+.opt:disabled{cursor:default;opacity:1;color:var(--ink);-webkit-text-fill-color:var(--ink)}
+
+/* ── обратная связь ── */
+.fb{margin-top:18px;border-radius:9px;border:1px solid;padding:16px 18px;font-size:14.5px;line-height:1.55}
+.fb.ok{border-color:var(--moss);background:var(--moss-soft)}
+.fb.err{border-color:var(--ochre);background:var(--ochre-soft)}
+.fb h4{font-family:Bitter,serif;font-size:15px;margin:0 0 10px;display:flex;gap:9px;align-items:center}
+.slot{display:grid;grid-template-columns:136px 1fr;gap:4px 14px;padding:7px 0;border-top:1px dashed var(--rule-strong)}
+.slot:first-of-type{border-top:none}
+.slot dt{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding-top:2px}
+.slot dd{margin:0;color:var(--ink)}
+@media(max-width:560px){.slot{grid-template-columns:1fr;gap:2px}}
+.code{font-family:"JetBrains Mono",monospace;font-size:11.5px;padding:2px 7px;border-radius:4px;
+  background:var(--surface);border:1px solid var(--rule-strong);color:var(--ink-2)}
+.hints{margin-top:14px;display:grid;gap:7px}
+.hint{font-size:14px;padding:10px 13px;border-left:2.5px solid var(--accent);background:var(--surface-2);border-radius:0 6px 6px 0}
+
+/* ── прогресс ── */
+.pbar{height:5px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin:2px 0 18px}
+.pbar i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .35s}
+.skill{display:grid;grid-template-columns:1fr 44px;gap:4px 10px;align-items:center;padding:9px 0;border-top:1px solid var(--rule)}
+.skill:first-of-type{border-top:none}
+.skill .nm{font-size:13.5px;line-height:1.3}
+.skill .nm small{display:block;font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3)}
+.skill .pc{font-family:"JetBrains Mono",monospace;font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.bar{grid-column:1/-1;height:5px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.bar i{display:block;height:100%;border-radius:99px;background:var(--ink-3);transition:width .55s cubic-bezier(.2,.7,.3,1),background .3s}
+.bar i.lo{background:var(--clay)} .bar i.mid{background:var(--ochre)} .bar i.hi{background:var(--moss)}
+
+/* ── результат ── */
+.layout{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:24px;align-items:start}
+@media(max-width:940px){.layout{grid-template-columns:minmax(0,1fr)}}
+main{display:grid;align-content:start;gap:0}
+.rail{display:grid;gap:16px;position:sticky;top:72px}
+@media(max-width:940px){.rail{position:static}}
+.rail h3{font-size:13px;font-family:Bitter,serif;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
+.rail h3 em{font-style:normal;font-size:11px;color:var(--ink-3);font-weight:400;font-family:"Golos Text",sans-serif}
+.score{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
+.score b{font-family:Bitter,serif;font-size:36px;line-height:1;font-variant-numeric:tabular-nums}
+.score span{font-size:12.5px;color:var(--ink-3)}
+.scale{height:7px;border-radius:99px;background:var(--surface-2);position:relative;margin:14px 0 8px;overflow:hidden}
+.scale i{position:absolute;top:0;bottom:0;background:var(--accent);opacity:.85;transition:left .5s,width .5s}
+.legend{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);font-family:"JetBrains Mono",monospace}
+.thr{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:9px;border:1px solid;margin:18px 0}
+.thr.pass{border-color:var(--moss);background:var(--moss-soft)}
+.thr.fail{border-color:var(--clay);background:var(--clay-soft)}
+.thr.wait{border-color:var(--rule-strong);background:var(--surface-2)}
+.thr .ic{font-family:Bitter,serif;font-size:22px;line-height:1;flex:none}
+.thr b{display:block;font-size:15px;margin-bottom:3px}
+.thr p{margin:0;font-size:14px;color:var(--ink-2)}
+.gap-list{display:grid;gap:10px;margin:16px 0}
+.gap{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:12px 14px;border-radius:8px;border:1px solid var(--rule);background:var(--surface-2)}
+.gap b{font-size:14.5px;font-weight:600}
+.gap small{grid-column:1/-1;font-size:12.5px;color:var(--ink-2)}
+.gap .v{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--clay);font-variant-numeric:tabular-nums}
+.gap.ok .v{color:var(--moss)}
+table.rev{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
+table.rev th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);
+  font-weight:600;padding:6px 10px 6px 0;border-bottom:1px solid var(--rule)}
+table.rev td{padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);vertical-align:top}
+table.rev td:last-child{padding-right:0}
+.dotmark{display:inline-block;width:9px;height:9px;border-radius:99px;flex:none;margin-top:6px}
+.dotmark.y{background:var(--moss)} .dotmark.n{background:var(--clay)}
+.tblwrap{overflow-x:auto}
+
+.note{font-size:12.5px;color:var(--ink-3);line-height:1.5}
+.foot{margin-top:28px;padding-top:18px;border-top:1px solid var(--rule);font-size:12.5px;color:var(--ink-3)}
+.foot b{color:var(--ink-2);font-weight:600}
+.foot a{color:var(--ink-2)}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px;align-items:center}
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+/* ═══ КАТАЛОГ ТИПОВЫХ ОШИБОК ═══
+   Каждый код: t — что произошло, w — почему это ошибка, d — что сделать.
+   Основа для четырёхслотовой обратной связи. */
+const MIS = {
+'M.PCT.01':{t:'Проценты сложены как числа',w:'Первый процент берётся от исходной цены, второй — уже от новой. Базы разные, складывать их нельзя.',d:'Пересчитайте второй шаг от цены после первого изменения.'},
+'M.PCT.02':{t:'Проценты считаны от одной базы',w:'«Выросло и упало на столько же — вернулось» верно только если база не менялась. Здесь она изменилась.',d:'Найдите цену после первого шага, потом берите процент уже от неё.'},
+'M.ARI.02':{t:'Округление вверх вместо вниз',w:'На остаток товар не купить — округлять нужно вниз.',d:'Возьмите целую часть частного.'},
+'M.ARI.03':{t:'Ответ не целый',w:'Количество предметов — целое число.',d:'Отбросьте дробную часть.'},
+'M.ARI.04':{t:'Умножение вместо деления',w:'Деление на дробь меньше единицы увеличивает число, а не уменьшает.',d:'Разделите произведение на последний множитель.'},
+'M.POW.01':{t:'Показатели перемножены',w:'Показатели перемножаются при возведении степени в степень, а не при умножении степеней.',d:'При умножении степеней с одинаковым основанием показатели складываются.'},
+'M.POW.02':{t:'Все показатели сложены',w:'При делении показатель вычитается, а не прибавляется.',d:'Сложите показатели множителей и вычтите показатель делителя.'},
+'M.SQRT.01':{t:'Взят только один множитель',w:'Извлечён корень не из всего произведения.',d:'√a · √b = √(ab). Перемножьте подкоренные выражения.'},
+'M.SQRT.02':{t:'Корень не извлечён',w:'Вы нашли подкоренное выражение, но остановились на шаг раньше.',d:'Извлеките корень из полученного числа.'},
+'M.FSU.02':{t:'Применена формула квадрата разности',w:'a² − b² — это разность квадратов, а не квадрат разности.',d:'a² − b² = (a − b)(a + b).'},
+'M.FSU.03':{t:'Взят только один множитель',w:'(a − b) — половина ответа: второй множитель потерян.',d:'Умножьте разность на сумму.'},
+'M.RAT.03':{t:'Сокращён не тот множитель',w:'После разложения числителя сокращается общий множитель, и остаётся другая скобка.',d:'Проверьте, какая скобка остаётся после сокращения.'},
+'M.PROC.01':{t:'Выполнен только первый шаг',w:'Найдена промежуточная величина, а не то, что спрашивают.',d:'Перечитайте вопрос: остался ещё один шаг.'},
+'M.PROC.02':{t:'Упрощение не выполнено',w:'Подстановка без упрощения приводит к громоздким вычислениям и ошибке.',d:'Сначала разложите и сократите, потом подставляйте число.'},
+'M.PROC.04':{t:'Найдена не та из двух величин',w:'Вычисления верные, но в ответ пошло не то число, которое требуется.',d:'Перечитайте, что именно просят: больший или меньший.'},
+'M.PROC.05':{t:'Перепутаны действия',w:'Здесь нужно не вычитание, а деление и последующее сложение.',d:'Выразите скобку, потом найдите x.'},
+'M.PROC.06':{t:'Найдена другая переменная',w:'Система решена верно, но в ответ записан y вместо x.',d:'Перечитайте, что просят записать в ответ.'},
+'M.EQ.01':{t:'Потерян знак корня',w:'Знак корня противоположен знаку в скобке разложения.',d:'Проверьте подстановкой: подставьте найденный корень в уравнение.'},
+'M.ODZ.03':{t:'Корень обращает знаменатель в ноль',w:'Такое значение не входит в область допустимых значений — это посторонний корень.',d:'Всегда сверяйте найденные корни с ОДЗ.'},
+'M.PRB.01':{t:'Вероятности сложены',w:'Сумма вероятностей работает только для несовместных событий. Здесь события могут произойти одновременно, и результат больше единицы — это уже сигнал ошибки.',d:'Перейдите к противоположному событию: «ни одного».'},
+'M.PRB.02':{t:'Найдена вероятность обоих событий',w:'Произведение даёт вероятность того, что произошли оба, а спрашивается «хотя бы один».',d:'«Хотя бы один» = 1 − P(ни одного).'},
+'M.PRB.03':{t:'Решение не завершено',w:'Это вероятность того, что не произошло ничего. Вы почти у цели.',d:'Вычтите полученное число из единицы.'},
+'M.PRB.05':{t:'Отношение вместо вероятности',w:'Вероятность — это доля от ВСЕХ исходов, а не отношение одной части к другой.',d:'В знаменателе должно быть общее количество.'},
+'M.PRB.06':{t:'Найдена вероятность противоположного',w:'Посчитана доля не того цвета.',d:'Перечитайте, какое событие требуется.'},
+'M.STAT.01':{t:'Найдено среднее вместо медианы',w:'Среднее и медиана — разные величины: среднее чувствительно к выбросам, медиана нет.',d:'Медиана — середина упорядоченного ряда.'},
+'M.STAT.02':{t:'Ряд не упорядочен',w:'Взят средний по счёту элемент исходного набора, а не упорядоченного.',d:'Сначала расставьте числа по возрастанию.'},
+'M.FUN.01':{t:'Потерян знак в формуле вершины',w:'x₀ = −b/(2a): минус перед b обязателен.',d:'Проверьте знак коэффициента b и знак самой формулы.'},
+'M.FUN.02':{t:'Взят свободный член',w:'Свободный член c не влияет на абсциссу вершины — он сдвигает параболу по вертикали.',d:'Используйте только a и b.'},
+'M.FUN.03':{t:'Найден сдвиг вместо наклона',w:'Это значение b — точка пересечения с осью y, а не угловой коэффициент.',d:'k = (y₂ − y₁) / (x₂ − x₁).'},
+'M.FUN.04':{t:'Перепутан порядок вычитания',w:'Числитель и знаменатель должны идти в одном порядке: из второй точки вычитаем первую и там, и там.',d:'Проверьте знаки при вычитании отрицательных координат.'},
+'M.ALG.01':{t:'Забыта двойка',w:'В формуле площади есть деление на 2 — при выражении высоты оно превращается в умножение.',d:'h = 2S / (a + b).'},
+'M.ALG.02':{t:'Основания перемножены',w:'В формуле стоит СУММА оснований, а не произведение.',d:'В знаменателе должно быть (a + b).'},
+'M.INEQ.01':{t:'Знак неравенства перевёрнут',w:'Знак меняется только при делении на отрицательное число. Здесь коэффициент положительный.',d:'Проверьте знак множителя перед x.'},
+'M.INEQ.02':{t:'Потерян знак при переносе',w:'При переносе числа через знак неравенства оно меняет знак.',d:'Перенесите свободный член и проверьте его знак.'},
+'M.INT.02':{t:'Знаки на интервалах определены неверно',w:'Парабола с положительным старшим коэффициентом отрицательна МЕЖДУ корнями, а не вне их.',d:'Подставьте любое число между корнями и проверьте знак.'},
+'M.INT.04':{t:'Границы исключены при нестрогом знаке',w:'Знак ≤ означает, что нули выражения тоже подходят.',d:'Включите концы отрезка.'},
+'M.INT.05':{t:'Границы записаны в обратном порядке',w:'В записи промежутка сначала идёт меньшее число.',d:'Поменяйте границы местами.'},
+'M.SEQ.01':{t:'Взято n вместо n − 1',w:'От первого члена до n-го делается n − 1 шаг, а не n.',d:'aₙ = a₁ + (n − 1)d.'},
+'M.SEQ.02':{t:'Формула заменена произведением',w:'Это формула геометрической прогрессии, а не арифметической.',d:'В арифметической разность прибавляется, а не умножается.'},
+'M.SIM.01':{t:'Площадь умножена на коэффициент',w:'Так относятся линейные размеры, а площади — как квадрат коэффициента.',d:'Умножьте на k², а не на k.'},
+'M.SIM.02':{t:'Деление вместо умножения',w:'Площадь большего треугольника больше, а не меньше.',d:'Умножьте площадь меньшего на k².'},
+'M.ANG.01':{t:'Взято дополнение до 90°',w:'Смежные углы дополняют друг друга до развёрнутого, а не до прямого.',d:'Сумма смежных углов — 180°.'},
+'M.ANG.02':{t:'Взято дополнение до 360°',w:'360° — это полный угол, а смежные дают развёрнутый.',d:'Вычитайте из 180°.'},
+'M.ANG.03':{t:'Углы приняты равными',w:'Равны вертикальные углы, а смежные равны только если оба по 90°.',d:'Смежные в сумме дают 180°.'},
+'M.ANG.04':{t:'Разность принята за сам угол',w:'Дана разность углов, а не один из них.',d:'Составьте уравнение: x и x + d в сумме дают 180°.'},
+'M.ANG.05':{t:'Односторонние приняты за равные',w:'Равны накрест лежащие и соответственные углы. Односторонние дают в сумме 180°.',d:'Вычтите данный угол из 180°.'},
+'M.ANG.06':{t:'Половина принята за целое',w:'Биссектриса делит угол пополам — значит весь угол вдвое больше.',d:'Умножьте на 2.'},
+'M.ANG.07':{t:'Разделено вместо умножения',w:'Дана половина, ищется целый угол.',d:'Умножьте, а не делите.'},
+'M.ANG.08':{t:'Ошибка в числе частей',w:'Если один угол в k раз больше другого, то всего частей k + 1, а не k.',d:'Разделите 180° на (k + 1).'},
+'M.GEO.01':{t:'Найдена гипотенуза, а не высота',w:'Высота к гипотенузе короче любого катета.',d:'Посчитайте площадь двумя способами и приравняйте.'},
+'M.GEO.02':{t:'Найдена площадь',w:'Это промежуточная величина, а не ответ на вопрос.',d:'Подставьте её во вторую формулу площади.'},
+'M.GEO.03':{t:'Взято среднее катетов',w:'Высота к гипотенузе не связана со средним арифметическим катетов.',d:'Приравняйте две записи площади: ab/2 = ch/2.'},
+'M.GEO.06':{t:'Углы сложены вместо вычитания',w:'Сумма всех трёх углов — 180°, значит третий равен 180 минус два данных.',d:'Вычтите сумму данных углов из 180°.'},
+'M.GEO.07':{t:'Взято 360° вместо 180°',w:'360° — сумма углов четырёхугольника, а не треугольника.',d:'Для треугольника используйте 180°.'},
+'M.GEO.08':{t:'Стороны сложены вместо теоремы Пифагора',w:'Гипотенуза меньше суммы катетов — иначе треугольник вырождается в отрезок.',d:'c² = a² + b², и только потом извлекайте корень.'},
+'M.GEO.09':{t:'Забыто деление на 2',w:'В формуле площади треугольника (и трапеции, и ромба по диагоналям) есть деление пополам.',d:'Разделите полученное произведение на 2.'},
+'M.GEO.10':{t:'Основания перемножены',w:'В формуле площади трапеции стоит сумма оснований, а не произведение.',d:'S = (a + b) · h / 2.'},
+'M.GEO.11':{t:'Угол принят равным дуге',w:'Вписанный угол вдвое меньше дуги, на которую опирается.',d:'Разделите градусную меру дуги пополам.'},
+'M.GEO.12':{t:'Умножено вместо деления',w:'Вдвое больше дуги — это не вписанный угол.',d:'Вписанный угол = дуга : 2.'},
+'M.GEO.13':{t:'Взято дополнение до 180°',w:'Связь вписанного угла с дугой — деление пополам, а не вычитание.',d:'Разделите дугу на 2.'},
+'M.GEO.14':{t:'Средняя линия принята равной стороне',w:'Средняя линия вдвое короче стороны, которой параллельна.',d:'Разделите на 2.'},
+'M.GEO.15':{t:'Умножено вместо деления',w:'Средняя линия короче стороны, а не длиннее.',d:'Разделите на 2.'},
+'M.GEO.16':{t:'Найден внутренний угол',w:'Вы нашли угол C, а спрашивается внешний угол при этой вершине.',d:'Внешний угол = 180° − внутренний, он же равен сумме двух других внутренних.'},
+'M.GEO.17':{t:'Использован не тот угол',w:'Внешний угол при вершине C связан с углами A и B, а не с одним из них.',d:'Сложите два не смежных внутренних угла.'},
+'M.GEO.18':{t:'Не разделено на два угла при основании',w:'Углов при основании два, и они равны.',d:'Разделите оставшиеся градусы пополам.'},
+'M.GEO.19':{t:'Углы приняты равными',w:'Равны углы при основании, а угол при вершине от них отличается.',d:'Из 180° вычтите угол при вершине и разделите пополам.'},
+'M.GEO.20':{t:'Учтён только один угол при основании',w:'Углов при основании два, и оба равны данному.',d:'Вычтите из 180° удвоенный угол при основании.'},
+'M.GEO.21':{t:'Выполнено лишнее деление',w:'Делить пополам нужно, когда ищем углы при основании, а не при вершине.',d:'180° − 2 · (угол при основании).'},
+'M.GEO.22':{t:'Части приняты за градусы',w:'Числа в отношении — это части, а не сами углы.',d:'Найдите величину одной части: 180° разделить на сумму частей.'},
+'M.GEO.23':{t:'Сложение вместо вычитания',w:'Катет короче гипотенузы, значит его квадрат — разность, а не сумма.',d:'a² = c² − b².'},
+'M.GEO.24':{t:'Найдена площадь',w:'Произведение сторон — площадь прямоугольника, а не диагональ.',d:'Диагональ — гипотенуза прямоугольного треугольника из двух сторон.'},
+'M.GEO.25':{t:'Найден периметр',w:'Периметр и диагональ — разные величины.',d:'Примените теорему Пифагора к сторонам.'},
+'M.GEO.26':{t:'Высота принята равной боковой стороне',w:'Высота — катет, боковая сторона — гипотенуза, они не равны.',d:'h² = (боковая)² − (половина основания)².'},
+'M.GEO.27':{t:'Взято основание',w:'Основание — не высота.',d:'Высота делит основание пополам и образует прямоугольный треугольник.'},
+'M.GEO.28':{t:'Взято целое основание вместо половины',w:'Высота к основанию равнобедренного треугольника делит его пополам.',d:'В теорему Пифагора подставляйте половину основания.'},
+'M.GEO.29':{t:'Величины сложены',w:'Площадь — это произведение, а не сумма.',d:'Перемножьте и разделите пополам.'},
+'M.GEO.30':{t:'Взята не та пара сторон',w:'В прямоугольном треугольнике высотой к катету служит другой катет, а не гипотенуза.',d:'Перемножьте два катета и разделите на 2.'},
+'M.GEO.31':{t:'Лишнее деление на 2',w:'Пополам делят при вычислении площади треугольника, а параллелограмм — это два треугольника.',d:'S = a · h, без деления.'},
+'M.GEO.32':{t:'Забыт синус',w:'Формула S = ½ab работает только при прямом угле между сторонами.',d:'Умножьте ещё на синус угла между сторонами.'},
+'M.GEO.33':{t:'Разделено вместо умножения',w:'Центральный угол больше вписанного, а не меньше.',d:'Умножьте вписанный угол на 2.'},
+'M.GEO.34':{t:'Взято дополнение до 180°',w:'Сумма острых углов прямоугольного треугольника — 90°, а не 180°.',d:'Вычтите данный угол из 90°.'},
+'M.GEO.35':{t:'Углы приняты равными',w:'Острые углы прямоугольного треугольника равны только когда оба по 45°.',d:'Их сумма равна 90°.'},
+'M.GEO.36':{t:'Использована формула равнобедренного треугольника',w:'Здесь треугольник прямоугольный, а не равнобедренный.',d:'Третий угол — 90°, значит на два острых остаётся 90°.'},
+'M.GEO.37':{t:'Углы приняты равными',w:'Во вписанном четырёхугольнике противоположные углы дают в сумме 180°, а равны они только если оба прямые.',d:'Вычтите данный угол из 180°.'},
+'M.TRIG.02':{t:'Взят прилежащий катет',w:'Синус — отношение противолежащего катета к гипотенузе.',d:'Определите, какой катет лежит НАПРОТИВ нужного угла.'},
+'M.TRIG.03':{t:'Найден тангенс',w:'Отношение катетов — это тангенс, а не синус или косинус.',d:'В знаменателе должна быть гипотенуза.'},
+'M.TRIG.04':{t:'Взят противолежащий катет',w:'Косинус — отношение ПРИЛЕЖАЩЕГО катета к гипотенузе.',d:'Прилежащий катет образует угол вместе с гипотенузой.'},
+'M.TRIG.05':{t:'Умножение вместо деления',w:'Гипотенуза длиннее катета, значит катет нужно разделить на синус, а не умножить.',d:'Гипотенуза = катет : sin.'},
+'M.TRIG.06':{t:'Умножено на тангенс вместо деления',w:'Если тангенс меньше единицы, прилежащий катет длиннее противолежащего.',d:'Прилежащий = противолежащий : tg.'},
+'M.TRIG.07':{t:'Синус выдан за косинус',w:'Синус и косинус равны только при угле 45°.',d:'Используйте sin²A + cos²A = 1.'},
+'M.TRIG.08':{t:'Вычтено без возведения в квадрат',w:'В основном тождестве складываются квадраты, а не сами значения.',d:'cos²A = 1 − sin²A, и только потом корень.'}
+};
+
+/* ═══ ДИАГНОСТИКА ОГЭ · МАТЕМАТИКА ═══
+   28 параметризованных шаблонов, покрытие заданий 1–19 + вход в часть 2.
+   Каждый gen(R) возвращает конкретный экземпляр задачи. */
+
+const DIAG = [
+
+// ── Числа и вычисления ─────────────────────────────────────────────
+{id:'D01', node:'ALG.NUM.05', exam:'1–5, 21', diff:2, topic:'Проценты',
+ gen(R){
+   let P,a,b,v;
+   do { P=R.int(8,50)*100; a=R.pick([10,15,20,25]); b=R.pick([10,20,25]);
+        v=P*(1+a/100)*(1-b/100); } while(Math.abs(v-Math.round(v))>1e-9 || Math.abs(v-P)<1e-9);
+   v=Math.round(v);
+   return {type:'num', ans:v, tol:0.001,
+     stem:`Товар стоил <b>${P} ₽</b>. В марте цена выросла на ${a}%, в апреле снизилась на ${b}% от новой цены. Сколько стоит товар после апреля?`,
+     hint:'Ответ в рублях, целое число.',
+     wrong:{[Math.round(P*(1+(a-b)/100))]:'M.PCT.01', [P]:'M.PCT.02', [Math.round(P*(1+a/100))]:'M.PROC.01'},
+     hints:['Сколько стоил товар в конце марта?',`${P} · ${1+a/100} = ${P*(1+a/100)}. Снижение на ${b}% — от какого числа?`,'Умножьте цену после марта на '+(1-b/100)+'.']};
+ }},
+
+{id:'D02', node:'ALG.NUM.01', exam:'1–5', diff:1, topic:'Целая часть, прикидка',
+ gen(R){
+   let A,B; do{ A=R.int(23,89); B=R.int(12,40)*100; }while(B%A===0);
+   return {type:'num', ans:Math.floor(B/A), tol:0.001,
+     stem:`Шариковая ручка стоит <b>${A} ₽</b>. Какое наибольшее число таких ручек можно купить на <b>${B} ₽</b>?`,
+     hint:'Целое число.',
+     wrong:{[Math.ceil(B/A)]:'M.ARI.02', [Math.round(B/A*10)/10]:'M.ARI.03'},
+     hints:['Разделите сумму на цену.',`${B} : ${A} — целого не получится. Что делать с остатком?`,'Округляем ВНИЗ: на остаток ручку не купить.']};
+ }},
+
+{id:'D03', node:'ALG.NUM.01', exam:'6', diff:1, topic:'Действия с дробями',
+ gen(R){
+   const a=R.pick([0.4,0.5,0.6,0.8,1.2,1.5]), b=R.pick([0.7,0.9,1.4,2.5,3.5]), c=R.pick([0.1,0.2,0.5]);
+   const v=Math.round(a*b/c*1000)/1000;
+   return {type:'num', ans:v, tol:0.005,
+     stem:`Найдите значение выражения <b>(${(''+a).replace('.',',')} · ${(''+b).replace('.',',')}) : ${(''+c).replace('.',',')}</b>`,
+     hint:'Десятичная дробь.',
+     wrong:{[Math.round(a*b*c*1000)/1000]:'M.ARI.04'},
+     hints:['Сначала умножение, потом деление.','Деление на десятичную дробь: умножьте и делимое, и делитель на 10 или 100.']};
+ }},
+
+{id:'D04', node:'ALG.NUM.02', exam:'6, 8', diff:2, topic:'Степени',
+ gen(R){
+   const base=R.pick([2,3,5]), m=R.int(4,7), n=R.int(2,4), k=R.int(3,6);
+   const e=m+n-k; if(e<0||e>5) return DIAG[3].gen(R);
+   return {type:'num', ans:Math.pow(base,e), tol:0.001,
+     stem:`Найдите значение выражения <b>(${base}<sup>${m}</sup> · ${base}<sup>${n}</sup>) : ${base}<sup>${k}</sup></b>`,
+     hint:'Целое число.',
+     wrong:{[Math.pow(base,m*n-k)]:'M.POW.01', [Math.pow(base,m+n+k)]:'M.POW.02'},
+     hints:['При умножении степеней с одинаковым основанием показатели складываются.','При делении — вычитаются.',`Показатель: ${m} + ${n} − ${k} = ${e}.`]};
+ }},
+
+{id:'D05', node:'ALG.NUM.03', exam:'8', diff:2, topic:'Квадратный корень',
+ gen(R){
+   const r=R.int(3,12), k=R.pick([2,3,5,6,7,8]);
+   const a=r*r*k, b=k;   // √a · √b = r·k
+   return {type:'num', ans:r*k, tol:0.001,
+     stem:`Найдите значение выражения <b>√${a} · √${b}</b>`,
+     hint:'Целое число.',
+     wrong:{[r]:'M.SQRT.01', [a*b]:'M.SQRT.02'},
+     hints:['Произведение корней — корень произведения.',`√${a} · √${b} = √${a*b}. Какое число в квадрате даёт ${a*b}?`]};
+ }},
+
+{id:'D06', node:'ALG.POLY.02', exam:'8', diff:2, topic:'Разность квадратов',
+ gen(R){
+   const c=R.int(20,60), d=R.pick([2,3,4,5,6]);
+   const a=c+d, b=c-d;
+   return {type:'num', ans:a*a-b*b, tol:0.001,
+     stem:`Найдите значение выражения <b>${a}² − ${b}²</b>`,
+     hint:'Считать в лоб не нужно — есть формула.',
+     wrong:{[(a-b)*(a-b)]:'M.FSU.02', [a-b]:'M.FSU.03'},
+     hints:['a² − b² = (a − b)(a + b).',`(${a} − ${b}) · (${a} + ${b}) = ?`]};
+ }},
+
+{id:'D07', node:'ALG.RAT.03', exam:'6, 9', diff:3, topic:'Сокращение дроби',
+ gen(R){
+   const a=R.int(2,9), v=R.int(11,30);
+   return {type:'num', ans:v-a, tol:0.001,
+     stem:`Найдите значение выражения <b>(x² − ${a*a}) / (x + ${a})</b> при <b>x = ${v}</b>`,
+     hint:'Сначала упростите, потом подставьте.',
+     wrong:{[v+a]:'M.RAT.03', [v*v-a*a]:'M.PROC.02'},
+     hints:['Числитель — разность квадратов.',`x² − ${a*a} = (x − ${a})(x + ${a}). Что сокращается?`,`Осталось x − ${a}. Подставьте x = ${v}.`]};
+ }},
+
+// ── Уравнения ──────────────────────────────────────────────────────
+{id:'D08', node:'ALG.EQ.01', exam:'9', diff:1, topic:'Линейное уравнение',
+ gen(R){
+   const x=R.int(-9,12), a=R.int(2,9), c=R.int(1,6);
+   if(a===c) return DIAG[7].gen(R);
+   const b=R.int(-20,20), d=(a-c)*x+b;
+   return {type:'num', ans:x, tol:0.001,
+     stem:`Решите уравнение <b>${a}x ${b<0?'−':'+'} ${Math.abs(b)} = ${c}x ${d<0?'−':'+'} ${Math.abs(d)}</b>`,
+     hint:'Одно число.',
+     hints:['Перенесите x в одну часть, числа — в другую.','Не забудьте менять знак при переносе.']};
+ }},
+
+{id:'D09', node:'ALG.EQ.02', exam:'9, 21', diff:2, topic:'Квадратное уравнение',
+ gen(R){
+   let x1,x2; do{ x1=R.int(-8,8); x2=R.int(-8,8);}while(x1===x2||x1===0||x2===0);
+   const p=-(x1+x2), q=x1*x2, big=Math.max(x1,x2);
+   return {type:'num', ans:big, tol:0.001,
+     stem:`Решите уравнение <b>x² ${p<0?'−':'+'} ${Math.abs(p)}x ${q<0?'−':'+'} ${Math.abs(q)} = 0</b>. В ответ запишите <b>больший</b> корень.`,
+     hint:'Одно число.',
+     wrong:{[Math.min(x1,x2)]:'M.PROC.04', [-big]:'M.EQ.01'},
+     hints:['Дискриминант или теорема Виета.',`Сумма корней = ${-p}, произведение = ${q}.`,`Корни: ${Math.min(x1,x2)} и ${big}. Нужен больший.`]};
+ }},
+
+{id:'D10', node:'ALG.EQ.04', exam:'9, 21', diff:3, topic:'Дробно-рациональное уравнение',
+ gen(R){
+   const a=R.int(2,9), k=R.pick([1,2,4,5]);
+   const x=a+k*R.int(1,4);
+   const num=k*(x-a)/k;  // не используется
+   const rhs=k, res=a+ k; // 5/(x-3)=1 → x=8
+   const N=k*R.int(2,6);
+   const ans=a+N/k;
+   return {type:'num', ans:ans, tol:0.001,
+     stem:`Решите уравнение <b>${N} / (x − ${a}) = ${k}</b>`,
+     hint:'Одно число.',
+     wrong:{[a]:'M.ODZ.03', [N-a]:'M.PROC.05'},
+     hints:['Умножьте обе части на знаменатель.',`${N} = ${k}(x − ${a}).`,`x − ${a} = ${N/k}.`]};
+ }},
+
+{id:'D11', node:'ALG.EQ.06', exam:'9, 21', diff:2, topic:'Система уравнений',
+ gen(R){
+   const x=R.int(-6,10), y=R.int(-6,10);
+   return {type:'num', ans:x, tol:0.001,
+     stem:`Решите систему <b>{ x + y = ${x+y};  x − y = ${x-y} }</b>. В ответ запишите <b>x</b>.`,
+     hint:'Одно число.',
+     wrong:{[y]:'M.PROC.06'},
+     hints:['Сложите уравнения почленно — y исчезнет.',`2x = ${2*x}.`]};
+ }},
+
+// ── Вероятность и статистика ──────────────────────────────────────
+{id:'D12', node:'PRB.PROB.01', exam:'10', diff:1, topic:'Классическая вероятность',
+ gen(R){
+   const tot=R.pick([4,5,8,10,20,25,40,50]); const w=R.int(1,tot-1), b=tot-w;
+   const v=Math.round(w/tot*1000)/1000;
+   return {type:'num', ans:v, tol:0.005,
+     stem:`В корзине <b>${w}</b> белых и <b>${b}</b> чёрных шаров. Наугад достают один шар. Найдите вероятность того, что он белый.`,
+     hint:'Десятичная дробь.',
+     wrong:{[Math.round(w/b*1000)/1000]:'M.PRB.05', [Math.round(b/tot*1000)/1000]:'M.PRB.06'},
+     hints:['Вероятность = благоприятные исходы : все исходы.',`Всего шаров ${tot}.`]};
+ }},
+
+{id:'D13', node:'PRB.PROB.03', exam:'10', diff:3, topic:'Независимые события',
+ gen(R){
+   const p1=R.pick([0.5,0.6,0.7,0.8,0.9]), p2=R.pick([0.4,0.5,0.6,0.7,0.8]);
+   const v=Math.round((1-(1-p1)*(1-p2))*1000)/1000;
+   const f=n=>(''+Math.round(n*1000)/1000).replace('.',',');
+   return {type:'num', ans:v, tol:0.005,
+     stem:`Два стрелка независимо стреляют по мишени. Вероятность попадания первого — <b>${f(p1)}</b>, второго — <b>${f(p2)}</b>. Найдите вероятность того, что мишень поражена <b>хотя бы одним</b> стрелком.`,
+     hint:'Десятичная дробь.',
+     wrong:{[Math.round((p1+p2)*1000)/1000]:'M.PRB.01', [Math.round(p1*p2*1000)/1000]:'M.PRB.02', [Math.round((1-p1)*(1-p2)*1000)/1000]:'M.PRB.03'},
+     hints:['«Хотя бы один» удобнее считать через противоположное событие.',`P(оба промахнулись) = ${f(1-p1)} · ${f(1-p2)} = ${f((1-p1)*(1-p2))}.`,'Вычтите это из единицы.']};
+ }},
+
+{id:'D14', node:'PRB.STAT.02', exam:'10', diff:2, topic:'Медиана и среднее',
+ gen(R){
+   const n=R.pick([5,7]); const arr=[]; for(let i=0;i<n;i++) arr.push(R.int(2,40));
+   const s=[...arr].sort((a,b)=>a-b), med=s[(n-1)/2];
+   const mean=Math.round(arr.reduce((a,b)=>a+b,0)/n*100)/100;
+   return {type:'num', ans:med, tol:0.001,
+     stem:`Дан набор чисел: <b>${arr.join(', ')}</b>. Найдите его <b>медиану</b>.`,
+     hint:'Одно число.',
+     wrong:{[mean]:'M.STAT.01', [arr[(n-1)/2]]:'M.STAT.02'},
+     hints:['Медиана — середина УПОРЯДОЧЕННОГО ряда.','Сначала расставьте числа по возрастанию.',`Упорядоченный ряд: ${s.join(', ')}.`]};
+ }},
+
+// ── Функции и графики ─────────────────────────────────────────────
+{id:'D15', node:'FUN.QUAD.01', exam:'11', diff:3, topic:'Вершина параболы',
+ gen(R){
+   const xv=R.pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]), q=R.int(-15,15), p=-2*xv;
+   return {type:'num', ans:xv, tol:0.001,
+     stem:`Найдите абсциссу вершины параболы <b>y = x² ${p<0?'−':'+'} ${Math.abs(p)}x ${q<0?'−':'+'} ${Math.abs(q)}</b>`,
+     hint:'Одно число.',
+     wrong:{[-xv]:'M.FUN.01', [q]:'M.FUN.02'},
+     hints:['Абсцисса вершины: x₀ = −b / (2a).','Здесь a = 1, b = '+p+'.']};
+ }},
+
+{id:'D16', node:'FUN.LIN.01', exam:'11', diff:2, topic:'Угловой коэффициент',
+ gen(R){
+   const k=R.pick([-4,-3,-2,-1,1,2,3,4]), bq=R.int(-8,8);
+   const x1=R.int(-5,0), x2=R.int(1,6);
+   return {type:'num', ans:k, tol:0.001,
+     stem:`Прямая проходит через точки <b>(${x1}; ${k*x1+bq})</b> и <b>(${x2}; ${k*x2+bq})</b>. Найдите её <b>угловой коэффициент</b>.`,
+     hint:'Одно число.',
+     wrong:{[bq]:'M.FUN.03', [-k]:'M.FUN.04'},
+     hints:['k = (y₂ − y₁) / (x₂ − x₁).','Следите за знаками при вычитании отрицательных чисел.']};
+ }},
+
+{id:'D17', node:'FUN.APP.01', exam:'12', diff:2, topic:'Выражение из формулы',
+ gen(R){
+   const a=R.int(3,15), b=R.int(3,15), h=R.pick([2,4,6,8,10,12,14]);
+   const S=(a+b)*h/2;
+   return {type:'num', ans:h, tol:0.01,
+     stem:`Площадь трапеции вычисляется по формуле <b>S = (a + b)h / 2</b>. Найдите <b>h</b>, если S = ${S}, a = ${a}, b = ${b}.`,
+     hint:'Одно число.',
+     wrong:{[Math.round(S/(a+b)*100)/100]:'M.ALG.01', [2*S/(a*b)]:'M.ALG.02'},
+     hints:['Выразите h из формулы.','h = 2S / (a + b).',`h = ${2*S} / ${a+b}.`]};
+ }},
+
+// ── Неравенства ───────────────────────────────────────────────────
+{id:'D18', node:'ALG.INEQ.02', exam:'13', diff:2, topic:'Линейное неравенство',
+ gen(R){
+   const a=R.pick([2,3,4,5]), x0=R.pick([-6,-5,-4,-3,-2,-1,1,2,3,4,5,6]), b=-a*x0;
+   const opts=[{t:`x > ${x0}`, ok:true},{t:`x < ${x0}`, m:'M.INEQ.01'},
+               {t:`x > ${-x0}`, m:'M.INEQ.02'},{t:`x < ${-x0}`, m:'M.INEQ.02'}];
+   return {type:'mc', opts:R.shuffle(opts),
+     stem:`Решите неравенство <b>${a}x ${b<0?'−':'+'} ${Math.abs(b)} > 0</b>`,
+     hint:'Один верный ответ.',
+     hints:['Перенесите число вправо.',`${a}x > ${-b}.`,`Делим на ${a} — число положительное, знак не меняется.`]};
+ }},
+
+{id:'D19', node:'ALG.INEQ.03', exam:'13', diff:3, topic:'Метод интервалов',
+ gen(R){
+   let p,q; do{ p=R.int(-7,4); q=R.int(-3,8);}while(q<=p);
+   const opts=[{t:`[${p}; ${q}]`, ok:true},{t:`(−∞; ${p}] ∪ [${q}; +∞)`, m:'M.INT.02'},
+               {t:`(${p}; ${q})`, m:'M.INT.04'},{t:`[${q}; ${p}]`, m:'M.INT.05'}];
+   return {type:'mc', opts:R.shuffle(opts),
+     stem:`Решите неравенство <b>(x − ${p<0?'('+p+')':p})(x − ${q<0?'('+q+')':q}) ≤ 0</b>`,
+     hint:'Один верный ответ.',
+     hints:['Нули: x = '+p+' и x = '+q+'.','Парабола ветвями вверх — между корнями она отрицательна.','Знак нестрогий: границы включаются.']};
+ }},
+
+{id:'D20', node:'ALG.SEQ.01', exam:'14', diff:2, topic:'Арифметическая прогрессия',
+ gen(R){
+   const a1=R.int(-10,15), d=R.pick([-5,-4,-3,-2,2,3,4,5,6]), n=R.int(8,25);
+   return {type:'num', ans:a1+(n-1)*d, tol:0.001,
+     stem:`Арифметическая прогрессия задана первым членом <b>a₁ = ${a1}</b> и разностью <b>d = ${d}</b>. Найдите <b>a<sub>${n}</sub></b>.`,
+     hint:'Одно число.',
+     wrong:{[a1+n*d]:'M.SEQ.01', [a1*d*n]:'M.SEQ.02'},
+     hints:['aₙ = a₁ + (n − 1)d.',`Здесь n − 1 = ${n-1}.`]};
+ }},
+
+// ── Геометрия (диагностическая часть) ─────────────────────────────
+{id:'D21', node:'GEO.TRI.03', exam:'15', diff:1, topic:'Углы треугольника',
+ gen(R){
+   const A=R.int(25,80), B=R.int(25,80);
+   if(A+B>=170) return DIAG[20].gen(R);
+   return {type:'num', ans:180-A-B, tol:0.001,
+     stem:`В треугольнике два угла равны <b>${A}°</b> и <b>${B}°</b>. Найдите третий угол.`,
+     hint:'В градусах, число без знака °.',
+     wrong:{[A+B]:'M.GEO.06', [360-A-B]:'M.GEO.07'},
+     hints:['Сумма углов треугольника — 180°.',`180 − ${A} − ${B} = ?`]};
+ }},
+
+{id:'D22', node:'GEO.PYTH.01', exam:'16', diff:2, topic:'Теорема Пифагора',
+ gen(R){
+   const t=R.pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[7,24,25],[12,16,20],[20,21,29]]);
+   const k=R.pick([1,1,2,3,4]);
+   const a=t[0]*k, b=t[1]*k, c=t[2]*k;
+   return {type:'num', ans:c, tol:0.001,
+     stem:`Катеты прямоугольного треугольника равны <b>${a}</b> и <b>${b}</b>. Найдите гипотенузу.`,
+     hint:'Одно число.',
+     wrong:{[a+b]:'M.GEO.08', [a*b/2]:'M.GEO.02'},
+     hints:['c² = a² + b².',`c² = ${a*a} + ${b*b} = ${a*a+b*b}.`,`c = √${a*a+b*b}.`]};
+ }},
+
+{id:'D23', node:'GEO.AREA.02', exam:'17', diff:2, topic:'Площадь трапеции',
+ gen(R){
+   const a=R.int(4,20), b=R.int(4,20), h=R.pick([2,4,6,8,10,12]);
+   return {type:'num', ans:(a+b)*h/2, tol:0.01,
+     stem:`Основания трапеции равны <b>${a}</b> и <b>${b}</b>, высота — <b>${h}</b>. Найдите площадь трапеции.`,
+     hint:'Одно число.',
+     wrong:{[(a+b)*h]:'M.GEO.09', [a*b*h/2]:'M.GEO.10'},
+     hints:['S = (a + b) · h / 2.',`(${a} + ${b}) · ${h} / 2 = ?`]};
+ }},
+
+{id:'D24', node:'GEO.CIRC.01', exam:'16', diff:2, topic:'Вписанный угол',
+ gen(R){
+   const arc=R.pick([20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170]);
+   return {type:'num', ans:arc/2, tol:0.001,
+     stem:`Вписанный угол опирается на дугу окружности величиной <b>${arc}°</b>. Найдите этот угол.`,
+     hint:'В градусах.',
+     wrong:{[arc]:'M.GEO.11', [2*arc]:'M.GEO.12', [180-arc]:'M.GEO.13'},
+     hints:['Вписанный угол вдвое меньше дуги, на которую опирается.',`${arc} : 2 = ?`]};
+ }},
+
+{id:'D25', node:'GEO.MIX', exam:'19', diff:2, topic:'Верные утверждения', multi:true,
+ gen(R){
+   const pool=[
+    {t:'Сумма углов любого треугольника равна 180°.', ok:true},
+    {t:'Вертикальные углы равны.', ok:true},
+    {t:'Любые два прямоугольных треугольника подобны.', ok:false},
+    {t:'Если две стороны треугольника равны, то равны и углы при основании.', ok:true},
+    {t:'Диагонали любого параллелограмма равны.', ok:false},
+    {t:'Через любые три точки проходит ровно одна прямая.', ok:false},
+    {t:'Диагонали ромба взаимно перпендикулярны.', ok:true},
+    {t:'Площадь квадрата равна произведению его диагоналей.', ok:false}
+   ];
+   const sel=R.shuffle(pool).slice(0,4);
+   if(!sel.some(o=>o.ok)) sel[0]=pool[0];
+   return {type:'multi', opts:sel,
+     stem:'Какие из утверждений <b>верны</b>? Отметьте все верные.',
+     hint:'Верных может быть несколько.',
+     hints:['Проверяйте каждое утверждение отдельно — ищите контрпример.','Слова «любой» и «всегда» — частый признак ложного утверждения.']};
+ }},
+
+{id:'D26', node:'GEO.TRI.04', exam:'16', diff:2, topic:'Средняя линия',
+ gen(R){
+   const c=R.int(6,40)*(R.pick([1,1,2]));
+   return {type:'num', ans:c/2, tol:0.01,
+     stem:`Средняя линия треугольника параллельна стороне длиной <b>${c}</b>. Найдите длину средней линии.`,
+     hint:'Одно число.',
+     wrong:{[c]:'M.GEO.14', [c*2]:'M.GEO.15'},
+     hints:['Средняя линия вдвое меньше стороны, которой параллельна.']};
+ }},
+
+{id:'D27', node:'GEO.SIM.02', exam:'23', diff:4, topic:'Отношение площадей',
+ gen(R){
+   const k=R.pick([2,3,4,5]), S=R.int(3,20);
+   return {type:'num', ans:S*k*k, tol:0.01,
+     stem:`Треугольники подобны с коэффициентом <b>${k}</b>. Площадь меньшего равна <b>${S}</b>. Найдите площадь большего.`,
+     hint:'Одно число.',
+     wrong:{[S*k]:'M.SIM.01', [S/k]:'M.SIM.02'},
+     hints:['Площади подобных фигур относятся как КВАДРАТ коэффициента.',`Коэффициент ${k}, значит площади относятся как ${k*k}.`]};
+ }},
+
+{id:'D28', node:'GEO.TRIG.01', exam:'15–17', diff:3, topic:'Синус острого угла',
+ gen(R){
+   const t0=R.pick([[3,4,5],[4,3,5],[6,8,10],[8,6,10],[9,12,15],[12,9,15],[12,16,20]]);
+   const kk=R.pick([1,1,2,3]); const t=t0.map(x=>x*kk);
+   const [a,b,c]=t;
+   const v=Math.round(a/c*10000)/10000;
+   return {type:'num', ans:v, tol:0.002,
+     stem:`В прямоугольном треугольнике катеты равны <b>${a}</b> и <b>${b}</b>, гипотенуза — <b>${c}</b>. Найдите <b>синус</b> угла, лежащего против катета ${a}.`,
+     hint:'Десятичная дробь.',
+     wrong:{[Math.round(b/c*10000)/10000]:'M.TRIG.02', [Math.round(a/b*10000)/10000]:'M.TRIG.03'},
+     hints:['Синус — отношение ПРОТИВОЛЕЖАЩЕГО катета к гипотенузе.',`Против катета ${a} лежит нужный угол, гипотенуза = ${c}.`,`${a} : ${c} = ?`]};
+ }}
+
+];
+
+
+/* Санитайзер: параметризация иногда порождает дистрактор, совпавший с верным
+   ответом. Убираем такие — ученик не должен видеть «неверно» на верное число. */
+function sanitize(q){
+  if(q.type==='num' && q.wrong){
+    const w={}; const tol=q.tol||0.001;
+    for(const k in q.wrong){ const v=parseFloat(k);
+      if(isFinite(v) && Math.abs(v-q.ans)>tol) w[k]=q.wrong[k]; }
+    q.wrong=w;
+  }
+  return q;
+}
+
+/* ═══ ТРЕНАЖЁР «ГЕОМЕТРИЯ: 2 БАЛЛА ДО ТРОЙКИ» ═══
+   6 узлов графа навыков, 31 параметризованный шаблон. */
+
+const GEO_NODES = [
+ {id:'GEO.ANG.01',  name:'Углы: смежные, вертикальные, при параллельных', exam:'15, 16'},
+ {id:'GEO.TRI.03',  name:'Треугольник: сумма углов, равнобедренный',      exam:'15, 16'},
+ {id:'GEO.PYTH.01', name:'Теорема Пифагора',                              exam:'16, 17'},
+ {id:'GEO.AREA.01', name:'Площади фигур',                                 exam:'17'},
+ {id:'GEO.CIRC.01', name:'Окружность: вписанные и центральные углы',      exam:'16'},
+ {id:'GEO.TRIG.01', name:'Синус, косинус, тангенс острого угла',          exam:'15–17'}
+];
+
+const GEO = [
+
+// ── GEO.ANG.01 ────────────────────────────────────────────────────
+{id:'G101', node:'GEO.ANG.01', diff:1, topic:'Смежные углы',
+ gen(R){ const a=R.int(20,160);
+  return {type:'num', ans:180-a, tol:0.001,
+   stem:`Один из смежных углов равен <b>${a}°</b>. Найдите другой.`,
+   hint:'В градусах.', wrong:{[90-a]:'M.ANG.01',[360-a]:'M.ANG.02',[a]:'M.ANG.03'},
+   hints:['Смежные углы в сумме дают развёрнутый угол.','Развёрнутый угол — 180°.']};
+ }},
+
+{id:'G102', node:'GEO.ANG.01', diff:3, topic:'Разность смежных углов',
+ gen(R){ const d=R.pick([10,20,30,40,50,60,80,100]);
+  return {type:'num', ans:(180+d)/2, tol:0.001,
+   stem:`Разность двух смежных углов равна <b>${d}°</b>. Найдите <b>больший</b> из них.`,
+   hint:'В градусах.', wrong:{[(180-d)/2]:'M.PROC.04',[d]:'M.ANG.04'},
+   hints:['Обозначьте меньший угол за x.',`Тогда больший — x + ${d}, а сумма равна 180°.`,`2x + ${d} = 180.`]};
+ }},
+
+{id:'G103', node:'GEO.ANG.01', diff:2, topic:'Углы при параллельных',
+ gen(R){ const a=R.int(25,155);
+  return {type:'num', ans:180-a, tol:0.001,
+   stem:`Прямые <b>a</b> и <b>b</b> параллельны, <b>c</b> — секущая. Один из односторонних углов равен <b>${a}°</b>. Найдите другой.`,
+   hint:'В градусах.', wrong:{[a]:'M.ANG.05',[90-a]:'M.ANG.01'},
+   hints:['Односторонние углы при параллельных прямых в сумме дают 180°.','Не путайте с накрест лежащими — те равны.']};
+ }},
+
+{id:'G104', node:'GEO.ANG.01', diff:2, topic:'Биссектриса угла',
+ gen(R){ const h=R.int(15,80);
+  return {type:'num', ans:2*h, tol:0.001,
+   stem:`Луч <b>OM</b> — биссектриса угла <b>AOB</b>. Угол <b>AOM</b> равен <b>${h}°</b>. Найдите угол <b>AOB</b>.`,
+   hint:'В градусах.', wrong:{[h]:'M.ANG.06',[h/2]:'M.ANG.07',[180-h]:'M.ANG.02'},
+   hints:['Биссектриса делит угол пополам.','Значит весь угол вдвое больше половины.']};
+ }},
+
+{id:'G105', node:'GEO.ANG.01', diff:4, topic:'Отношение смежных углов',
+ gen(R){ const k=R.pick([2,3,4,5,8,9,11,14]);
+  const big=180*k/(k+1);
+  return {type:'num', ans:big, tol:0.001,
+   stem:`Углы 1 и 2 — смежные, причём угол 1 <b>в ${k} раз больше</b> угла 2. Найдите угол 1.`,
+   hint:'В градусах.', wrong:{[180/(k+1)]:'M.PROC.04',[180/k]:'M.ANG.08'},
+   hints:['Обозначьте меньший угол за x.',`Тогда больший — ${k}x, и вместе они дают 180°.`,`${k+1}x = 180, значит x = ${180/(k+1)}.`]};
+ }},
+
+// ── GEO.TRI.03 ────────────────────────────────────────────────────
+{id:'G201', node:'GEO.TRI.03', diff:1, topic:'Сумма углов треугольника',
+ gen(R){ let A,B; do{A=R.int(20,120);B=R.int(20,120);}while(A+B>165);
+  return {type:'num', ans:180-A-B, tol:0.001,
+   stem:`В треугольнике <b>ABC</b> угол <b>A = ${A}°</b>, угол <b>B = ${B}°</b>. Найдите угол <b>C</b>.`,
+   hint:'В градусах.', wrong:{[A+B]:'M.GEO.06',[360-A-B]:'M.GEO.07'},
+   hints:['Сумма углов треугольника — 180°.']};
+ }},
+
+{id:'G202', node:'GEO.TRI.03', diff:3, topic:'Внешний угол',
+ gen(R){ let A,B; do{A=R.int(25,90);B=R.int(25,90);}while(A+B>160);
+  return {type:'num', ans:A+B, tol:0.001,
+   stem:`В треугольнике <b>ABC</b> угол <b>A = ${A}°</b>, угол <b>B = ${B}°</b>. Найдите <b>внешний</b> угол при вершине <b>C</b>.`,
+   hint:'В градусах.', wrong:{[180-A-B]:'M.GEO.16',[180-A]:'M.GEO.17'},
+   hints:['Внешний угол смежен с внутренним углом C.','Внешний угол равен сумме двух не смежных с ним внутренних.',`${A} + ${B} = ?`]};
+ }},
+
+{id:'G203', node:'GEO.TRI.03', diff:2, topic:'Равнобедренный: угол при основании',
+ gen(R){ const v=R.pick([20,30,40,50,60,70,80,100,120,140]);
+  return {type:'num', ans:(180-v)/2, tol:0.001,
+   stem:`В равнобедренном треугольнике угол при <b>вершине</b> равен <b>${v}°</b>. Найдите угол при <b>основании</b>.`,
+   hint:'В градусах.', wrong:{[180-v]:'M.GEO.18',[v]:'M.GEO.19',[(180-v)]:'M.GEO.18'},
+   hints:['Углы при основании равнобедренного треугольника равны.',`На два угла при основании остаётся 180 − ${v} = ${180-v}°.`,'Разделите пополам.']};
+ }},
+
+{id:'G204', node:'GEO.TRI.03', diff:2, topic:'Равнобедренный: угол при вершине',
+ gen(R){ const b=R.int(25,85);
+  return {type:'num', ans:180-2*b, tol:0.001,
+   stem:`В равнобедренном треугольнике угол при <b>основании</b> равен <b>${b}°</b>. Найдите угол при <b>вершине</b>.`,
+   hint:'В градусах.', wrong:{[180-b]:'M.GEO.20',[(180-b)/2]:'M.GEO.21'},
+   hints:['Углов при основании — два, и они равны.',`${b} + ${b} = ${2*b}°. Сколько осталось до 180°?`]};
+ }},
+
+{id:'G205', node:'GEO.TRI.03', diff:4, topic:'Углы в отношении',
+ gen(R){ const s=R.pick([[1,2,3],[2,3,4],[1,3,5],[2,2,5],[1,1,4],[3,4,5],[1,4,5],[2,4,6]]);
+  const sum=s[0]+s[1]+s[2]; if(180%sum!==0) return GEO[9].gen(R);
+  const u=180/sum, mx=Math.max(...s);
+  return {type:'num', ans:mx*u, tol:0.001,
+   stem:`Углы треугольника относятся как <b>${s.join(' : ')}</b>. Найдите <b>наибольший</b> угол.`,
+   hint:'В градусах.', wrong:{[Math.min(...s)*u]:'M.PROC.04',[mx]:'M.GEO.22'},
+   hints:['Обозначьте одну часть за x.',`Тогда ${s.join('x + ')}x = 180°, то есть ${sum}x = 180.`,`x = ${u}°. Наибольший угол — ${mx} частей.`]};
+ }},
+
+// ── GEO.PYTH.01 ───────────────────────────────────────────────────
+{id:'G301', node:'GEO.PYTH.01', diff:1, topic:'Гипотенуза',
+ gen(R){ const t0=R.pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[7,24,25],[20,21,29],[12,35,37]]);
+  const kk=R.pick([1,1,2,3,4]); const t=t0.map(x=>x*kk);
+  return {type:'num', ans:t[2], tol:0.001,
+   stem:`Катеты прямоугольного треугольника равны <b>${t[0]}</b> и <b>${t[1]}</b>. Найдите гипотенузу.`,
+   hint:'Одно число.', wrong:{[t[0]+t[1]]:'M.GEO.08',[t[0]*t[1]/2]:'M.GEO.02'},
+   hints:['c² = a² + b².',`c² = ${t[0]**2} + ${t[1]**2} = ${t[0]**2+t[1]**2}.`]};
+ }},
+
+{id:'G302', node:'GEO.PYTH.01', diff:2, topic:'Катет',
+ gen(R){ const t0=R.pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[7,24,25],[20,21,29]]);
+  const kk=R.pick([1,1,2,3,4]); const t=t0.map(x=>x*kk);
+  return {type:'num', ans:t[0], tol:0.001,
+   stem:`Гипотенуза прямоугольного треугольника равна <b>${t[2]}</b>, один катет — <b>${t[1]}</b>. Найдите другой катет.`,
+   hint:'Одно число.', wrong:{[t[2]+t[1]]:'M.GEO.23',[t[2]-t[1]]:'M.GEO.08'},
+   hints:['a² = c² − b².',`a² = ${t[2]**2} − ${t[1]**2} = ${t[2]**2-t[1]**2}.`]};
+ }},
+
+{id:'G303', node:'GEO.PYTH.01', diff:4, topic:'Высота к гипотенузе',
+ gen(R){ const t0=R.pick([[3,4,5],[6,8,10],[5,12,13],[9,12,15],[8,15,17]]);
+  const kk=R.pick([1,1,2,3,4]); const t=t0.map(x=>x*kk);
+  const h=Math.round(t[0]*t[1]/t[2]*1000)/1000;
+  return {type:'num', ans:h, tol:0.01,
+   stem:`Катеты прямоугольного треугольника равны <b>${t[0]}</b> и <b>${t[1]}</b>. Найдите высоту, проведённую к <b>гипотенузе</b>.`,
+   hint:'Десятичная дробь.', wrong:{[t[2]]:'M.GEO.01',[t[0]*t[1]/2]:'M.GEO.02',[(t[0]+t[1])/2]:'M.GEO.03'},
+   hints:['Площадь треугольника можно посчитать двумя способами.',`S = ${t[0]}·${t[1]}/2 = ${t[0]*t[1]/2}, и одновременно S = c·h/2.`,`${t[0]*t[1]/2} = ${t[2]} · h / 2.`]};
+ }},
+
+{id:'G304', node:'GEO.PYTH.01', diff:2, topic:'Диагональ прямоугольника',
+ gen(R){ const t0=R.pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[12,16,20]]);
+  const kk=R.pick([1,1,2,3,4]); const t=t0.map(x=>x*kk);
+  return {type:'num', ans:t[2], tol:0.001,
+   stem:`Стороны прямоугольника равны <b>${t[0]}</b> и <b>${t[1]}</b>. Найдите его <b>диагональ</b>.`,
+   hint:'Одно число.', wrong:{[t[0]*t[1]]:'M.GEO.24',[2*(t[0]+t[1])]:'M.GEO.25'},
+   hints:['Диагональ делит прямоугольник на два прямоугольных треугольника.','Стороны — катеты, диагональ — гипотенуза.']};
+ }},
+
+{id:'G305', node:'GEO.PYTH.01', diff:4, topic:'Высота равнобедренного треугольника',
+ gen(R){ const t0=R.pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15]]);
+  const kk=R.pick([1,1,2,3]); const t=t0.map(x=>x*kk);
+  const half=t[0], h=t[1], side=t[2], base=2*half;
+  return {type:'num', ans:h, tol:0.001,
+   stem:`В равнобедренном треугольнике боковая сторона равна <b>${side}</b>, основание — <b>${base}</b>. Найдите <b>высоту</b>, проведённую к основанию.`,
+   hint:'Одно число.', wrong:{[side]:'M.GEO.26',[base]:'M.GEO.27',[Math.round(Math.sqrt(side*side-base*base)*100)/100]:'M.GEO.28'},
+   hints:['Высота к основанию равнобедренного треугольника делит его пополам.',`Половина основания — ${half}, боковая сторона — гипотенуза ${side}.`,`h² = ${side*side} − ${half*half}.`]};
+ }},
+
+// ── GEO.AREA.01 ───────────────────────────────────────────────────
+{id:'G401', node:'GEO.AREA.01', diff:1, topic:'Площадь треугольника',
+ gen(R){ const a=R.int(3,25), h=R.pick([2,4,6,8,10,12,14]);
+  return {type:'num', ans:a*h/2, tol:0.01,
+   stem:`Основание треугольника равно <b>${a}</b>, высота, проведённая к нему, — <b>${h}</b>. Найдите площадь.`,
+   hint:'Одно число.', wrong:{[a*h]:'M.GEO.09',[a+h]:'M.GEO.29'},
+   hints:['S = a · h / 2.']};
+ }},
+
+{id:'G402', node:'GEO.AREA.01', diff:2, topic:'Площадь прямоугольного треугольника',
+ gen(R){ const t0=R.pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[7,24,25]]);
+  const kk=R.pick([1,1,2,3]); const t=t0.map(x=>x*kk);
+  return {type:'num', ans:t[0]*t[1]/2, tol:0.01,
+   stem:`Катеты прямоугольного треугольника равны <b>${t[0]}</b> и <b>${t[1]}</b>. Найдите его площадь.`,
+   hint:'Одно число.', wrong:{[t[0]*t[1]]:'M.GEO.09',[t[2]]:'M.GEO.01',[t[0]*t[2]/2]:'M.GEO.30'},
+   hints:['В прямоугольном треугольнике катеты — это основание и высота.','S = a · b / 2.']};
+ }},
+
+{id:'G403', node:'GEO.AREA.01', diff:2, topic:'Площадь параллелограмма',
+ gen(R){ const a=R.int(4,22), h=R.int(3,16);
+  return {type:'num', ans:a*h, tol:0.01,
+   stem:`Сторона параллелограмма равна <b>${a}</b>, высота, проведённая к ней, — <b>${h}</b>. Найдите площадь.`,
+   hint:'Одно число.', wrong:{[a*h/2]:'M.GEO.31',[2*(a+h)]:'M.GEO.25'},
+   hints:['Площадь параллелограмма — произведение стороны на высоту к ней.','Делить пополам не нужно — это не треугольник.']};
+ }},
+
+{id:'G404', node:'GEO.AREA.01', diff:3, topic:'Высота трапеции по площади',
+ gen(R){ const a=R.int(4,18), b=R.int(4,18), h=R.pick([2,4,6,8,10]);
+  const S=(a+b)*h/2;
+  return {type:'num', ans:h, tol:0.01,
+   stem:`Площадь трапеции равна <b>${S}</b>, основания — <b>${a}</b> и <b>${b}</b>. Найдите <b>высоту</b>.`,
+   hint:'Одно число.', wrong:{[Math.round(S/(a+b)*100)/100]:'M.ALG.01',[Math.round(S/(a*b)*100)/100]:'M.ALG.02'},
+   hints:['S = (a + b) · h / 2. Выразите h.',`h = 2S / (a + b) = ${2*S} / ${a+b}.`]};
+ }},
+
+{id:'G405', node:'GEO.AREA.01', diff:3, topic:'Площадь ромба по диагоналям',
+ gen(R){ const d1=R.pick([4,6,8,10,12,14,16,18]), d2=R.pick([4,6,8,10,12,14,20,24]);
+  return {type:'num', ans:d1*d2/2, tol:0.01,
+   stem:`Диагонали ромба равны <b>${d1}</b> и <b>${d2}</b>. Найдите его площадь.`,
+   hint:'Одно число.', wrong:{[d1*d2]:'M.GEO.09',[(d1+d2)/2]:'M.GEO.29'},
+   hints:['Диагонали ромба перпендикулярны и делятся пополам.','S = d₁ · d₂ / 2.']};
+ }},
+
+{id:'G406', node:'GEO.AREA.01', diff:4, topic:'Площадь по двум сторонам и углу',
+ gen(R){ const ang=R.pick([30,150]), a=R.pick([4,6,8,10,12,14,16]), b=R.pick([4,6,8,10,12,20]);
+  return {type:'num', ans:a*b/4, tol:0.01,
+   stem:`Две стороны треугольника равны <b>${a}</b> и <b>${b}</b>, угол между ними — <b>${ang}°</b>. Найдите площадь.`,
+   hint:'Одно число.', wrong:{[a*b/2]:'M.GEO.32',[a*b]:'M.GEO.09'},
+   hints:['S = ½ · a · b · sin C.',`sin ${ang}° = 0,5.`,`S = 0,5 · ${a} · ${b} · 0,5.`]};
+ }},
+
+// ── GEO.CIRC.01 ───────────────────────────────────────────────────
+{id:'G501', node:'GEO.CIRC.01', diff:2, topic:'Вписанный угол по дуге',
+ gen(R){ const arc=R.pick([30,40,50,60,70,80,100,110,120,140,160]);
+  return {type:'num', ans:arc/2, tol:0.001,
+   stem:`Вписанный угол опирается на дугу в <b>${arc}°</b>. Найдите величину этого угла.`,
+   hint:'В градусах.', wrong:{[arc]:'M.GEO.11',[2*arc]:'M.GEO.12',[180-arc]:'M.GEO.13'},
+   hints:['Вписанный угол вдвое меньше дуги, на которую опирается.']};
+ }},
+
+{id:'G502', node:'GEO.CIRC.01', diff:2, topic:'Центральный угол по вписанному',
+ gen(R){ const w=R.int(15,85);
+  return {type:'num', ans:2*w, tol:0.001,
+   stem:`Вписанный угол равен <b>${w}°</b>. Найдите <b>центральный</b> угол, опирающийся на ту же дугу.`,
+   hint:'В градусах.', wrong:{[w/2]:'M.GEO.33',[w]:'M.GEO.11',[180-w]:'M.GEO.13'},
+   hints:['Центральный угол вдвое больше вписанного, опирающегося на ту же дугу.']};
+ }},
+
+{id:'G503', node:'GEO.CIRC.01', diff:3, topic:'Угол, опирающийся на диаметр',
+ gen(R){ const a=R.int(15,75);
+  return {type:'num', ans:90-a, tol:0.001,
+   stem:`Треугольник вписан в окружность так, что одна его сторона — <b>диаметр</b>. Один из острых углов равен <b>${a}°</b>. Найдите другой острый угол.`,
+   hint:'В градусах.', wrong:{[180-a]:'M.GEO.34',[a]:'M.GEO.35',[180-2*a]:'M.GEO.36'},
+   hints:['Вписанный угол, опирающийся на диаметр, — прямой.','Значит третий угол треугольника равен 90°.',`90 − ${a} = ?`]};
+ }},
+
+{id:'G504', node:'GEO.CIRC.01', diff:3, topic:'Вписанный четырёхугольник',
+ gen(R){ const a=R.int(50,140);
+  return {type:'num', ans:180-a, tol:0.001,
+   stem:`Четырёхугольник вписан в окружность. Один из его углов равен <b>${a}°</b>. Найдите <b>противоположный</b> угол.`,
+   hint:'В градусах.', wrong:{[a]:'M.GEO.37',[360-a]:'M.GEO.07',[90-a]:'M.ANG.01'},
+   hints:['Сумма противоположных углов вписанного четырёхугольника — 180°.']};
+ }},
+
+{id:'G505', node:'GEO.CIRC.01', diff:4, topic:'Касательная и радиус',
+ gen(R){ const t0=R.pick([[3,4,5],[6,8,10],[5,12,13],[8,15,17],[9,12,15],[7,24,25]]);
+  const kk=R.pick([1,1,2,3,4]); const t=t0.map(x=>x*kk);
+  return {type:'num', ans:t[0], tol:0.001,
+   stem:`Из точки, удалённой от центра окружности на <b>${t[2]}</b>, проведена касательная. Длина отрезка касательной до точки касания — <b>${t[1]}</b>. Найдите <b>радиус</b>.`,
+   hint:'Одно число.', wrong:{[t[2]-t[1]]:'M.GEO.08',[t[2]+t[1]]:'M.GEO.23'},
+   hints:['Радиус перпендикулярен касательной в точке касания.','Получается прямоугольный треугольник: радиус и касательная — катеты, расстояние до центра — гипотенуза.',`r² = ${t[2]**2} − ${t[1]**2}.`]};
+ }},
+
+// ── GEO.TRIG.01 ───────────────────────────────────────────────────
+{id:'G601', node:'GEO.TRIG.01', diff:2, topic:'Косинус острого угла',
+ gen(R){ const t0=R.pick([[3,4,5],[4,3,5],[6,8,10],[8,6,10],[9,12,15],[12,16,20]]);
+  const kk=R.pick([1,1,2,3]); const t=t0.map(x=>x*kk);
+  const v=Math.round(t[1]/t[2]*10000)/10000;
+  return {type:'num', ans:v, tol:0.002,
+   stem:`В прямоугольном треугольнике катеты равны <b>${t[0]}</b> и <b>${t[1]}</b>, гипотенуза — <b>${t[2]}</b>. Найдите <b>косинус</b> угла, лежащего <b>против</b> катета ${t[0]}.`,
+   hint:'Десятичная дробь.', wrong:{[Math.round(t[0]/t[2]*10000)/10000]:'M.TRIG.04',[Math.round(t[1]/t[0]*10000)/10000]:'M.TRIG.03'},
+   hints:['Косинус — отношение ПРИЛЕЖАЩЕГО катета к гипотенузе.',`Против катета ${t[0]} лежит наш угол, значит прилежащий к нему катет — ${t[1]}.`]};
+ }},
+
+{id:'G602', node:'GEO.TRIG.01', diff:3, topic:'Гипотенуза по синусу',
+ gen(R){ const t0=R.pick([[3,4,5],[4,3,5],[6,8,10],[8,6,10],[9,12,15],[12,16,20]]);
+  const kk=R.pick([1,1,2,3]); const t=t0.map(x=>x*kk);
+  const f=n=>(''+n).replace('.',',');
+  return {type:'num', ans:t[2], tol:0.01,
+   stem:`В прямоугольном треугольнике катет равен <b>${t[0]}</b>, а синус противолежащего ему угла равен <b>${f(Math.round(t[0]/t[2]*1000)/1000)}</b>. Найдите гипотенузу.`,
+   hint:'Одно число.', wrong:{[Math.round(t[0]*t[0]/t[2]*100)/100]:'M.TRIG.05'},
+   hints:['sin = противолежащий катет : гипотенуза.','Значит гипотенуза = катет : sin.']};
+ }},
+
+{id:'G603', node:'GEO.TRIG.01', diff:3, topic:'Тангенс',
+ gen(R){ const t=R.pick([[1,2],[2,1],[3,2],[2,5],[3,4],[4,5],[1,4],[7,10],[3,10],[1,5]]);
+  const k=R.pick([1,2,3,4,5]);
+  const f=n=>(''+Math.round(n*1000)/1000).replace('.',',');
+  return {type:'num', ans:t[1]*k, tol:0.01,
+   stem:`В прямоугольном треугольнике тангенс острого угла равен <b>${f(t[0]/t[1])}</b>, а противолежащий этому углу катет равен <b>${t[0]*k}</b>. Найдите прилежащий катет.`,
+   hint:'Одно число.', wrong:{[Math.round(t[0]*k*t[0]/t[1]*100)/100]:'M.TRIG.06'},
+   hints:['tg = противолежащий : прилежащий.','Значит прилежащий = противолежащий : tg.']};
+ }},
+
+{id:'G604', node:'GEO.TRIG.01', diff:2, topic:'Катет по косинусу',
+ gen(R){ const t0=R.pick([[3,4,5],[4,3,5],[6,8,10],[8,6,10],[9,12,15],[12,16,20]]);
+  const kk=R.pick([1,1,2,3]); const t=t0.map(x=>x*kk);
+  const f=n=>(''+Math.round(n*1000)/1000).replace('.',',');
+  return {type:'num', ans:t[1], tol:0.01,
+   stem:`Гипотенуза прямоугольного треугольника равна <b>${t[2]}</b>, косинус острого угла — <b>${f(t[1]/t[2])}</b>. Найдите <b>прилежащий</b> к этому углу катет.`,
+   hint:'Одно число.', wrong:{[t[0]]:'M.TRIG.04',[Math.round(t[2]/(t[1]/t[2])*100)/100]:'M.TRIG.05'},
+   hints:['cos = прилежащий катет : гипотенуза.','Значит прилежащий катет = гипотенуза · cos.']};
+ }},
+
+{id:'G605', node:'GEO.TRIG.01', diff:4, topic:'Основное тригонометрическое тождество',
+ gen(R){ const t=R.pick([[3,4,5],[4,3,5],[7,24,25],[24,7,25],[15,20,25],[20,15,25],[6,8,10],[8,6,10],[20,99,101],[99,20,101]]);
+  const s=Math.round(t[0]/t[2]*10000)/10000, c=Math.round(t[1]/t[2]*10000)/10000;
+  const f=n=>(''+n).replace('.',',');
+  return {type:'num', ans:c, tol:0.002,
+   stem:`В треугольнике <b>ABC</b> угол <b>C = 90°</b>, <b>sin A = ${f(s)}</b>. Найдите <b>cos A</b>.`,
+   hint:'Десятичная дробь, угол A острый.', wrong:{[s]:'M.TRIG.07',[Math.round((1-s)*10000)/10000]:'M.TRIG.08'},
+   hints:['sin²A + cos²A = 1.',`cos²A = 1 − ${f(Math.round(s*s*10000)/10000)}.`,'Угол A острый, значит косинус положительный.']};
+ }}
+
+];
+
+"use strict";
+/* ═══ КОНФИГУРАЦИЯ ═══ */
+const CFG = {
+  title:'Порог',                        // рабочее название продукта
+  subtitle:'Математика · ОГЭ · 9 класс',
+  tgLink:'',                            // ← ссылка на Telegram-канал, когда появится
+  diagLen:18                            // заданий в диагностике
+};
+
+/* ═══ ГЕНЕРАТОР СЛУЧАЙНЫХ ЧИСЕЛ (детерминированный по seed) ═══ */
+function mkR(seed){
+  let s=seed>>>0;
+  const r=()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);
+    t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};
+  return {r, int:(a,b)=>a+Math.floor(r()*(b-a+1)), pick:a=>a[Math.floor(r()*a.length)],
+    shuffle:a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}};
+}
+let SEED = (Date.now()^0x9E3779B9)>>>0;
+const nextR = ()=> mkR(SEED = (SEED*1664525+1013904223)>>>0);
+
+/* ═══ ХРАНИЛИЩЕ (только в браузере ученика) ═══ */
+const KEY='porog.v1';
+function load(){ try{ const v=localStorage.getItem(KEY); return v?JSON.parse(v):{}; }catch(e){ return {}; } }
+function save(st){ try{ localStorage.setItem(KEY, JSON.stringify(st)); }catch(e){} }
+let ST = load();
+
+/* ═══ ГРУППЫ ДИАГНОСТИКИ ═══ */
+const GROUP = {
+  D01:'num',D02:'num',D03:'num',D04:'num',D05:'num',D06:'num',D07:'num',
+  D08:'alg',D09:'alg',D10:'alg',D11:'alg',
+  D12:'prb',D13:'prb',D14:'prb',
+  D15:'fun',D16:'fun',D17:'fun',
+  D18:'ineq',D19:'ineq', D20:'seq',
+  D21:'geo',D22:'geo',D23:'geo',D24:'geo',D25:'geo',D26:'geo',D27:'geo',D28:'geo'
+};
+const GROUP_NAME = {num:'Числа и вычисления',alg:'Уравнения и системы',prb:'Вероятность и статистика',
+  fun:'Функции и графики',ineq:'Неравенства',seq:'Прогрессии',geo:'Геометрия'};
+const BLUEPRINT = ['num','geo','alg','num','prb','geo','alg','fun','num','geo','ineq','alg','geo','prb','num','fun','seq','geo'];
+
+/* ═══ УТИЛИТЫ ═══ */
+const $ = s => document.querySelector(s);
+const el = (h)=>{const d=document.createElement('div'); d.innerHTML=h.trim(); return d.firstElementChild;};
+const num = s => { const t=String(s).trim().replace(/\s| /g,'').replace(',','.').replace(/−/g,'-');
+  return /^-?\d*\.?\d+$/.test(t) ? parseFloat(t) : NaN; };
+const fmt = n => (''+n).replace('.',',');
+const esc = s => String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+function sanitizeQ(q){
+  if(q.type==='num'&&q.wrong){ const w={},tol=q.tol||0.001;
+    for(const k in q.wrong){const v=parseFloat(k); if(isFinite(v)&&Math.abs(v-q.ans)>tol) w[k]=q.wrong[k];}
+    q.wrong=w; }
+  return q;
+}
+
+/* ═══ BKT ═══ */
+function bkt(p, correct){
+  const SLIP=.1, GUESS=.2, T=.28;
+  const post = correct ? p*(1-SLIP)/(p*(1-SLIP)+(1-p)*GUESS)
+                       : p*SLIP/(p*SLIP+(1-p)*(1-GUESS));
+  return Math.min(.985, post+(1-post)*T);
+}
+
+/* ═══ РОУТЕР ═══ */
+let view='home';
+function go(v){ view=v; window.scrollTo(0,0); render(); }
+
+function shell(inner, chips){
+  return `
+  <header class="top"><div class="top-in">
+    <button class="brand" onclick="go('home')">
+      <div class="mark">П</div>
+      <div><b>${CFG.title}</b><span>${CFG.subtitle}</span></div>
+    </button>
+    ${chips||''}
+  </div></header>
+  <div class="wrap">${inner}</div>`;
+}
+
+/* ═══ ЭКРАН 1 · ГЛАВНАЯ ═══ */
+function viewHome(){
+  const last = ST.diag;
+  const geoM = ST.geo||{};
+  const mastered = GEO_NODES.filter(n=>(geoM[n.id]||0)>=.75).length;
+  return shell(`
+    <div class="narrow" style="margin:0 auto">
+    <section class="hero">
+      <h1>Узнай за 20 минут, что мешает тебе сдать ОГЭ по математике</h1>
+      <p>Бесплатно и без регистрации. Диагностика покажет, какие темы просели, и посчитает прогноз первичного балла. Дальше — тренажёр по геометрии: без двух баллов за неё тройку не поставят, а именно её чаще всего избегают.</p>
+    </section>
+
+    <div class="tiles">
+      <button class="tile" onclick="startDiag()">
+        <span class="badge">20–25 минут</span>
+        <h2>Диагностика</h2>
+        <p>${CFG.diagLen} заданий по всем темам ОГЭ. В конце — карта пробелов, прогноз балла и разбор каждой ошибки с объяснением, что именно пошло не так.</p>
+        <span class="go">${last?'Пройти заново →':'Начать →'}</span>
+      </button>
+      <button class="tile" onclick="go('geo')">
+        <span class="badge">Тренажёр</span>
+        <h2>Геометрия: 2 балла до тройки</h2>
+        <p>Шесть навыков, которых хватает, чтобы взять геометрический порог. Задачи не повторяются, каждая ошибка разбирается по существу.</p>
+        <span class="go">${mastered?`Продолжить · освоено ${mastered} из 6 →`:'Начать →'}</span>
+      </button>
+    </div>
+
+    ${last ? `<div class="card pad" style="margin-bottom:18px">
+      <span class="eyebrow">Прошлая диагностика</span>
+      <div class="score" style="margin-top:8px"><b>${last.lo}–${last.hi}</b><span>из 31 первичного балла · ориентир ${last.mark}</span></div>
+      <div class="row"><button onclick="go('result')">Посмотреть разбор</button></div>
+    </div>` : ''}
+
+    <div class="facts">
+      <div class="fact"><b>59</b><span>шаблонов заданий, числа не повторяются</span></div>
+      <div class="fact"><b>91</b><span>код типовых ошибок с разбором</span></div>
+      <div class="fact"><b>0</b><span>собираемых данных о вас</span></div>
+    </div>
+
+    <p class="foot"><b>Что это.</b> Демонстрационная версия тренажёра: один предмет, две темы. Мы ничего не продаём и не просим регистрироваться.
+    Прогресс хранится только в вашем браузере и никуда не передаётся. Все задания написаны нами — это не задания ФИПИ и не задания из чужих сборников.
+    Прогноз балла — оценка по вашим ответам, а не гарантия результата.</p>
+    </div>
+  `);
+}
+
+/* ═══ ЭКРАН 2 · ДИАГНОСТИКА ═══ */
+let D = null;
+function startDiag(){
+  D = {i:0, items:[], used:new Set(), theta:2, t0:Date.now(), cur:null, picked:null};
+  nextItem(); go('diag');
+}
+function pickTemplate(group, theta){
+  const pool = DIAG.filter(t=>GROUP[t.id]===group && !D.used.has(t.id));
+  const src = pool.length ? pool : DIAG.filter(t=>GROUP[t.id]===group);
+  let best=src[0], bd=99;
+  for(const t of src){ const d=Math.abs(t.diff-theta); if(d<bd){bd=d;best=t;} }
+  return best;
+}
+function nextItem(){
+  const g = BLUEPRINT[D.i];
+  const T = pickTemplate(g, D.theta);
+  D.used.add(T.id);
+  D.cur = {T, q:sanitizeQ(T.gen(nextR())), t:Date.now()};
+  D.picked = null;
+}
+function viewDiag(){
+  const q=D.cur.q, T=D.cur.T, n=D.i+1, total=CFG.diagLen;
+  let body;
+  if(q.type==='num'){
+    body = `<div class="answer">
+      <input type="text" id="ans" placeholder="ответ" autocomplete="off" inputmode="decimal">
+      <button onclick="submitDiag()">Дальше</button>
+      <button class="ghost" onclick="submitDiag(true)">Не знаю</button></div>`;
+  } else if(q.type==='mc'){
+    body = `<div class="opts">${q.opts.map((o,i)=>
+      `<button class="opt" onclick="pickOpt(${i})" id="o${i}"><span class="k">${'АБВГД'[i]}</span><span>${o.t}</span></button>`).join('')}
+      </div><div class="row"><button onclick="submitDiag()">Дальше</button><button class="ghost" onclick="submitDiag(true)">Не знаю</button></div>`;
+  } else {
+    body = `<div class="opts">${q.opts.map((o,i)=>
+      `<button class="opt" onclick="toggleOpt(${i})" id="o${i}"><span class="k">${'АБВГД'[i]}</span><span>${o.t}</span></button>`).join('')}
+      </div><div class="row"><button onclick="submitDiag()">Дальше</button><button class="ghost" onclick="submitDiag(true)">Не знаю</button></div>`;
+  }
+  return shell(`<div class="narrow" style="margin:0 auto">
+    <div class="pbar"><i style="width:${(D.i/total*100).toFixed(1)}%"></i></div>
+    <section class="card pad">
+      <div class="meta">
+        <span class="eyebrow">Задание ${n} из ${total}</span>
+        <span class="tag${GROUP[T.id]==='geo'?' geo':''}">${GROUP_NAME[GROUP[T.id]]}</span>
+        <span class="tag">ОГЭ № ${T.exam}</span>
+      </div>
+      <h2 class="stem">${q.stem}</h2>
+      <p class="hintline">${q.hint||''}</p>
+      ${body}
+    </section>
+    <p class="foot">Это диагностика, а не тренировка: подсказок и проверки ответа здесь нет — полный разбор всех заданий будет в конце.
+    Если не знаете — нажмите «Не знаю», это честнее для прогноза, чем угадывание.</p>
+  </div>`, `<span class="chip">Задание <b>${n} / ${total}</b></span>
+     <span class="chip">Прошло <b id="clock">0:00</b></span>`);
+}
+function pickOpt(i){ D.picked=i; document.querySelectorAll('.opt').forEach((b,k)=>b.classList.toggle('sel',k===i)); }
+function toggleOpt(i){
+  if(!Array.isArray(D.picked)) D.picked=[];
+  const k=D.picked.indexOf(i); if(k<0) D.picked.push(i); else D.picked.splice(k,1);
+  document.querySelectorAll('.opt').forEach((b,j)=>b.classList.toggle('sel',D.picked.includes(j)));
+}
+function submitDiag(skip){
+  const {T,q,t}=D.cur; let ok=false, code=null, given='—';
+  if(!skip){
+    if(q.type==='num'){
+      const raw=$('#ans').value; given=raw.trim()||'—';
+      const v=num(raw);
+      if(!isNaN(v)){
+        ok = Math.abs(v-q.ans)<=(q.tol||0.001);
+        if(!ok) for(const k in (q.wrong||{})) if(Math.abs(v-parseFloat(k))<=(q.tol||0.001)) code=q.wrong[k];
+      } else if(raw.trim()!=='') given=raw.trim();
+    } else if(q.type==='mc'){
+      if(D.picked===null) return flash('Выберите вариант или нажмите «Не знаю»');
+      const o=q.opts[D.picked]; given=o.t; ok=!!o.ok; if(!ok) code=o.m||null;
+    } else {
+      if(!Array.isArray(D.picked)||!D.picked.length) return flash('Отметьте хотя бы один вариант или нажмите «Не знаю»');
+      const chosen=new Set(D.picked);
+      ok = q.opts.every((o,i)=>!!o.ok===chosen.has(i));
+      given = D.picked.map(i=>'АБВГД'[i]).join(', ');
+    }
+  }
+  const right = q.type==='num' ? fmt(q.ans)
+              : q.type==='mc' ? q.opts.find(o=>o.ok).t
+              : q.opts.map((o,i)=>o.ok?'АБВГД'[i]:null).filter(Boolean).join(', ');
+  D.items.push({id:T.id, node:T.node, group:GROUP[T.id], topic:T.topic, exam:T.exam,
+    diff:T.diff, ok, code, given, right, stem:q.stem, ms:Date.now()-t});
+  D.theta = Math.max(1, Math.min(4, D.theta + (ok?0.6:-0.8)));
+  D.i++;
+  if(D.i>=CFG.diagLen){ finishDiag(); } else { nextItem(); render(); }
+}
+function flash(msg){
+  const b=el(`<div class="fb err" style="margin-top:14px"><p style="margin:0">${msg}</p></div>`);
+  const c=$('.card'); const old=c.querySelector('.fb'); if(old) old.remove(); c.appendChild(b);
+}
+
+function finishDiag(){
+  const it=D.items, n=it.length;
+  const acc = it.filter(x=>x.ok).length/n;
+  const adv = it.filter(x=>x.diff>=3);
+  const advAcc = adv.length? adv.filter(x=>x.ok).length/adv.length : 0;
+  const p1 = Math.round(acc*19);
+  const gate = Math.max(0, Math.min(1,(acc-0.6)/0.4));
+  const p2 = Math.round(advAcc*12*gate);
+  const primary = Math.max(0, Math.min(31, p1+p2));
+  const half = Math.max(2, Math.round(5 - n/6));
+  const lo=Math.max(0,primary-half), hi=Math.min(31,primary+half);
+  const geo = it.filter(x=>x.group==='geo');
+  const geoOk = geo.filter(x=>x.ok).length;
+  const thr = geoOk>=2;
+  const mark = !thr ? '«2» — порог по геометрии не взят'
+             : primary>=22 ? '«5»' : primary>=15 ? '«4»' : primary>=8 ? '«3»' : '«2» — ниже порога';
+  const groups={};
+  for(const x of it){ (groups[x.group]=groups[x.group]||{n:0,ok:0}); groups[x.group].n++; if(x.ok)groups[x.group].ok++; }
+  ST.diag = {lo,hi,primary,mark,thr,geoOk,geoN:geo.length,acc,groups,items:it,
+             mins:Math.max(1,Math.round((Date.now()-D.t0)/60000))};
+  // засеиваем тренажёр результатами диагностики
+  ST.geo = ST.geo||{};
+  for(const nd of GEO_NODES){
+    const rel=geo.filter(x=>x.node===nd.id);
+    if(rel.length) ST.geo[nd.id] = Math.max(ST.geo[nd.id]||0, rel.every(x=>x.ok)?0.55:0.22);
+    else if(ST.geo[nd.id]===undefined) ST.geo[nd.id]=0.3;
+  }
+  save(ST); go('result');
+}
+
+/* ═══ ЭКРАН 3 · РЕЗУЛЬТАТ ═══ */
+function viewResult(){
+  const r=ST.diag; if(!r) return viewHome();
+  const gs = Object.entries(r.groups).map(([k,v])=>({k,name:GROUP_NAME[k],p:v.ok/v.n,n:v.n,ok:v.ok}))
+              .sort((a,b)=>a.p-b.p);
+  const errs = r.items.filter(x=>!x.ok);
+  return shell(`<div class="layout">
+    <main>
+      <section class="card pad">
+        <span class="eyebrow">Результат диагностики · ${r.mins||1} мин</span>
+        <h2 style="font-size:23px;margin:6px 0 4px">Верно ${r.items.filter(x=>x.ok).length} из ${r.items.length}</h2>
+
+        <div class="thr ${r.thr?'pass':'fail'}">
+          <span class="ic">${r.thr?'✓':'!'}</span>
+          <div><b>${r.thr?'Геометрический порог взят':'Геометрический порог НЕ взят'}</b>
+          <p>${r.thr
+            ? `Из ${r.geoN} геометрических заданий верно ${r.geoOk}. На ОГЭ без двух баллов за геометрию тройку не ставят — этот риск у вас закрыт. Дальше можно поднимать общий балл.`
+            : `Из ${r.geoN} геометрических заданий верно ${r.geoOk}. <b>Это главная опасность:</b> на ОГЭ без двух баллов за геометрию оценку «3» не выставят, каким бы ни был остальной балл. Начинать нужно отсюда.`}</p></div>
+        </div>
+
+        <h3 style="font-size:15px;margin-top:22px">Где просело</h3>
+        <div class="gap-list">${gs.map(g=>`
+          <div class="gap${g.p>=0.7?' ok':''}">
+            <b>${g.name}</b><span class="v">${g.ok} / ${g.n}</span>
+            <small>${g.p>=0.7?'В порядке — держите этот уровень':g.p>=0.4?'Есть провалы, нужна практика':'Слабое место, начинать отсюда'}</small>
+          </div>`).join('')}</div>
+
+        ${errs.length?`<h3 style="font-size:15px;margin-top:24px">Разбор ошибок</h3>
+        ${errs.map(e=>{
+          const m=e.code?MIS[e.code]:null;
+          return `<div class="fb err" style="margin-top:14px">
+            <h4>${e.topic} · ОГЭ № ${e.exam} ${e.code?`<span class="code">${e.code}</span>`:''}</h4>
+            <div style="font-size:14.5px;margin-bottom:10px;color:var(--ink-2)">${e.stem}</div>
+            <dl style="margin:0">
+              <div class="slot"><dt>Ваш ответ</dt><dd>${esc(e.given)}</dd></div>
+              <div class="slot"><dt>Верный ответ</dt><dd><b>${esc(e.right)}</b></dd></div>
+              ${m?`<div class="slot"><dt>Что случилось</dt><dd>${m.t}</dd></div>
+                  <div class="slot"><dt>Почему это ошибка</dt><dd>${m.w}</dd></div>
+                  <div class="slot"><dt>Что сделать</dt><dd>${m.d}</dd></div>`
+                 :`<div class="slot"><dt>Что сделать</dt><dd>Разберите это задание заново: тема «${e.topic}» просела.</dd></div>`}
+            </dl></div>`;}).join('')}`
+        :`<div class="fb ok" style="margin-top:20px"><h4>Ошибок нет</h4>
+          <p style="margin:0">Все ${r.items.length} заданий решены верно. Диагностика этого уровня себя исчерпала — имеет смысл переходить к части 2.</p></div>`}
+
+        <div class="row" style="margin-top:24px">
+          <button onclick="go('geo')">${r.thr?'Закрепить геометрию':'Взять геометрический порог'} →</button>
+          <button class="ghost" onclick="startDiag()">Пройти диагностику заново</button>
+        </div>
+      </section>
+      <p class="foot"><b>Как считается прогноз.</b> Мы берём долю верных ответов, отдельно учитываем задания повышенной сложности и переводим это
+      в первичный балл ОГЭ (максимум 31). Интервал отражает неопределённость: ${r.items.length} заданий — это оценка, а не измерение.
+      Реальный балл зависит ещё и от того, как вы напишете часть 2, которой в диагностике нет.</p>
+    </main>
+
+    <aside class="rail">
+      <div class="card pad">
+        <h3>Прогноз первичного балла <em>интервал</em></h3>
+        <div class="score"><b>${r.lo}–${r.hi}</b><span>из 31</span></div>
+        <div class="scale"><i style="left:${r.lo/31*100}%;width:${(r.hi-r.lo)/31*100}%"></i></div>
+        <div class="legend"><span>0</span><span>«3» ≥ 8</span><span>«4» ≥ 15</span><span>«5» ≥ 22</span><span>31</span></div>
+        <p class="note" style="margin:12px 0 0">Ориентир: <b>${r.mark}</b>. Порог «3» требует ещё и не менее <b>2 баллов по геометрии</b>.</p>
+      </div>
+      <div class="card pad">
+        <h3>Ответы по заданиям</h3>
+        <div class="tblwrap"><table class="rev">
+          <tr><th></th><th>Тема</th><th>№</th></tr>
+          ${r.items.map(x=>`<tr><td><span class="dotmark ${x.ok?'y':'n'}"></span></td>
+            <td>${x.topic}</td><td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--ink-3)">${x.exam}</td></tr>`).join('')}
+        </table></div>
+      </div>
+    </aside>
+  </div>`, `<span class="chip pred">Прогноз <b>${r.lo}–${r.hi}</b></span>
+    <span class="chip">${r.thr?'Порог по геометрии взят':'Порог по геометрии не взят'}</span>`);
+}
+
+/* ═══ ЭКРАН 4 · ТРЕНАЖЁР ГЕОМЕТРИИ ═══ */
+let G=null;
+function initGeo(){
+  ST.geo = ST.geo||{}; for(const n of GEO_NODES) if(ST.geo[n.id]===undefined) ST.geo[n.id]=0.3;
+  G={cur:null, attempts:0, hints:0, done:0, lastNode:null, solved:0};
+  nextGeo(); save(ST);
+}
+function nextGeo(){
+  const cand = GEO_NODES.filter(n=>ST.geo[n.id]<0.92);
+  const pool = (cand.length?cand:GEO_NODES).filter(n=>n.id!==G.lastNode);
+  const list = pool.length?pool:(cand.length?cand:GEO_NODES);
+  let node=list[0]; for(const n of list) if(ST.geo[n.id]<ST.geo[node.id]) node=n;
+  const theta = 1+ST.geo[node.id]*3.2;
+  const tpl = GEO.filter(t=>t.node===node.id);
+  let best=tpl[0],bd=99; const R=nextR();
+  const shuffled=R.shuffle(tpl);
+  for(const t of shuffled){ const d=Math.abs(t.diff-theta); if(d<bd){bd=d;best=t;} }
+  G.cur={node, T:best, q:sanitizeQ(best.gen(nextR()))};
+  G.attempts=0; G.hints=0; G.lastNode=node.id;
+}
+function viewGeo(){
+  if(!G) initGeo();
+  const {node,T,q}=G.cur;
+  const mastered = GEO_NODES.filter(n=>ST.geo[n.id]>=0.75).length;
+  const goal = mastered>=4;
+  const body = q.type==='num'
+   ? `<div class="answer">
+        <input type="text" id="gans" placeholder="ответ" autocomplete="off" inputmode="decimal">
+        <button onclick="checkGeo()">Проверить</button>
+        <button class="ghost" onclick="showHint()">Подсказка</button></div>`
+   : '';
+  return shell(`<div class="layout">
+    <main>
+      <section class="card pad">
+        <div class="meta">
+          <span class="eyebrow">Задача ${G.done+1}</span>
+          <span class="tag geo">${node.id}</span>
+          <span class="tag">${T.topic}</span>
+          <span class="tag">ОГЭ № ${node.exam}</span>
+        </div>
+        <h2 class="stem">${q.stem}</h2>
+        <p class="hintline">${q.hint||''}</p>
+        ${body}
+        <div id="gfb"></div>
+        <div class="hints" id="ghints"></div>
+        <div class="row"><button class="link" onclick="reportBug()">В задании ошибка</button></div>
+        <div id="bugbox"></div>
+      </section>
+      <p class="foot"><b>Как это работает.</b> Задачи подбираются по вашему уровню и перемешиваются между темами — так материал удерживается лучше,
+      чем при решении подряд одной темы. Числа в каждой задаче новые, поэтому решить «по памяти» не получится.
+      Прогресс хранится в вашем браузере; чтобы начать заново, <button class="link" onclick="resetGeo()">сбросьте его</button>.</p>
+    </main>
+    <aside class="rail">
+      <div class="card pad">
+        <h3>Цель <em>${mastered} из 6</em></h3>
+        <div class="thr ${goal?'pass':'wait'}" style="margin:0">
+          <span class="ic">${goal?'✓':'○'}</span>
+          <div><b>${goal?'Порог закрыт':'Порог: 4 навыка из 6'}</b>
+          <p>${goal?'Этого набора хватает, чтобы уверенно взять два балла за геометрию на ОГЭ.'
+                  :'Освойте любые четыре навыка на 75% — этого хватает на два балла за геометрию.'}</p></div>
+        </div>
+      </div>
+      <div class="card pad">
+        <h3>Навыки <em>P(освоено)</em></h3>
+        ${GEO_NODES.map(n=>{const p=Math.round(ST.geo[n.id]*100);
+          const c=p>=75?'hi':p>=45?'mid':'lo';
+          return `<div class="skill"><div class="nm">${n.name}<small>${n.id}</small></div>
+            <div class="pc">${p}%</div><div class="bar"><i class="${c}" style="width:${p}%"></i></div></div>`;}).join('')}
+      </div>
+      <div class="card pad">
+        <h3>Сегодня</h3>
+        <div class="skill" style="border:0"><div class="nm">Решено задач</div><div class="pc">${G.solved}</div></div>
+      </div>
+    </aside>
+  </div>`, `<span class="chip">Освоено <b>${mastered} / 6</b></span>`);
+}
+function showHint(){
+  const q=G.cur.q, list=q.hints||[];
+  if(G.hints>=list.length) return;
+  $('#ghints').insertAdjacentHTML('beforeend',
+    `<div class="hint"><b>Подсказка ${G.hints+1}.</b> ${list[G.hints]}</div>`);
+  G.hints++;
+}
+function checkGeo(){
+  const q=G.cur.q, node=G.cur.node, inp=$('#gans');
+  const raw=inp.value; if(!raw.trim()) return;
+  G.attempts++;
+  const v=num(raw);
+  const ok = !isNaN(v) && Math.abs(v-q.ans)<=(q.tol||0.001);
+  let code=null;
+  if(!ok && !isNaN(v)) for(const k in (q.wrong||{})) if(Math.abs(v-parseFloat(k))<=(q.tol||0.001)) code=q.wrong[k];
+  const fb=$('#gfb');
+  if(!ok){
+    const m=code?MIS[code]:null;
+    fb.innerHTML = m
+      ? `<div class="fb err"><h4>Разберём <span class="code">${code}</span></h4><dl style="margin:0">
+          <div class="slot"><dt>Что случилось</dt><dd>${m.t}</dd></div>
+          <div class="slot"><dt>Почему это ошибка</dt><dd>${m.w}</dd></div>
+          <div class="slot"><dt>Что сделать</dt><dd>${m.d}</dd></div></dl></div>`
+      : `<div class="fb err"><h4>Не сходится</h4><p style="margin:0">Проверьте вычисления и попробуйте ещё раз. Если застряли — возьмите подсказку.</p></div>`;
+    if(G.attempts>=2) showHint();
+    if(G.attempts>=4){
+      fb.insertAdjacentHTML('beforeend',
+        `<div class="fb ok" style="margin-top:12px"><h4>Верный ответ: ${fmt(q.ans)}</h4>
+         <p style="margin:0">Разберите решение по подсказкам выше и идите дальше — эта тема вернётся.</p></div>`);
+      ST.geo[node.id]=bkt(ST.geo[node.id],false); save(ST);
+      nextBtn(fb,'Следующая задача');
+    }
+    inp.select(); return;
+  }
+  const clean = G.attempts===1 && G.hints===0;
+  ST.geo[node.id]=bkt(ST.geo[node.id],clean); save(ST); G.solved++;
+  fb.innerHTML=`<div class="fb ok"><h4>✓ Верно</h4><p style="margin:0">${clean
+    ? 'С первой попытки и без подсказок — навык засчитан полностью.'
+    : 'Правильно. Навык засчитан частично: понадобились попытки или подсказки, поэтому тема вернётся раньше.'}</p></div>`;
+  nextBtn(fb,'Следующая задача');
+}
+function nextBtn(host,label){
+  const b=document.createElement('button');
+  b.textContent=label; b.style.marginTop='16px';
+  b.onclick=()=>{ G.done++; nextGeo(); render(); };
+  host.appendChild(b); b.focus();
+}
+function reportBug(){
+  const {T,q}=G.cur;
+  const txt=`Задание ${T.id}: ${q.stem.replace(/<[^>]+>/g,'')} — ожидаемый ответ ${fmt(q.ans)}`;
+  const box=$('#bugbox');
+  if(CFG.tgLink){ window.open(CFG.tgLink,'_blank','noopener'); return; }
+  box.innerHTML=`<div class="fb err" style="margin-top:12px"><h4>Спасибо, это важно</h4>
+    <p style="margin:0 0 8px">Скопируйте текст ниже и пришлите нам — задание уберём из выдачи в течение суток.</p>
+    <div class="code" style="display:block;padding:10px;line-height:1.5;white-space:pre-wrap">${esc(txt)}</div></div>`;
+}
+function resetGeo(){
+  ST.geo={}; save(ST); G=null; render();
+}
+
+/* ═══ РЕНДЕР ═══ */
+function render(){
+  const html = view==='home' ? viewHome()
+             : view==='diag' ? viewDiag()
+             : view==='result' ? viewResult()
+             : viewGeo();
+  document.getElementById('app').innerHTML = html;
+  const inp = document.getElementById('ans') || document.getElementById('gans');
+  if(inp){ inp.focus(); inp.onkeydown=e=>{ if(e.key==='Enter'){ view==='diag'?submitDiag():checkGeo(); } }; }
+}
+setInterval(()=>{
+  const c=document.getElementById('clock');
+  if(c&&D){ const s=Math.floor((Date.now()-D.t0)/1000);
+    c.textContent=Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+},1000);
+render();
+
+</script>
+</body>
+</html>
