@@ -282,6 +282,64 @@ table.rev td:last-child{padding-right:0}
 .rc-code.ready{border-style:solid;color:var(--ink-2);user-select:all}
 .rc-note{font-size:12.5px;margin:12px 0 0;color:var(--ink-3)}
 
+/* ─── Сводка по классу (экран учителя) ─────────────────────────────────── */
+.teacher{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;
+  background:var(--surface);border:1px solid var(--rule);border-radius:10px;
+  padding:18px 20px;margin:22px 0 0;box-shadow:var(--shadow)}
+.teacher b{display:block;font-family:Bitter,Georgia,serif;font-size:16px;margin-bottom:5px}
+.teacher p{margin:0;font-size:14px;color:var(--ink-2);max-width:56ch}
+.card{padding:20px 22px;margin:18px 0}
+.card h2{font-size:19px;margin-bottom:8px}
+.card h3{font-size:14.5px;margin:20px 0 8px}
+.card.warn{border-color:#E2C79A;background:#FDF7EC}
+.muted{color:var(--ink-3)}
+.small{font-size:12.5px}
+.cl-ta{width:100%;box-sizing:border-box;font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:12px;line-height:1.5;padding:12px 13px;border:1px solid var(--rule-strong);
+  border-radius:9px;background:var(--bg);color:var(--ink);resize:vertical}
+.cl-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 10px}
+.cl-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.cl-t{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+.cl-t th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;
+  color:var(--ink-3);font-weight:600;padding:0 10px 7px 0;border-bottom:1px solid var(--rule)}
+.cl-t td{padding:9px 10px 9px 0;border-bottom:1px solid var(--rule);vertical-align:middle}
+.cl-t td:last-child,.cl-t th:last-child{padding-right:0}
+.cl-pct{white-space:nowrap}
+.cl-bar{display:inline-block;width:88px;height:7px;border-radius:99px;background:var(--rule);
+  vertical-align:middle;margin-right:8px;overflow:hidden}
+.cl-bar i{display:block;height:100%;border-radius:99px}
+.cl-bar i.bad{background:#A33A2C}.cl-bar i.mid{background:#9C6209}.cl-bar i.ok{background:#0F6E62}
+.cl-list{margin:6px 0 0;padding-left:18px;font-size:14px}
+.cl-list li{margin:5px 0}
+.cl-err{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:var(--ink-2)}
+.cl-plan{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--rule);font-size:14.5px}
+@media print{
+  .teacher,.cl-actions,.back,.top{display:none}
+  .card{break-inside:avoid;box-shadow:none}
+}
+@media (max-width:560px){
+  .teacher{align-items:flex-start;flex-direction:column}
+  .cl-bar{width:56px}
+}
+
+/* ─── Памятка и QR на экране учителя ───────────────────────────────────── */
+.cl-how-in{display:flex;gap:26px;align-items:flex-start;flex-wrap:wrap}
+.cl-steps{margin:6px 0 0;padding-left:20px;font-size:14.5px;max-width:52ch}
+.cl-steps li{margin:8px 0}
+.cl-qr{display:flex;flex-direction:column;align-items:center;gap:8px;min-width:170px}
+button.qr-thumb{padding:8px;background:#fff;border:1px solid var(--rule);border-radius:10px;cursor:zoom-in}
+button.qr-thumb svg{display:block;width:150px;height:150px}
+.cl-url{font-size:12.5px;color:var(--ink-3);text-decoration:none;word-break:break-all;text-align:center}
+.cl-url:hover{color:var(--accent)}
+#qr-full{position:fixed;inset:0;z-index:60;background:rgba(20,32,28,.92);
+  display:grid;place-items:center;cursor:zoom-out;padding:24px}
+#qr-full .qr-box{background:#fff;padding:26px 26px 18px;border-radius:16px;text-align:center;max-width:min(78vh,560px)}
+#qr-full svg{display:block;width:min(70vh,480px);height:auto}
+#qr-full p{margin:14px 0 2px;font:600 16px/1.3 Bitter,Georgia,serif;color:#14201C;word-break:break-all}
+#qr-full span{font-size:12.5px;color:#6E817A}
+@media print{ .cl-how{display:none} }
+@media (max-width:560px){ .cl-how-in{flex-direction:column} .cl-qr{align-self:center} }
+
 </style>
 </head>
 <body>
@@ -6796,6 +6854,261 @@ function porogPlural(n, one, few, many){
 }
 
 "use strict";
+/* QR-код на страницу демо. Сгенерирован 09-ops/make-qr.py — руками не править.
+   Адрес: https://4ern0kniznik.github.io/porog-demo/
+   При смене домена перегенерировать и пересобрать демо. */
+const QR_URL = "https://4ern0kniznik.github.io/porog-demo/";
+const QR_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 33 33\" shape-rendering=\"crispEdges\" role=\"img\" aria-label=\"QR-код на страницу диагностики\"><rect width=\"33\" height=\"33\" fill=\"#fff\"/><path d=\"M2 2h7v1h-7zM13 2h1v1h-1zM16 2h1v1h-1zM18 2h1v1h-1zM20 2h1v1h-1zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h2v1h-2zM13 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM14 4h1v1h-1zM16 4h1v1h-1zM18 4h1v1h-1zM21 4h2v1h-2zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM15 5h1v1h-1zM18 5h2v1h-2zM22 5h1v1h-1zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM12 6h2v1h-2zM18 6h1v1h-1zM21 6h2v1h-2zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM13 7h2v1h-2zM16 7h1v1h-1zM18 7h1v1h-1zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM17 9h2v1h-2zM20 9h3v1h-3zM2 10h1v1h-1zM8 10h1v1h-1zM10 10h1v1h-1zM12 10h1v1h-1zM14 10h3v1h-3zM19 10h1v1h-1zM21 10h1v1h-1zM23 10h2v1h-2zM27 10h3v1h-3zM2 11h6v1h-6zM9 11h1v1h-1zM13 11h2v1h-2zM16 11h2v1h-2zM19 11h5v1h-5zM26 11h1v1h-1zM28 11h2v1h-2zM2 12h1v1h-1zM4 12h1v1h-1zM6 12h4v1h-4zM14 12h1v1h-1zM16 12h2v1h-2zM20 12h1v1h-1zM22 12h2v1h-2zM2 13h1v1h-1zM4 13h3v1h-3zM10 13h3v1h-3zM14 13h1v1h-1zM16 13h2v1h-2zM20 13h2v1h-2zM25 13h1v1h-1zM27 13h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM8 14h2v1h-2zM17 14h1v1h-1zM22 14h1v1h-1zM24 14h2v1h-2zM30 14h1v1h-1zM2 15h2v1h-2zM6 15h1v1h-1zM9 15h2v1h-2zM12 15h1v1h-1zM15 15h1v1h-1zM17 15h2v1h-2zM21 15h2v1h-2zM24 15h3v1h-3zM29 15h2v1h-2zM4 16h1v1h-1zM6 16h1v1h-1zM8 16h2v1h-2zM11 16h1v1h-1zM16 16h3v1h-3zM22 16h3v1h-3zM27 16h2v1h-2zM4 17h2v1h-2zM9 17h2v1h-2zM13 17h2v1h-2zM17 17h1v1h-1zM22 17h2v1h-2zM26 17h1v1h-1zM28 17h1v1h-1zM30 17h1v1h-1zM2 18h2v1h-2zM6 18h4v1h-4zM11 18h1v1h-1zM13 18h4v1h-4zM19 18h1v1h-1zM21 18h1v1h-1zM25 18h1v1h-1zM27 18h2v1h-2zM2 19h3v1h-3zM12 19h1v1h-1zM14 19h2v1h-2zM17 19h2v1h-2zM20 19h3v1h-3zM24 19h3v1h-3zM28 19h3v1h-3zM2 20h3v1h-3zM8 20h3v1h-3zM13 20h2v1h-2zM17 20h2v1h-2zM20 20h3v1h-3zM26 20h2v1h-2zM30 20h1v1h-1zM2 21h1v1h-1zM4 21h2v1h-2zM7 21h1v1h-1zM13 21h2v1h-2zM16 21h1v1h-1zM20 21h3v1h-3zM24 21h3v1h-3zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h1v1h-1zM12 22h1v1h-1zM14 22h2v1h-2zM17 22h10v1h-10zM28 22h3v1h-3zM10 23h1v1h-1zM13 23h1v1h-1zM15 23h3v1h-3zM19 23h2v1h-2zM22 23h1v1h-1zM26 23h2v1h-2zM2 24h7v1h-7zM12 24h8v1h-8zM21 24h2v1h-2zM24 24h1v1h-1zM26 24h3v1h-3zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM13 25h1v1h-1zM16 25h3v1h-3zM20 25h3v1h-3zM26 25h1v1h-1zM30 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM11 26h1v1h-1zM15 26h2v1h-2zM18 26h1v1h-1zM21 26h7v1h-7zM29 26h1v1h-1zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM11 27h3v1h-3zM17 27h1v1h-1zM19 27h2v1h-2zM22 27h2v1h-2zM27 27h2v1h-2zM30 27h1v1h-1zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM17 28h2v1h-2zM20 28h1v1h-1zM22 28h8v1h-8zM2 29h1v1h-1zM8 29h1v1h-1zM17 29h1v1h-1zM21 29h1v1h-1zM26 29h1v1h-1zM28 29h1v1h-1zM30 29h1v1h-1zM2 30h7v1h-7zM10 30h4v1h-4zM15 30h1v1h-1zM19 30h1v1h-1zM21 30h1v1h-1zM25 30h4v1h-4z\" fill=\"#14201C\"/></svg>";
+
+"use strict";
+/* ═══ СВОДКА ПО КЛАССУ ═══
+   Учитель проводит срез на уроке, ученики называют коды результата — учитель вставляет их
+   на этой странице и получает агрегат: что просело у класса, что повторить, какие ошибки
+   типовые. Решение D36: сводка превращает участие учителя из одолжения в его интерес.
+
+   ПРИВАТНОСТЬ (D30). Коды разбираются в браузере учителя. Ничего не отправляется на сервер
+   (его нет) и ничего не сохраняется между открытиями страницы. В самих кодах нет ни имён,
+   ни школы, ни класса — только идентификаторы заданий, seed и номера ответов. */
+
+const CL = { codes:'', rows:[], errs:[], done:false };
+
+/* ── Разбор кода: обратная операция к porogCode() ─────────────────────── */
+function clFromB64(b64){
+  const s = b64.replace(/-/g,'+').replace(/_/g,'/');
+  const bin = atob(s + '==='.slice((s.length + 3) % 4));
+  const out = new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) out[i] = bin.charCodeAt(i);
+  return out;
+}
+async function clDecode(code){
+  const t = String(code).trim();
+  const parts = t.split('.');
+  if(parts.length !== 3) throw new Error('это не код результата: в нём должно быть две точки');
+  const [tag, body, hash] = parts;
+  if(tag !== 'PRG3' && tag !== 'PRG3Z') throw new Error('код другой версии — ждём PRG3 или PRG3Z');
+  if(rcHash(body) !== hash) throw new Error('код скопирован не целиком: контрольная сумма не сходится');
+  let bytes = clFromB64(body);
+  if(tag === 'PRG3Z'){
+    if(typeof DecompressionStream !== 'function')
+      throw new Error('браузер не умеет разжимать код — откройте страницу в свежем Chrome, Safari или Firefox');
+    const ds = new DecompressionStream('deflate-raw');
+    const r = new Response(new Blob([bytes]).stream().pipeThrough(ds));
+    bytes = new Uint8Array(await r.arrayBuffer());
+  }
+  const data = JSON.parse(new TextDecoder().decode(bytes));
+  if(!Array.isArray(data) || data[0] !== RC_VER) throw new Error('код собран другой версией демо');
+  return data[2] || {};
+}
+
+/* ── Сбор сводки ──────────────────────────────────────────────────────── */
+async function clBuild(){
+  const box = document.getElementById('cl-in');
+  CL.codes = box ? box.value : '';
+  CL.errs = [];
+  /* Учитель вставляет коды как получится: по строкам, через запятую, с лишними пробелами.
+     Всё, что похоже на код (начинается с PRG), идёт в разбор; остальные непустые строки —
+     в список нераспознанного, чтобы ничей результат не потерялся молча. */
+  const list = [];
+  for(const raw of CL.codes.split(/[\s,;]+/)){
+    const t = raw.trim();
+    if(!t) continue;
+    if(/^PRG/i.test(t)) list.push(t);
+    else CL.errs.push(`«${t.slice(0,24)}${t.length>24?'…':''}» — это не код результата`);
+  }
+  CL.rows = []; CL.done = true;
+  let n = 0;
+  for(const c of list){
+    n++;
+    try { CL.rows.push(await clDecode(c)); }
+    catch(e){ CL.errs.push(`код № ${n}: ${e.message}`); }
+  }
+  render();
+}
+function clClear(){ CL.codes=''; CL.rows=[]; CL.errs=[]; CL.done=false; render(); }
+
+/* Номера заданий ОГЭ по разделу: «1–5, 6» + «6, 8» → «1–6, 8», без повторов. */
+function clExam(list){
+  const nums = new Set();
+  for(const raw of list){
+    for(const chunk of String(raw||'').split(',')){
+      const c = chunk.trim();
+      const m = c.match(/^(\d+)\s*[–—-]\s*(\d+)$/);
+      if(m){ for(let i=+m[1]; i<=+m[2]; i++) nums.add(i); }
+      else if(/^\d+$/.test(c)) nums.add(+c);
+    }
+  }
+  const a = [...nums].sort((x,y)=>x-y), out = [];
+  for(let i=0;i<a.length;i++){
+    let j=i; while(j+1<a.length && a[j+1]===a[j]+1) j++;
+    out.push(j-i>=1 ? a[i]+'–'+a[j] : String(a[i]));
+    i=j;
+  }
+  return out.join(', ');
+}
+
+/* Задание по id — чтобы показать тему и номер задания ОГЭ. */
+function clTask(key, id){
+  const s = SUBJECTS[key]; if(!s) return null;
+  return (s.diag || []).find(t=>t.id===id) || (s.bank || []).find(t=>t.id===id) || null;
+}
+/* Агрегат по одному предмету: группы, ошибки, баллы. */
+function clAgg(key){
+  const rows = CL.rows.filter(r=>r[key]).map(r=>r[key]);
+  if(!rows.length) return null;
+  const s = SUBJECTS[key];
+  const groups = {}, errors = {}, tasks = {};
+  let lo=0, hi=0, acc=0, mins=0;
+  for(let pi=0; pi<rows.length; pi++){
+    const r = rows[pi];
+    const sc = r[1] || [];
+    lo += sc[1]||0; hi += sc[2]||0; acc += sc[3]||0; mins += r[0]||0;
+    for(const g in (r[2]||{})){
+      const [ok, tot] = r[2][g];
+      groups[g] = groups[g] || {ok:0, n:0, weak:0, pupils:0};
+      groups[g].ok += ok; groups[g].n += tot; groups[g].pupils++;
+      if(tot && ok / tot < 0.5) groups[g].weak++;
+    }
+    for(const it of (r[3]||[])){
+      const id = it[0], ok = it[1] === 1;
+      tasks[id] = tasks[id] || {n:0, bad:0};
+      tasks[id].n++; if(!ok) tasks[id].bad++;
+      /* Считаем учеников, а не срабатывания: один и тот же код у одного ученика — один голос. */
+      if(!ok && it[3]){ (errors[it[3]] = errors[it[3]] || new Set()).add(pi); }
+    }
+  }
+  const k = rows.length;
+  return {
+    key, name:s.name, pupils:k, maxPrimary:s.maxPrimary,
+    lo: Math.round(lo/k), hi: Math.round(hi/k), acc: Math.round(acc/k), mins: Math.round(mins/k),
+    groups: Object.keys(groups).map(g=>({
+      g, title:(s.groupNames||{})[g] || g,
+      ok:groups[g].ok, n:groups[g].n,
+      pct: groups[g].n ? Math.round(groups[g].ok/groups[g].n*100) : 0,
+      weak: groups[g].weak, pupils: groups[g].pupils,
+      exam: clExam((s.diag||[]).filter(t=>t.group===g).map(t=>t.exam))
+    })).sort((a,b)=>a.pct-b.pct),
+    errors: Object.keys(errors).map(c=>({code:c, n:errors[c].size, m:MIS[c]||null}))
+      .sort((a,b)=>b.n-a.n).slice(0, 8),
+    tasks: Object.keys(tasks).map(id=>({id, ...tasks[id], t:clTask(key,id)}))
+      .filter(x=>x.bad>0).sort((a,b)=>(b.bad/b.n)-(a.bad/a.n) || b.bad-a.bad).slice(0, 6)
+  };
+}
+
+/* ── QR во весь экран: учителю удобно вывести его на доску ────────────── */
+function clQR(on){
+  let el = document.getElementById('qr-full');
+  if(on){
+    if(!el){
+      el = document.createElement('div');
+      el.id = 'qr-full';
+      el.onclick = () => clQR(false);
+      el.innerHTML = `<div class="qr-box">${typeof QR_SVG!=='undefined'?QR_SVG:''}
+        <p>${typeof QR_URL!=='undefined'?QR_URL.replace(/^https?:\/\//,''):''}</p>
+        <span>нажмите, чтобы закрыть</span></div>`;
+      document.body.appendChild(el);
+    }
+  } else if(el) el.remove();
+}
+
+/* ── Экран ────────────────────────────────────────────────────────────── */
+function clBar(pct){
+  const tone = pct < 40 ? 'bad' : pct < 70 ? 'mid' : 'ok';
+  return `<span class="cl-bar"><i class="${tone}" style="width:${Math.max(3,pct)}%"></i></span>`;
+}
+function viewClass(){
+  const aggs = CL.done ? SUBJ_ORDER.map(clAgg).filter(Boolean) : [];
+  const total = CL.rows.length;
+  return shell(`<div class="narrow" style="margin:0 auto">
+    <button class="back" onclick="go('home')">← На главную</button>
+    <section class="hero">
+      <h1>Сводка по классу</h1>
+      <p>Проведите срез на уроке, попросите учеников продиктовать коды результата и вставьте их сюда.
+      Страница соберёт общую картину: какие темы просели у класса, какие ошибки типовые и что
+      имеет смысл повторить. Имён и фамилий не нужно — их нет ни в кодах, ни на странице.</p>
+    </section>
+
+    <div class="card cl-how">
+      <h2>Как провести срез за 20 минут</h2>
+      <div class="cl-how-in">
+        <ol class="cl-steps">
+          <li>Покажите классу QR-код или продиктуйте адрес — открывается с любого телефона,
+              устанавливать и регистрироваться не нужно.</li>
+          <li>Ученики выбирают предмет и нажимают «Диагностика». 16 заданий, 15–20 минут.
+              Варианты генерируются, у соседей по парте они разные.</li>
+          <li>В конце каждый видит свою карту пробелов и <b>код результата</b> —
+              кнопка «Скопировать» уже есть на экране. Пусть пришлют его вам в чат класса.</li>
+          <li>Вставьте коды ниже — получите сводку по классу. Имён и фамилий не нужно.</li>
+        </ol>
+        <div class="cl-qr">
+          <button class="qr-thumb" onclick="clQR(true)" title="Показать во весь экран">${typeof QR_SVG!=='undefined'?QR_SVG:''}</button>
+          <a class="cl-url" href="${typeof QR_URL!=='undefined'?QR_URL:'#'}">${typeof QR_URL!=='undefined'?QR_URL.replace(/^https?:\/\//,''):''}</a>
+          <button class="ghost small" onclick="clQR(true)">Показать во весь экран</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Коды учеников</h2>
+      <p class="muted">По одному коду на строку. Код начинается с <code>PRG3Z.</code> — ученик видит его
+      в конце диагностики и может скопировать кнопкой.</p>
+      <textarea id="cl-in" class="cl-ta" rows="7" placeholder="PRG3Z.…&#10;PRG3Z.…&#10;PRG3Z.…">${CL.codes.replace(/</g,'&lt;')}</textarea>
+      <div class="cl-actions">
+        <button class="primary" onclick="clBuild()">Собрать сводку</button>
+        ${CL.done?`<button class="ghost" onclick="clClear()">Очистить</button>
+        <button class="ghost" onclick="window.print()">Распечатать</button>`:''}
+      </div>
+      <p class="muted small">Ничего не отправляется: страница работает без сервера, коды разбираются
+      прямо в браузере и нигде не сохраняются. Закроете вкладку — данных не останется.</p>
+    </div>
+
+    ${CL.errs.length?`<div class="card warn"><h2>Не разобрано: ${CL.errs.length}</h2>
+      <ul class="cl-err">${CL.errs.map(e=>`<li>${e}</li>`).join('')}</ul>
+      <p class="muted small">Чаще всего код скопирован не целиком — попросите прислать его одним куском.</p></div>`:''}
+
+    ${CL.done && !total?`<div class="card"><p>Ни один код не разобран. Проверьте, что коды скопированы целиком.</p></div>`:''}
+
+    ${aggs.map(a=>`
+    <div class="card">
+      <div class="cl-head">
+        <h2>${a.name}</h2>
+        <span class="chip">${a.pupils} ${porogPlural(a.pupils,'ученик','ученика','учеников')}</span>
+      </div>
+      <p class="muted">В среднем по классу: ${a.acc}% верных ответов, прогноз ${a.lo}–${a.hi}
+      из ${a.maxPrimary} первичных баллов, время работы ${a.mins} мин.</p>
+
+      <h3>Что просело — по разделам</h3>
+      <table class="cl-t">
+        <tr><th>Раздел</th><th>Класс решил</th><th>Провалили</th><th>Задания ОГЭ</th></tr>
+        ${a.groups.map(g=>`<tr>
+          <td>${g.title}</td>
+          <td class="cl-pct">${clBar(g.pct)} ${g.pct}%</td>
+          <td>${g.weak} из ${g.pupils}</td>
+          <td class="muted">${g.exam||'—'}</td>
+        </tr>`).join('')}
+      </table>
+
+      ${a.tasks.length?`<h3>Задания, которые чаще всего не выходят</h3>
+      <ul class="cl-list">${a.tasks.map(t=>`<li><b>${t.t?t.t.topic:t.id}</b>
+        ${t.t&&t.t.exam?`<span class="muted">· ОГЭ № ${t.t.exam}</span>`:''}
+        — ошиблись ${t.bad} из ${t.n}</li>`).join('')}</ul>`:''}
+
+      ${a.errors.length?`<h3>Типовые ошибки класса</h3>
+      <ul class="cl-list">${a.errors.map(e=>`<li><b>${e.m?e.m.t:e.code}</b> — ${e.n}
+        ${porogPlural(e.n,'ученик','ученика','учеников')}.
+        ${e.m?`<span class="muted">${e.m.d}</span>`:''}</li>`).join('')}</ul>`:''}
+
+      <p class="cl-plan"><b>Что повторить в первую очередь:</b>
+      ${a.groups.slice(0,3).map(g=>g.title.toLowerCase()).join(', ')}.</p>
+    </div>`).join('')}
+
+    ${aggs.length?`<div class="card muted small">
+      Сводка усредняет то, что видно диагностике: она покрывает часть экзамена, а не весь его,
+      поэтому прогноз балла — ориентир, а не оценка. Задания в каждом варианте генерируются заново,
+      поэтому одинаковых работ у соседей по парте не бывает.</div>`:''}
+  </div>`, '', 'Сводка по классу · для учителя');
+}
+
+"use strict";
 /* ═══ КОНФИГУРАЦИЯ ═══ */
 const CFG = {
   title:'Порог',                        // рабочее название продукта
@@ -6965,7 +7278,7 @@ function shell(inner, chips, sub){
   <header class="top"><div class="top-in">
     <button class="brand" onclick="go('home')">
       <div class="mark">П</div>
-      <div><b>${CFG.title}</b><span>${sub||'Тренажёр ОГЭ · 5 предметов'}</span></div>
+      <div><b>${CFG.title}</b><span>${sub||'Тренажёр ОГЭ · 6 предметов'}</span></div>
     </button>
     ${chips||''}
   </div></header>
@@ -7003,6 +7316,16 @@ function viewHome(){
             : `<span class="sc-badge">Диагностика не пройдена</span>`}
             ${st.mastered?`<span class="sc-badge on">Освоено ${st.mastered} из ${st.total}</span>`:''}</div>
         </button>`;}).join('')}
+    </div>
+
+    <div class="teacher">
+      <div>
+        <b>Учителю: срез за 20 минут на уроке</b>
+        <p>Класс проходит диагностику с телефонов, каждый получает свой код результата.
+        Вставьте коды — и увидите, какие темы просели у класса и что повторить.
+        Регистрации нет, имена не нужны.</p>
+      </div>
+      <button class="ghost" onclick="go('class')">Собрать сводку по классу →</button>
     </div>
 
     ${porogReportBlock()}
@@ -7534,6 +7857,7 @@ function render(){
              : view==='diag'   ? viewDiag()
              : view==='result' ? viewResult()
              : view==='atlas'  ? viewAtlas()
+             : view==='class'  ? viewClass()
              : viewTrain();
   document.getElementById('app').innerHTML = html;
   if(view==='atlas') renderAtlasList();
