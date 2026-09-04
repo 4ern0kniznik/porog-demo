@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex,nofollow">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Диагностика навыков ОГЭ за 20 минут и тренажёры по математике, физике, информатике, русскому языку, истории и обществознанию. Бесплатно, без регистрации.">
-<title>Порог · тренажёр ОГЭ по шести предметам</title>
+<title>Научился · тренажёр ОГЭ по шести предметам</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -1093,7 +1093,679 @@ const GEO = [
 ];
 
 "use strict";
-/* ═══ БАНК ЗАДАНИЙ · ФИЗИКА · ОГЭ (демо «Порог») ═══
+/* ═══ МАТЕМАТИКА · ОГЭ · тренажёр по всем разделам ═══
+   Дополняет bank-geo.js: там шесть узлов геометрии («2 балла до тройки»), здесь —
+   двенадцать узлов остальных разделов, по четыре шаблона на узел.
+   Вместе получается тренажёр на 18 узлов, покрывающий всю часть 1 ОГЭ.
+
+   Таксономия — 04-content/atlas/02-math.md. Коды ошибок берутся из общего каталога
+   mis.js; недостающие объявлены здесь в MATH_MIS и вливаются в общий каталог.
+
+   Все задания оригинальные: сюжеты и числа свои, ничего из ФИПИ и чужих сборников. */
+
+const MATH_NODES = [
+ {id:'ARI.PCT.01',  name:'Проценты: часть от числа и число по части',   exam:'1–5, 6'},
+ {id:'ARI.TXT.01',  name:'Текстовая задача: части, пропорция, скорость', exam:'1–5, 21'},
+ {id:'ARI.NUM.01',  name:'Дроби, степени, корни: вычисления',           exam:'6, 8'},
+ {id:'ALG.EQ.01',   name:'Линейные уравнения и системы',                exam:'9, 20'},
+ {id:'ALG.EQ.02',   name:'Квадратные уравнения',                        exam:'9, 20'},
+ {id:'ALG.EXPR.01', name:'Преобразование выражений',                    exam:'8, 20'},
+ {id:'FUN.LIN.01',  name:'Линейная функция и её график',                exam:'11, 22'},
+ {id:'FUN.QUAD.01', name:'Парабола: вершина и нули',                    exam:'11, 22'},
+ {id:'PRB.PROB.01', name:'Вероятность события',                         exam:'10'},
+ {id:'PRB.STAT.01', name:'Статистика: среднее, медиана, размах',        exam:'1–5, 10'},
+ {id:'ALG.INEQ.01', name:'Неравенства и числовая прямая',               exam:'7, 13'},
+ {id:'ALG.SEQ.01',  name:'Прогрессии',                                  exam:'14'}
+];
+
+/* ── Утилиты (префикс MB_, чтобы не конфликтовать при склейке файлов) ── */
+function MB_money(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ' '); }
+/* Красивое число: целое или одна-две цифры после запятой, с запятой как разделителем. */
+function MB_num(x){
+  const v = Math.round(x * 100) / 100;
+  return Number.isInteger(v) ? String(v) : String(v).replace('.', ',');
+}
+function MB_gcd(a,b){ a=Math.abs(a); b=Math.abs(b); while(b){ [a,b]=[b,a%b]; } return a; }
+/* Обыкновенная дробь в виде «3/8» — сокращённая. */
+function MB_frac(a,b){ const g=MB_gcd(a,b)||1; return (a/g)+'/'+(b/g); }
+function MB_sign(n){ return n<0 ? '− '+Math.abs(n) : '+ '+n; }
+/* Отрицательное число для показа: минус-дефис заменяем на настоящий знак минуса. */
+function MB_neg(v){ return String(v).replace('-', '−'); }
+/* Линейный член со знаком: 1 и −1 печатаются как «x» и «− x», а не «1x». */
+function MB_x(k){ const a=Math.abs(k); return (k<0?'− ':'+ ') + (a===1?'':a) + 'x'; }
+
+const MATH_BANK = [
+
+// ══ ARI.PCT.01 · Проценты ═══════════════════════════════════════════
+{id:'MA101', node:'ARI.PCT.01', diff:1, topic:'Скидка на товар',
+ gen(R){ const p=R.int(4,40)*100, d=R.pick([5,10,15,20,25,30,40]);
+  const ans=Math.round(p*(100-d)/100);
+  return {type:'num', ans, tol:0.001,
+   stem:`Куртка стоила <b>${MB_money(p)} ₽</b>. В конце сезона её уценили на <b>${d} %</b>. Сколько рублей она стоит после уценки?`,
+   hint:'Ответ в рублях, без пробелов.',
+   wrong:{[Math.round(p*d/100)]:'M.PROC.04', [p+Math.round(p*d/100)]:'M.PCT.02'},
+   hints:['Скидка — это часть от старой цены.',
+          `Найдите ${d} % от ${MB_money(p)} ₽ и вычтите из цены; либо сразу возьмите ${100-d} %.`]};
+ }},
+
+{id:'MA102', node:'ARI.PCT.01', diff:2, topic:'Число по его части',
+ gen(R){ const d=R.pick([5,10,20,25,40,50]), whole=R.int(3,30)*100;
+  const part=Math.round(whole*d/100);
+  return {type:'num', ans:whole, tol:0.001,
+   stem:`<b>${d} %</b> учеников школы — это <b>${part}</b> человек. Сколько всего учеников в школе?`,
+   hint:'Ответ — целое число человек.',
+   wrong:{[Math.round(part*d/100)]:'M.ARI.04', [part*100]:'M.PROC.05'},
+   hints:['Процент — это сотая доля целого.',
+          `Если ${d} % — это ${part}, то одна сотая равна ${part}/${d}, а целое — в сто раз больше.`]};
+ }},
+
+{id:'MA103', node:'ARI.PCT.01', diff:3, topic:'Два изменения цены подряд',
+ gen(R){ const p=R.int(5,20)*100, a=R.pick([10,20,25,50]), b=R.pick([10,20,25,50]);
+  const mid=Math.round(p*(100+a)/100), ans=Math.round(mid*(100-b)/100);
+  return {type:'num', ans, tol:0.001,
+   stem:`Товар стоил <b>${MB_money(p)} ₽</b>. Сначала цену подняли на <b>${a} %</b>, затем новую цену снизили на <b>${b} %</b>. Сколько рублей стоит товар теперь?`,
+   hint:'Ответ в рублях.',
+   wrong:{[Math.round(p*(100+a-b)/100)]:'M.PCT.01', [p]:'M.PCT.02', [mid]:'M.PROC.01'},
+   hints:['Второй процент берётся уже от новой цены, а не от исходной.',
+          'Посчитайте цену после первого шага, и только потом снижайте её.']};
+ }},
+
+{id:'MA104', node:'ARI.PCT.01', diff:2, topic:'Сколько процентов составляет',
+ gen(R){ const b=R.pick([200,250,400,500,800,1000]), pct=R.pick([5,10,12,15,20,25,40,60]);
+  const a=Math.round(b*pct/100);
+  return {type:'num', ans:pct, tol:0.001,
+   stem:`В коробке <b>${b}</b> деталей, из них <b>${a}</b> — бракованные. Сколько процентов деталей бракованные?`,
+   hint:'Ответ — число процентов.',
+   wrong:{[a]:'M.PRB.05', [Math.round(b/a)]:'M.PROC.05'},
+   hints:['Доля — это часть, делённая на целое.',
+          'Разделите число бракованных на общее число и умножьте на 100.']};
+ }},
+
+// ══ ARI.TXT.01 · Текстовые задачи ═══════════════════════════════════
+{id:'MA105', node:'ARI.TXT.01', diff:2, topic:'Пропорция в рецепте',
+ gen(R){ const per=R.pick([2,3,4,5]), flour=R.int(2,9)*100, k=R.int(2,6);
+  const ans=flour*k;
+  return {type:'num', ans, tol:0.001,
+   stem:`На <b>${per}</b> порции теста нужно <b>${flour} г</b> муки. Сколько граммов муки нужно на <b>${per*k}</b> порций?`,
+   hint:'Ответ в граммах.',
+   wrong:{[flour+k]:'M.PROC.05', [Math.round(flour/k)]:'M.ARI.04'},
+   hints:['Порций стало во сколько-то раз больше — во столько же раз больше и муки.',
+          `${per*k} : ${per} = ${k}, значит муки нужно в ${k} раза больше.`]};
+ }},
+
+{id:'MA106', node:'ARI.TXT.01', diff:2, topic:'Путь, скорость, время',
+ gen(R){ const v=R.pick([40,45,50,60,70,80,90]), t=R.pick([2,3,4,5,6]);
+  const s=v*t;
+  const mode=R.pick(['s','v','t']);
+  if(mode==='s') return {type:'num', ans:s, tol:0.001,
+    stem:`Автобус едет со скоростью <b>${v} км/ч</b>. Какое расстояние он пройдёт за <b>${t} ч</b>?`,
+    hint:'Ответ в километрах.', wrong:{[v+t]:'M.PROC.05', [Math.round(v/t)]:'M.ARI.04'},
+    hints:['Путь равен скорости, умноженной на время.','s = v · t.']};
+  if(mode==='v') return {type:'num', ans:v, tol:0.001,
+    stem:`Автобус прошёл <b>${s} км</b> за <b>${t} ч</b>. С какой скоростью он ехал?`,
+    hint:'Ответ в км/ч.', wrong:{[s*t]:'M.PROC.05', [s-t]:'M.PROC.05'},
+    hints:['Скорость — это путь, делённый на время.','v = s : t.']};
+  return {type:'num', ans:t, tol:0.001,
+    stem:`Автобус прошёл <b>${s} км</b> со скоростью <b>${v} км/ч</b>. Сколько часов он был в пути?`,
+    hint:'Ответ в часах.', wrong:{[s*v]:'M.PROC.05', [s-v]:'M.PROC.05'},
+    hints:['Время — это путь, делённый на скорость.','t = s : v.']};
+ }},
+
+{id:'MA107', node:'ARI.TXT.01', diff:3, topic:'Производительность',
+ gen(R){ const perDay=R.pick([12,15,18,20,24,25]), days=R.int(3,9);
+  const total=perDay*days, newPer=R.pick([2,3]) * perDay / R.pick([1]);
+  return {type:'num', ans:total, tol:0.001,
+   stem:`Мастер делает <b>${perDay}</b> деталей в день. Сколько деталей он сделает за <b>${days}</b> рабочих дней?`,
+   hint:'Ответ — целое число деталей.',
+   wrong:{[perDay+days]:'M.PROC.05', [Math.round(perDay/days)]:'M.ARI.04'},
+   hints:['Выработка за день умножается на число дней.',
+          `${perDay} · ${days} — это и есть ответ.`]};
+ }},
+
+{id:'MA108', node:'ARI.TXT.01', diff:3, topic:'Деление в отношении',
+ gen(R){ const m=R.int(1,5), n=R.int(1,5), part=R.int(3,12)*10;
+  const total=part*(m+n), first=part*m;
+  return {type:'num', ans:first, tol:0.001,
+   stem:`Сплав массой <b>${total} г</b> состоит из меди и цинка в отношении <b>${m} : ${n}</b>. Сколько граммов меди в сплаве?`,
+   hint:'Ответ в граммах.',
+   wrong:{[part*n]:'M.PROC.04', [Math.round(total/(m+n))]:'M.PROC.01', [Math.round(total*m/n)]:'M.PROC.05'},
+   hints:['Отношение задаёт число равных частей: их всего m + n.',
+          `Всего частей ${m+n}, одна часть — ${part} г, меди приходится ${m} ${m===1?'часть':'части'}.`]};
+ }},
+
+// ══ ARI.NUM.01 · Дроби, степени, корни ══════════════════════════════
+{id:'MA109', node:'ARI.NUM.01', diff:2, topic:'Значение выражения с дробями',
+ gen(R){ const a=R.int(2,9), b=R.int(2,9), c=R.int(2,9);
+  const ans=Math.round((a*b - c)*100)/100;
+  return {type:'num', ans, tol:0.001,
+   stem:`Найдите значение выражения <b>${a} · ${b} − ${c}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[a*(b-c)]:'M.PROC.05', [a+b-c]:'M.PROC.05'},
+   hints:['Сначала умножение, потом вычитание.','Порядок действий: умножение старше вычитания.']};
+ }},
+
+{id:'MA110', node:'ARI.NUM.01', diff:2, topic:'Действия со степенями',
+ gen(R){ const base=R.pick([2,3,5,10]);
+  let p, q, r, e, guard=0;
+  do { p=R.int(2,7); q=R.int(1,5); r=R.int(1,4); e=p+q-r; guard++; }
+  while(guard<60 && (e<1 || Math.pow(base,e) > 100000));
+  if(Math.pow(base,e) > 100000){ p=2; q=1; r=1; e=2; }
+  const ans=Math.pow(base,e);
+  return {type:'num', ans, tol:0.001,
+   stem:`Вычислите: <b>${base}<sup>${p}</sup> · ${base}<sup>${q}</sup> : ${base}<sup>${r}</sup></b>.`,
+   hint:'Ответ — число.',
+   wrong:{[Math.pow(base,p*q-r)]:'M.POW.01', [Math.pow(base,p+q+r)]:'M.POW.02'},
+   hints:['При умножении степеней показатели складываются, при делении — вычитаются.',
+          `Показатель ответа равен ${p} + ${q} − ${r}.`]};
+ }},
+
+{id:'MA111', node:'ARI.NUM.01', diff:2, topic:'Корень из произведения',
+ gen(R){ const a=R.pick([2,3,5,6,7,8]), b=R.pick([2,3,5,6,7,8]);
+  const val=a*a*b*b, ans=a*b;
+  return {type:'num', ans, tol:0.001,
+   stem:`Вычислите: <b>√${a*a} · √${b*b}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[val]:'M.SQRT.02', [a]:'M.SQRT.01', [a*a+b*b]:'M.PROC.05'},
+   hints:['Произведение корней равно корню из произведения.',
+          `√${a*a} = ${a}, √${b*b} = ${b} — осталось перемножить.`]};
+ }},
+
+{id:'MA112', node:'ARI.NUM.01', diff:1, topic:'Прикидка и округление',
+ gen(R){ const price=R.pick([35,45,60,75,90,120]), money=R.int(3,20)*100;
+  const ans=Math.floor(money/price);
+  return {type:'num', ans, tol:0.001,
+   stem:`Тетрадь стоит <b>${price} ₽</b>. Какое наибольшее число тетрадей можно купить на <b>${MB_money(money)} ₽</b>?`,
+   hint:'Ответ — целое число тетрадей.',
+   wrong:{[Math.ceil(money/price)]:'M.ARI.02', [Math.round(money/price*10)/10]:'M.ARI.03'},
+   hints:['Разделите деньги на цену и посмотрите на целую часть.',
+          'На остаток тетрадь не купить — округляем вниз.']};
+ }},
+
+// ══ ALG.EQ.01 · Линейные уравнения и системы ════════════════════════
+{id:'MA113', node:'ALG.EQ.01', diff:1, topic:'Линейное уравнение',
+ gen(R){ const a=R.pick([2,3,4,5,6,7]), x=R.int(-9,9), b=R.int(-20,20);
+  const c=a*x+b;
+  return {type:'num', ans:x, tol:0.001,
+   stem:`Решите уравнение <b>${a}x ${MB_sign(b)} = ${c}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[(c+b)/a]:'M.INEQ.02', [c-b]:'M.PROC.05'},
+   hints:['Перенесите свободный член в правую часть, поменяв знак.',
+          `${a}x = ${c} ${MB_sign(-b)}, дальше разделите обе части на ${a}.`]};
+ }},
+
+{id:'MA114', node:'ALG.EQ.01', diff:2, topic:'Уравнение со скобками',
+ gen(R){ const a=R.int(2,6), b=R.int(1,9), x=R.int(-8,8), c=R.int(2,5);
+  const right=a*(x-b)+c*x;
+  return {type:'num', ans:x, tol:0.001,
+   stem:`Решите уравнение <b>${a}(x − ${b}) + ${c}x = ${right}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[(right+a*b)/(a)]:'M.PROC.05', [(right-a*b)/(a+c)]:'M.INEQ.02'},
+   hints:['Раскройте скобки и приведите подобные слагаемые.',
+          `После раскрытия слева получится ${a+c}x − ${a*b}.`]};
+ }},
+
+{id:'MA115', node:'ALG.EQ.01', diff:3, topic:'Система двух уравнений',
+ gen(R){ const x=R.int(-6,6), y=R.int(-6,6);
+  const s=x+y, d=x-y;
+  return {type:'num', ans:x, tol:0.001,
+   stem:`Решите систему:<br><b>x + y = ${s}</b><br><b>x − y = ${d}</b><br>В ответ запишите <b>x</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[y]:'M.PROC.06', [s+d]:'M.PROC.01'},
+   hints:['Сложите уравнения — переменная y исчезнет.',
+          `Сумма даёт 2x = ${MB_neg(s + d)}, значит x — половина этого числа.`]};
+ }},
+
+{id:'MA116', node:'ALG.EQ.01', diff:2, topic:'Уравнение с дробью',
+ gen(R){ const k=R.pick([2,3,4,5]), x=R.int(-9,9)*k===0?k:R.int(-9,9)*k, b=R.int(-9,9);
+  const val=x/k+b;
+  return {type:'num', ans:x, tol:0.001,
+   stem:`Решите уравнение <b>x/${k} ${MB_sign(b)} = ${MB_num(val)}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[val-b]:'M.PROC.01', [(val+b)*k]:'M.INEQ.02'},
+   hints:['Сначала уберите свободный член, потом умножьте обе части на знаменатель.',
+          `x/${k} = ${MB_neg(MB_num(val-b))}, значит x = ${MB_neg(MB_num(val-b))} · ${k}.`]};
+ }},
+
+// ══ ALG.EQ.02 · Квадратные уравнения ════════════════════════════════
+{id:'MA117', node:'ALG.EQ.02', diff:2, topic:'Приведённое квадратное уравнение',
+ gen(R){ let x1=R.int(-8,8), x2=R.int(-8,8);
+  if(x1===x2) x2 = x1 + 1;
+  const big=Math.max(x1,x2), p=-(x1+x2), q=x1*x2;
+  return {type:'num', ans:big, tol:0.001,
+   stem:`Решите уравнение <b>x² ${MB_x(p)} ${MB_sign(q)} = 0</b>. В ответ запишите <b>больший</b> корень.`,
+   hint:'Ответ — число.',
+   wrong:{[Math.min(x1,x2)]:'M.PROC.04', [-big]:'M.EQ.01'},
+   hints:['По теореме Виета сумма корней равна −p, произведение равно q.',
+          `Ищем два числа с суммой ${MB_neg(-p)} и произведением ${MB_neg(q)}.`]};
+ }},
+
+{id:'MA118', node:'ALG.EQ.02', diff:2, topic:'Неполное квадратное уравнение',
+ gen(R){ const k=R.int(2,20), form=R.pick(['minus','right']);
+  const c=k*k;
+  return {type:'num', ans:k, tol:0.001,
+   stem: form==='minus'
+     ? `Решите уравнение <b>x² − ${c} = 0</b>. В ответ запишите <b>положительный</b> корень.`
+     : `Решите уравнение <b>x² = ${c}</b>. В ответ запишите <b>положительный</b> корень.`,
+   hint:'Ответ — число.',
+   wrong:{[-k]:'M.PROC.04', [c/2]:'M.PROC.05'},
+   hints:['Перенесите свободный член вправо: x² = ' + c + '.',
+          'Корней два — они отличаются знаком; нужен положительный.']};
+ }},
+
+{id:'MA119', node:'ALG.EQ.02', diff:3, topic:'Число корней по дискриминанту',
+ gen(R){ const a=1, variant=R.pick(['two','one','none']);
+  /* при варианте «один корень» нужен чётный b, иначе свободный член выходит дробным */
+  const b = variant==='one' ? R.pick([-8,-6,-4,-2,2,4,6,8]) : R.int(-9,9);
+  let c;
+  if(variant==='two'){ c = Math.floor((b*b)/4) - R.int(1,6); }
+  else if(variant==='one'){ c = (b*b)/4; }
+  else { c = Math.ceil((b*b)/4) + R.int(1,6); }
+  const D = b*b - 4*a*c;
+  const opts = ['два корня','один корень','корней нет'];
+  ansIdx = D>0 ? 0 : (D===0 ? 1 : 2);
+  return {type:'choice', opts, ans:ansIdx,
+   codes:opts.map((o,i)=>i===ansIdx?null:'M.INT.02'),
+   stem:`Сколько корней имеет уравнение <b>x² ${MB_x(b)} ${MB_sign(c)} = 0</b>?`,
+   hints:['Число корней определяет дискриминант D = b² − 4ac.',
+          `Здесь D = (${MB_neg(b)})² − 4 · 1 · ${MB_neg(MB_num(c))} = ${MB_neg(MB_num(D))}.`]};
+ }},
+
+{id:'MA120', node:'ALG.EQ.02', diff:3, topic:'Теорема Виета',
+ gen(R){ let x1=R.int(-7,7), x2=R.int(-7,7);
+  if(x1===x2) x2 = x1 - 1;
+  const p=-(x1+x2), q=x1*x2, ask=R.pick(['sum','prod']);
+  if(ask==='sum') return {type:'num', ans:x1+x2, tol:0.001,
+    stem:`Не решая уравнение <b>x² ${MB_x(p)} ${MB_sign(q)} = 0</b>, найдите <b>сумму</b> его корней.`,
+    hint:'Ответ — число.', wrong:{[q]:'M.PROC.04', [p]:'M.EQ.01'},
+    hints:['Теорема Виета: сумма корней равна −p, произведение равно q.',
+           `Здесь коэффициент при x равен ${MB_neg(p)}, значит сумма — противоположное число.`]};
+  return {type:'num', ans:q, tol:0.001,
+    stem:`Не решая уравнение <b>x² ${MB_x(p)} ${MB_sign(q)} = 0</b>, найдите <b>произведение</b> его корней.`,
+    hint:'Ответ — число.', wrong:{[x1+x2]:'M.PROC.04', [-q]:'M.EQ.01'},
+    hints:['Теорема Виета: произведение корней равно свободному члену.',
+           'Знак менять не нужно — берём свободный член как есть.']};
+ }},
+
+// ══ ALG.EXPR.01 · Преобразование выражений ══════════════════════════
+{id:'MA121', node:'ALG.EXPR.01', diff:2, topic:'Разность квадратов',
+ gen(R){ let a=R.int(11,60), b=R.int(1,9);
+  const x=a+b, y=a-b, ans=x*x - y*y;
+  return {type:'num', ans, tol:0.001,
+   stem:`Вычислите: <b>${x}² − ${y}²</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[(x-y)*(x-y)]:'M.FSU.02', [x-y]:'M.FSU.03'},
+   hints:['Разность квадратов раскладывается на произведение суммы и разности.',
+          `(${x} − ${y})(${x} + ${y}) = ${x-y} · ${x+y}.`]};
+ }},
+
+{id:'MA122', node:'ALG.EXPR.01', diff:3, topic:'Сокращение дроби',
+ gen(R){ const a=R.int(2,9), x=R.int(2,9);
+  const num1=(x+a)*(x-a), den=(x-a);
+  return {type:'num', ans:x+a, tol:0.001,
+   stem:`Упростите выражение <b>(y² − ${a*a}) / (y − ${a})</b> и найдите его значение при <b>y = ${MB_neg(x)}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[x-a]:'M.RAT.03', [num1]:'M.PROC.02'},
+   hints:['Числитель — разность квадратов, его можно разложить.',
+          `(y − ${a})(y + ${a}) : (y − ${a}) = y + ${a}, осталось подставить y = ${x}.`]};
+ }},
+
+{id:'MA123', node:'ALG.EXPR.01', diff:2, topic:'Значение выражения после упрощения',
+ gen(R){ const a=R.int(2,9), b=R.int(2,9), x=R.int(-6,6);
+  const ans=(a+b)*x;
+  return {type:'num', ans, tol:0.001,
+   stem:`Упростите выражение <b>${a}x + ${b}x</b> и найдите его значение при <b>x = ${MB_neg(x)}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[a*b*x]:'M.PROC.05', [a+b+x]:'M.PROC.05'},
+   hints:['Подобные слагаемые складываются: коэффициенты суммируются.',
+          `${a}x + ${b}x = ${a+b}x, дальше подставьте x = ${x}.`]};
+ }},
+
+{id:'MA124', node:'ALG.EXPR.01', diff:3, topic:'Степень с отрицательным показателем',
+ /* основания только 2, 5 и 10: их отрицательные степени дают конечные десятичные дроби */
+ gen(R){ const base=R.pick([2,5,10]), n=R.int(1,3), c=R.int(1,6);
+  const ans=Math.round(c/Math.pow(base,n)*100000)/100000;
+  return {type:'num', ans, tol:0.0001,
+   stem:`Вычислите: <b>${c===1?'':c+' · '}${base}<sup>−${n}</sup></b>. Ответ запишите десятичной дробью.`,
+   hint:'Например: 0,25',
+   wrong:{[-Math.round(c*Math.pow(base,n)*1000)/1000]:'M.POW.01', [c*Math.pow(base,n)]:'M.POW.02'},
+   hints:['Отрицательный показатель означает единицу, делённую на степень.',
+          `${base}<sup>−${n}</sup> = 1 : ${Math.pow(base,n)}${c===1?'':', остаётся умножить на '+c}.`]};
+ }},
+
+// ══ FUN.LIN.01 · Линейная функция ═══════════════════════════════════
+{id:'MA125', node:'FUN.LIN.01', diff:2, topic:'Значение функции в точке',
+ gen(R){ const k=R.int(-6,6)||2, b=R.int(-9,9), x=R.int(-6,6);
+  const ans=k*x+b;
+  return {type:'num', ans, tol:0.001,
+   stem:`Функция задана формулой <b>y = ${k}x ${MB_sign(b)}</b>. Найдите значение <b>y</b> при <b>x = ${MB_neg(x)}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[k+x+b]:'M.PROC.05', [k*(x+b)]:'M.PROC.05'},
+   hints:['Подставьте число вместо x и посчитайте.',
+          `${MB_neg(k)} · (${MB_neg(x)}) ${MB_sign(b)} — это и есть ответ.`]};
+ }},
+
+{id:'MA126', node:'FUN.LIN.01', diff:3, topic:'Угловой коэффициент по двум точкам',
+ gen(R){ const k=R.pick([-4,-3,-2,-1,1,2,3,4]), b=R.int(-8,8);
+  const x1=R.int(-6,0), x2=x1+R.int(1,6);
+  const y1=k*x1+b, y2=k*x2+b;
+  return {type:'num', ans:k, tol:0.001,
+   stem:`График линейной функции проходит через точки <b>(${MB_neg(x1)}; ${MB_neg(y1)})</b> и <b>(${MB_neg(x2)}; ${MB_neg(y2)})</b>. Найдите угловой коэффициент <b>k</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[b]:'M.FUN.03', [Math.round((x2-x1)/(y2-y1)*1000)/1000]:'M.FUN.04'},
+   hints:['Угловой коэффициент — это отношение приращения y к приращению x.',
+          `k = (${MB_neg(y2)} − (${MB_neg(y1)})) : (${MB_neg(x2)} − (${MB_neg(x1)})).`]};
+ }},
+
+{id:'MA127', node:'FUN.LIN.01', diff:2, topic:'Пересечение с осью',
+ gen(R){ const k=R.pick([-5,-4,-3,-2,2,3,4,5]), x0=R.int(-6,6), b=-k*x0;
+  return {type:'num', ans:x0, tol:0.001,
+   stem:`В какой точке график функции <b>y = ${k}x ${MB_sign(b)}</b> пересекает ось <b>Ox</b>? В ответ запишите абсциссу этой точки.`,
+   hint:'Ответ — число.',
+   wrong:{[b]:'M.FUN.03', [-b]:'M.FUN.01'},
+   hints:['На оси Ox значение y равно нулю.',
+          `Решите уравнение ${MB_neg(k)}x ${MB_sign(b)} = 0.`]};
+ }},
+
+{id:'MA128', node:'FUN.LIN.01', diff:3, topic:'Формула по описанию графика',
+ gen(R){ const rises=R.pick([true,false]), crosses=R.pick([true,false]);
+  const k = rises ? R.int(1,5) : -R.int(1,5);
+  const b = crosses ? R.int(1,7) : -R.int(1,7);
+  const right = `y = ${k}x ${MB_sign(b)}`;
+  const wrongs = [`y = ${-k}x ${MB_sign(b)}`, `y = ${k}x ${MB_sign(-b)}`, `y = ${-k}x ${MB_sign(-b)}`];
+  const opts = R.shuffle([right].concat(wrongs));
+  const ans = opts.indexOf(right);
+  return {type:'choice', opts, ans,
+   codes:opts.map((o,i)=>i===ans?null:'M.FUN.03'),
+   stem:`График линейной функции ${rises?'<b>возрастает</b>':'<b>убывает</b>'} и пересекает ось <b>Oy</b> в точке <b>(0; ${MB_neg(b)})</b>. Какая формула ему соответствует?`,
+   hints:['Знак k отвечает за наклон: положительный — возрастает, отрицательный — убывает.',
+          'Свободный член b — это ордината точки пересечения с осью Oy.']};
+ }},
+
+// ══ FUN.QUAD.01 · Парабола ══════════════════════════════════════════
+{id:'MA129', node:'FUN.QUAD.01', diff:3, topic:'Абсцисса вершины параболы',
+ gen(R){ const a=R.pick([1,1,1,2]), x0=R.int(-5,5), b=-2*a*x0, c=R.int(-9,9);
+  return {type:'num', ans:x0, tol:0.001,
+   stem:`Найдите абсциссу вершины параболы <b>y = ${a===1?'':a}x² ${MB_x(b)} ${MB_sign(c)}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[-x0]:'M.FUN.01', [c]:'M.FUN.02'},
+   hints:['Абсцисса вершины считается по формуле x₀ = −b / (2a).',
+          `Здесь b = ${MB_neg(b)}, a = ${a}: x₀ = ${MB_neg(-b)} : ${2*a}.`]};
+ }},
+
+{id:'MA130', node:'FUN.QUAD.01', diff:3, topic:'Нули квадратичной функции',
+ gen(R){ let x1=R.int(-7,7), x2=R.int(-7,7);
+  if(x1===x2) x2 = x1 + 2;
+  const b=-(x1+x2), c=x1*x2, big=Math.max(x1,x2);
+  return {type:'num', ans:big, tol:0.001,
+   stem:`Найдите наибольший нуль функции <b>y = x² ${MB_x(b)} ${MB_sign(c)}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[Math.min(x1,x2)]:'M.PROC.04', [-big]:'M.EQ.01'},
+   hints:['Нули функции — это корни уравнения y = 0.',
+          `По теореме Виета корни в сумме дают ${MB_neg(-b)}, в произведении ${MB_neg(c)}.`]};
+ }},
+
+{id:'MA131', node:'FUN.QUAD.01', diff:2, topic:'Ветви параболы',
+ gen(R){ const a=R.pick([-3,-2,-1,1,2,3]), b=R.int(-6,6), c=R.int(-9,9);
+  const opts=['вверх, наименьшее значение есть','вниз, наибольшее значение есть'];
+  const ans = a>0 ? 0 : 1;
+  return {type:'choice', opts, ans,
+   codes:opts.map((o,i)=>i===ans?null:'M.INT.02'),
+   stem:`Куда направлены ветви параболы <b>y = ${a===1?'':a===-1?'−':a}x² ${MB_x(b)} ${MB_sign(c)}</b> и что у функции есть — наименьшее или наибольшее значение?`,
+   hints:['Направление ветвей задаёт знак старшего коэффициента.',
+          'Ветви вверх — у функции есть наименьшее значение, вниз — наибольшее.']};
+ }},
+
+{id:'MA132', node:'FUN.QUAD.01', diff:2, topic:'Значение квадратичной функции',
+ gen(R){ const a=R.pick([1,2]), b=R.int(-6,6), c=R.int(-9,9), x=R.int(-4,4);
+  const ans=a*x*x + b*x + c;
+  return {type:'num', ans, tol:0.001,
+   stem:`Найдите значение функции <b>y = ${a===1?'':a}x² ${MB_x(b)} ${MB_sign(c)}</b> при <b>x = ${MB_neg(x)}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[a*x*x*(-1) + b*x + c]:'M.PROC.05', [a*x + b*x + c]:'M.POW.01'},
+   hints:['Сначала возведите x в квадрат, потом умножайте.',
+          'Квадрат отрицательного числа положителен.']};
+ }},
+
+// ══ PRB.PROB.01 · Вероятность ═══════════════════════════════════════
+{id:'MA133', node:'PRB.PROB.01', diff:1, topic:'Вероятность вынуть шар',
+ gen(R){ const t=R.pick([10,20,25,40,50,100]);
+  const g=R.int(1, t-1);
+  const p=Math.round(g/t*10000)/10000;
+  const what=R.pick([
+    {box:'корзине', item:'шаров', adj:'красных', one:'шар', is:'он красный'},
+    {box:'коробке', item:'карандашей', adj:'синих', one:'карандаш', is:'он синий'},
+    {box:'мешке', item:'жетонов', adj:'жёлтых', one:'жетон', is:'он жёлтый'},
+    {box:'пакете', item:'конфет', adj:'шоколадных', one:'конфету', is:'она шоколадная'}
+  ]);
+  return {type:'num', ans:p, tol:0.0001,
+   stem:`В ${what.box} <b>${t}</b> ${what.item}, из них <b>${g}</b> ${what.adj}. Наугад достают один${what.one==='конфету'?'у':''} ${what.one}. Какова вероятность, что ${what.is}?`,
+   hint:'Ответ — десятичная дробь, например 0,25.',
+   wrong:{[Math.round((t-g)/t*10000)/10000]:'M.PRB.06', [Math.round(g/(t-g)*10000)/10000]:'M.PRB.05'},
+   hints:['Вероятность — это число нужных исходов, делённое на число всех исходов.',
+          `Всего исходов ${t}, подходящих ${g}.`]};
+ }},
+
+{id:'MA134', node:'PRB.PROB.01', diff:2, topic:'Вероятность противоположного события',
+ gen(R){ const p=R.pick([0.05,0.1,0.15,0.2,0.25,0.3,0.4,0.45,0.6,0.75,0.8]);
+  const ans=Math.round((1-p)*1000)/1000;
+  const c=R.pick([
+    {bad:'новая ручка пишет плохо', good:'случайно выбранная ручка пишет хорошо'},
+    {bad:'батарейка окажется разряженной', good:'случайно выбранная батарейка рабочая'},
+    {bad:'лампочка перегорит в первый час', good:'лампочка проработает дольше часа'},
+    {bad:'автобус придёт с опозданием', good:'автобус придёт вовремя'}
+  ]);
+  return {type:'num', ans, tol:0.001,
+   stem:`Вероятность того, что ${c.bad}, равна <b>${MB_num(p)}</b>. Какова вероятность, что ${c.good}?`,
+   hint:'Ответ — десятичная дробь.',
+   wrong:{[p]:'M.PRB.06', [Math.round((1+p)*1000)/1000]:'M.PRB.01'},
+   hints:['Сумма вероятностей события и противоположного ему равна единице.',
+          `1 − ${MB_num(p)} — это и есть ответ.`]};
+ }},
+
+{id:'MA135', node:'PRB.PROB.01', diff:3, topic:'Два независимых события',
+ gen(R){ const a=R.pick([0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]), b=R.pick([0.1,0.2,0.4,0.5,0.6,0.8]);
+  const ans=Math.round(a*b*1000)/1000;
+  const c=R.pick([
+    {first:'при первом выстреле', second:'при втором', both:'стрелок попадёт оба раза'},
+    {first:'на первом станке', second:'на втором', both:'оба станка отработают смену без сбоя'},
+    {first:'у первого спортсмена', second:'у второго', both:'оба выполнят норматив'}
+  ]);
+  return {type:'num', ans, tol:0.001,
+   stem:`Вероятность успеха ${c.first} — <b>${MB_num(a)}</b>, ${c.second} — <b>${MB_num(b)}</b>. События независимы. Какова вероятность, что <b>${c.both}</b>?`,
+   hint:'Ответ — десятичная дробь.',
+   wrong:{[Math.round((a+b)*1000)/1000]:'M.PRB.01', [Math.round((1-a)*(1-b)*1000)/1000]:'M.PRB.03'},
+   hints:['Для независимых событий вероятность их совместного наступления — произведение.',
+          `${MB_num(a)} · ${MB_num(b)} — это и есть ответ.`]};
+ }},
+
+{id:'MA136', node:'PRB.PROB.01', diff:2, topic:'Вероятность в задаче о билетах',
+ gen(R){ const total=R.pick([20,25,40,50,80,100,125,200]), lucky=R.pick([2,4,5,8,10,20,25]);
+  const g=Math.min(lucky, total-1);
+  const p=Math.round(g/total*1000)/1000;
+  return {type:'num', ans:p, tol:0.001,
+   stem:`На экзамене <b>${total}</b> билетов, <b>${g}</b> из них ученик выучил особенно хорошо. Какова вероятность, что ему достанется именно такой билет?`,
+   hint:'Ответ — десятичная дробь.',
+   wrong:{[Math.round((total-g)/total*1000)/1000]:'M.PRB.06', [g]:'M.PRB.05'},
+   hints:['Все билеты равновероятны.',
+          `Разделите ${g} на ${total}.`]};
+ }},
+
+// ══ PRB.STAT.01 · Статистика ════════════════════════════════════════
+{id:'MA137', node:'PRB.STAT.01', diff:1, topic:'Среднее арифметическое',
+ gen(R){ const n=R.pick([4,5,6]); const arr=[];
+  for(let i=0;i<n;i++) arr.push(R.int(2,20));
+  const sum=arr.reduce((a,b)=>a+b,0);
+  const ans=Math.round(sum/n*100)/100;
+  return {type:'num', ans, tol:0.011,
+   stem:`Найдите среднее арифметическое чисел: <b>${arr.join(', ')}</b>.`,
+   hint:'Ответ — число, при необходимости с запятой.',
+   wrong:{[sum]:'M.PROC.01', [Math.max(...arr)-Math.min(...arr)]:'M.STAT.01'},
+   hints:['Сложите все числа и разделите на их количество.',
+          `Сумма равна ${sum}, чисел ${n}.`]};
+ }},
+
+{id:'MA138', node:'PRB.STAT.01', diff:3, topic:'Медиана ряда',
+ gen(R){ const n=R.pick([5,7]); const arr=[];
+  while(arr.length<n){ const v=R.int(1,30); if(!arr.includes(v)) arr.push(v); }
+  const sorted=arr.slice().sort((a,b)=>a-b);
+  const med=sorted[(n-1)/2];
+  const mean=Math.round(arr.reduce((a,b)=>a+b,0)/n*100)/100;
+  const w={}; w[mean]='M.STAT.01'; w[arr[(n-1)/2]]='M.STAT.02';
+  return {type:'num', ans:med, tol:0.001,
+   stem:`Найдите медиану ряда чисел: <b>${arr.join(', ')}</b>.`,
+   hint:'Ответ — число.', wrong:w,
+   hints:['Сначала упорядочьте числа по возрастанию.',
+          `В ряду из ${n} чисел медиана — это ${(n+1)/2}-е число упорядоченного ряда.`]};
+ }},
+
+{id:'MA139', node:'PRB.STAT.01', diff:2, topic:'Размах ряда',
+ gen(R){ const n=R.pick([5,6,7]); const arr=[];
+  for(let i=0;i<n;i++) arr.push(R.int(1,40));
+  const mx=Math.max(...arr), mn=Math.min(...arr);
+  const mean=Math.round(arr.reduce((a,b)=>a+b,0)/n*100)/100;
+  return {type:'num', ans:mx-mn, tol:0.001,
+   stem:`Найдите размах ряда чисел: <b>${arr.join(', ')}</b>.`,
+   hint:'Ответ — число.',
+   wrong:{[mean]:'M.STAT.01', [mx]:'M.PROC.04', [mx+mn]:'M.PROC.05'},
+   hints:['Размах — разность наибольшего и наименьшего значений ряда.',
+          `Наибольшее ${mx}, наименьшее ${mn}.`]};
+ }},
+
+{id:'MA140', node:'PRB.STAT.01', diff:2, topic:'Чтение таблицы',
+ gen(R){ const days=['понедельник','вторник','среду','четверг','пятницу'];
+  const vals=days.map(()=>R.int(10,90));
+  const idx=R.int(0,4);
+  const rows=days.map((d,i)=>`${d.charAt(0).toUpperCase()+d.slice(1)} — ${vals[i]}`).join('<br>');
+  const w={}; vals.forEach((v,i)=>{ if(i!==idx) w[v]='M.STAT.02'; });
+  return {type:'num', ans:vals[idx], tol:0.001,
+   stem:`В таблице записано число посетителей библиотеки:<br>${rows}<br>Сколько человек пришло в <b>${days[idx]}</b>?`,
+   hint:'Ответ — целое число.', wrong:w,
+   hints:['Найдите нужную строку таблицы.','Проверьте, что смотрите именно на тот день, о котором спрашивают.']};
+ }},
+
+// ══ ALG.INEQ.01 · Неравенства ═══════════════════════════════════════
+{id:'MA141', node:'ALG.INEQ.01', diff:2, topic:'Линейное неравенство',
+ gen(R){ const a=R.pick([2,3,4,5]), x0=R.int(-8,8), b=R.int(-9,9);
+  const c=a*x0+b;
+  return {type:'num', ans:x0+1, tol:0.001,
+   stem:`Решите неравенство <b>${a}x ${MB_sign(b)} > ${c}</b> и укажите <b>наименьшее целое</b> решение.`,
+   hint:'Ответ — целое число.',
+   wrong:{[x0]:'M.INT.04', [x0-1]:'M.INEQ.01'},
+   hints:['Решите неравенство как уравнение, затем посмотрите на знак.',
+          `Получится x > ${MB_neg(x0)}; наименьшее целое, строго большее ${MB_neg(x0)}, — это ${MB_neg(x0+1)}.`]};
+ }},
+
+{id:'MA142', node:'ALG.INEQ.01', diff:3, topic:'Деление на отрицательное число',
+ gen(R){ const a=R.pick([-2,-3,-4,-5]), x0=R.int(-6,6), b=R.int(-9,9);
+  const c=a*x0+b;
+  return {type:'num', ans:x0-1, tol:0.001,
+   stem:`Решите неравенство <b>${a}x ${MB_sign(b)} > ${c}</b> и укажите <b>наибольшее целое</b> решение.`,
+   hint:'Ответ — целое число.',
+   wrong:{[x0+1]:'M.INEQ.01', [x0]:'M.INT.04'},
+   hints:['При делении обеих частей на отрицательное число знак неравенства меняется.',
+          `Получится x < ${MB_neg(x0)}; наибольшее целое, строго меньшее ${MB_neg(x0)}, — это ${MB_neg(x0-1)}.`]};
+ }},
+
+{id:'MA143', node:'ALG.INEQ.01', diff:3, topic:'Целые решения на промежутке',
+ gen(R){ const l=R.int(-8,2), r=l+R.int(2,7);
+  const count=r-l-1;
+  return {type:'num', ans:count, tol:0.001,
+   stem:`Сколько <b>целых</b> чисел удовлетворяет неравенству <b>${MB_neg(l)} < x < ${MB_neg(r)}</b>?`,
+   hint:'Ответ — целое число.',
+   wrong:{[count+2]:'M.INT.04', [r-l]:'M.INT.05'},
+   hints:['Знаки строгие — сами границы не считаются.',
+          `Перечислите целые от ${MB_neg(l+1)} до ${MB_neg(r-1)}.`]};
+ }},
+
+{id:'MA144', node:'ALG.INEQ.01', diff:2, topic:'Число на числовой прямой',
+ gen(R){ const k=R.pick([2,3,5,6,7,8,10,11,12,13,15,17]);
+  const val=Math.sqrt(k);
+  const lo=Math.floor(val), hi=lo+1;
+  const opts=[`между ${lo-1} и ${lo}`, `между ${lo} и ${hi}`, `между ${hi} и ${hi+1}`];
+  const ans=1;
+  const sh=R.shuffle(opts), a2=sh.indexOf(opts[1]);
+  return {type:'choice', opts:sh, ans:a2,
+   codes:sh.map((o,i)=>i===a2?null:'M.INT.05'),
+   stem:`Между какими соседними целыми числами находится <b>√${k}</b> на числовой прямой?`,
+   hints:['Найдите ближайшие точные квадраты снизу и сверху.',
+          `${lo}² = ${lo*lo}, ${hi}² = ${hi*hi}, а под корнем ${k}.`]};
+ }},
+
+// ══ ALG.SEQ.01 · Прогрессии ═════════════════════════════════════════
+{id:'MA145', node:'ALG.SEQ.01', diff:2, topic:'n-й член арифметической прогрессии',
+ gen(R){ const a1=R.int(-9,9), d=R.pick([-5,-4,-3,-2,2,3,4,5]), n=R.int(5,15);
+  const ans=a1+(n-1)*d;
+  return {type:'num', ans, tol:0.001,
+   stem:`Арифметическая прогрессия задана первым членом <b>a₁ = ${MB_neg(a1)}</b> и разностью <b>d = ${MB_neg(d)}</b>. Найдите <b>a<sub>${n}</sub></b>.`,
+   hint:'Ответ — число.',
+   wrong:{[a1+n*d]:'M.SEQ.01', [a1*Math.pow(d,n-1)]:'M.SEQ.02'},
+   hints:['aₙ = a₁ + (n − 1)d.',
+          `От первого члена до ${n}-го делается ${n-1} шаг${n-1===1?'':'ов'} по ${d}.`]};
+ }},
+
+{id:'MA146', node:'ALG.SEQ.01', diff:3, topic:'Сумма первых членов',
+ gen(R){ const a1=R.int(1,9), d=R.pick([2,3,4,5]), n=R.pick([6,8,10,12]);
+  const an=a1+(n-1)*d, ans=(a1+an)*n/2;
+  return {type:'num', ans, tol:0.001,
+   stem:`В арифметической прогрессии <b>a₁ = ${MB_neg(a1)}</b>, <b>d = ${MB_neg(d)}</b>. Найдите сумму первых <b>${n}</b> членов.`,
+   hint:'Ответ — число.',
+   wrong:{[an]:'M.PROC.01', [(a1+an)*n]:'M.ALG.01'},
+   hints:['Sₙ = (a₁ + aₙ) · n / 2.',
+          `Сначала найдите a${n} = ${an}, затем подставьте в формулу суммы.`]};
+ }},
+
+{id:'MA147', node:'ALG.SEQ.01', diff:3, topic:'Разность по двум членам',
+ gen(R){ const a1=R.int(-9,9), d=R.pick([-4,-3,-2,2,3,4,5]), n=R.int(4,9);
+  const an=a1+(n-1)*d;
+  return {type:'num', ans:d, tol:0.001,
+   stem:`В арифметической прогрессии <b>a₁ = ${MB_neg(a1)}</b>, <b>a<sub>${n}</sub> = ${MB_neg(an)}</b>. Найдите разность прогрессии.`,
+   hint:'Ответ — число.',
+   wrong:{[Math.round((an-a1)/n*1000)/1000]:'M.SEQ.01', [an-a1]:'M.PROC.01'},
+   hints:['Между первым и n-м членом ровно n − 1 шаг.',
+          `d = (${MB_neg(an)} − (${MB_neg(a1)})) : ${n-1}.`]};
+ }},
+
+{id:'MA148', node:'ALG.SEQ.01', diff:3, topic:'Геометрическая прогрессия',
+ gen(R){ const b1=R.pick([1,2,3,5]), q=R.pick([2,3]), n=R.int(3,6);
+  const ans=b1*Math.pow(q,n-1);
+  return {type:'num', ans, tol:0.001,
+   stem:`Геометрическая прогрессия задана первым членом <b>b₁ = ${b1}</b> и знаменателем <b>q = ${q}</b>. Найдите <b>b<sub>${n}</sub></b>.`,
+   hint:'Ответ — число.',
+   wrong:{[b1*Math.pow(q,n)]:'M.SEQ.01', [b1+(n-1)*q]:'M.SEQ.02'},
+   hints:['bₙ = b₁ · q^(n − 1).',
+          `Умножьте ${b1} на ${q} ровно ${n-1} раз${n-1===1?'':'а'}.`]};
+ }}
+
+];
+
+/* Коды ошибок, которых не было в общем каталоге mis.js. */
+const MATH_MIS = {
+'M.PROC.07':{t:'Ответ дан в другой величине',w:'Найдено верное число, но не та величина, о которой спрашивают.',d:'Перечитайте вопрос и проверьте, что именно требуется в ответе.'}
+};
+
+/* Страховка: при некоторых значениях параметров «типичный неверный ответ» совпадает
+   с верным (например, медиана ряда случайно равна его среднему). Такой ключ нужно
+   убрать, иначе верный ответ был бы разобран как ошибка. Движок делает это же
+   в sanitizeQ, но банк обязан быть корректным сам по себе — иначе автотест банка
+   и выгрузка на вычитку видят несуществующую ошибку. */
+MATH_BANK.forEach(T => {
+  const gen = T.gen;
+  T.gen = R => {
+    const q = gen(R);
+    if (q && q.type === 'num' && q.wrong) {
+      const tol = q.tol || 0.001, clean = {};
+      for (const k in q.wrong) {
+        const v = parseFloat(k);
+        if (isFinite(v) && Math.abs(v - q.ans) > tol) clean[k] = q.wrong[k];
+      }
+      q.wrong = clean;
+    }
+    return q;
+  };
+});
+
+"use strict";
+/* ═══ БАНК ЗАДАНИЙ · ФИЗИКА · ОГЭ (демо «Научился») ═══
    Таксономия: 04-content/atlas/03-physics.md (166 узлов, ID PHY.<BRANCH>.<NN>).
    Коды ошибок: §5 того же файла (76 кодов). Коды с номерами выше атласных —
    продолжение нумерации ветки, смысл согласован с каталогом §5.
@@ -1751,7 +2423,7 @@ const PHY_SUBJ = {
 "use strict";
 /* форма слова «балл» в родительном падеже после «больше»: 21 балла, 22 баллов */
 function INF_BALL(n){ return (n%10===1 && n%100!==11) ? "балла" : "баллов"; }
-/* ═══ ИНФОРМАТИКА · ОГЭ · демо «Порог» ═══
+/* ═══ ИНФОРМАТИКА · ОГЭ · демо «Научился» ═══
    17 шаблонов диагностики (16 заданий КИМ + запасной по системам счисления),
    30 шаблонов тренажёра на 6 узлов, 59 кодов заблуждений.
    Таксономия узлов и коды ошибок — 04-content/atlas/04-informatics.md (§2 и §5, сборка 27.08.2026).
@@ -3788,7 +4460,7 @@ mis:{
 };
 
 "use strict";
-/* ═══ ИСТОРИЯ · ОГЭ · банк заданий демо «Порог» ═══
+/* ═══ ИСТОРИЯ · ОГЭ · банк заданий демо «Научился» ═══
    Таксономия: 04-content/atlas/06-history.md — ось Б (умения) × ось А (периоды P1–P5).
    Содержание — только до 1914 г., как в ОГЭ. Ни карт, ни изображений: банк работает
    на тексте и на каталоге ядра знаний (§4 атласа, позиции P1–P5).
@@ -4916,7 +5588,7 @@ const HIS_SUBJ = {
 };
 
 "use strict";
-/* ═══ ОБЩЕСТВОЗНАНИЕ · ОГЭ · банк заданий демо «Порог» ═══
+/* ═══ ОБЩЕСТВОЗНАНИЕ · ОГЭ · банк заданий демо «Научился» ═══
    Таксономия: 04-content/atlas/08-social.md — ось Б (9 веток умений) × ось А (6 модулей).
    Экзаменационная рамка: ОГЭ-2027 — 20 заданий, максимум 32 первичных балла
    (курс сокращён до 9–11 классов с 01.09.2026, работа переработана под сжатый курс).
@@ -7111,7 +7783,7 @@ function viewClass(){
 "use strict";
 /* ═══ КОНФИГУРАЦИЯ ═══ */
 const CFG = {
-  title:'Порог',                        // рабочее название продукта
+  title:'Научился',                     // название продукта (D41 от 02.09.2026)
   tgLink:'',                            // ← ссылка на Telegram-канал, когда появится
   reportBot:'',                         // ← @имя бота отчётов; пока пусто — блок «Отчёт родителям» не показывается
   diagLen:16                            // заданий в диагностике по предмету
@@ -7166,12 +7838,12 @@ const MATH_SUBJ = {
   marks:[{min:22,l:'«5»'},{min:15,l:'«4»'},{min:8,l:'«3»'}],
   groupNames:GROUP_NAME,
   blueprint:BLUEPRINT,
-  nodes:GEO_NODES,
+  nodes:GEO_NODES.concat(typeof MATH_NODES!=='undefined'?MATH_NODES:[]),
   diag:DIAG.map(t=>Object.assign({group:GROUP[t.id]}, t)),
-  bank:GEO,
-  mis:{},
-  trainer:'Геометрия: 2 балла до тройки',
-  trainerNote:'Шесть навыков, которых хватает, чтобы взять геометрический порог. Задачи не повторяются, каждая ошибка разбирается по существу.',
+  bank:GEO.concat(typeof MATH_BANK!=='undefined'?MATH_BANK:[]),
+  mis:(typeof MATH_MIS!=='undefined'?MATH_MIS:{}),
+  trainer:'Математика: 18 навыков части 1',
+  trainerNote:'Шесть навыков геометрии, которых хватает, чтобы взять порог, и двенадцать по остальным разделам: проценты и текстовые задачи, вычисления, уравнения, неравенства, функции, вероятность и статистика, прогрессии. Задачи не повторяются, каждая ошибка разбирается по существу.',
   gate:{group:'geo', need:2, name:'геометрии',
         why:'На ОГЭ без двух баллов за геометрию тройку не ставят, каким бы ни был остальной балл.'}
 };
@@ -7277,7 +7949,7 @@ function shell(inner, chips, sub){
   return `
   <header class="top"><div class="top-in">
     <button class="brand" onclick="go('home')">
-      <div class="mark">П</div>
+      <div class="mark">Н</div>
       <div><b>${CFG.title}</b><span>${sub||'Тренажёр ОГЭ · 6 предметов'}</span></div>
     </button>
     ${chips||''}
