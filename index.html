@@ -271,16 +271,29 @@ table.rev td:last-child{padding-right:0}
 .flash{position:fixed;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;
   background:var(--ink);color:var(--ground);padding:9px 18px;border-radius:99px;font-size:14px;box-shadow:var(--shadow)}
 
-/* ═══ Код результата для отчёта родителям ═══ */
+/* ═══ Код результата для отчёта родителям ═══
+   Кегль блока — по макету R-01 (Контора/макеты/R-01-kanal-dostavki/01-otchet-dlya-roditeley.html)
+   и порогу конторы из Контора/макеты/токены.md: 16px тело, 14px нижняя граница служебного.
+   Ниже 14px в этом блоке опускаться нельзя — проверяется demo/src/test-report.js. */
 .rc{margin-top:26px;padding:18px 20px;border:1px solid var(--rule);border-radius:12px;background:var(--surface-2)}
-.rc h3{font-size:15px;margin:0 0 8px}
-.rc p{font-size:14px;line-height:1.5;margin:0 0 12px;color:var(--ink-2)}
-.rc-subj{font-size:13.5px;margin-bottom:12px}
-.rc-code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;line-height:1.45;
+.rc h3{font-size:18px;margin:0 0 8px}
+.rc p{font-size:16px;line-height:1.5;margin:0 0 12px;color:var(--ink-2)}
+.rc-subj{font-size:16px;margin-bottom:12px}
+.rc-code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px;line-height:1.5;
   word-break:break-all;padding:12px 14px;border-radius:9px;border:1px dashed var(--rule);
-  background:var(--surface);color:var(--ink-3);max-height:66px;overflow-y:auto;margin-bottom:12px}
+  background:var(--surface);color:var(--ink-3);max-height:76px;overflow-y:auto;margin-bottom:12px}
 .rc-code.ready{border-style:solid;color:var(--ink-2);user-select:all}
-.rc-note{font-size:12.5px;margin:12px 0 0;color:var(--ink-3)}
+.rc-link{color:var(--ink-2);border-style:solid;user-select:all}
+a.rc-goto{font-family:inherit;font-size:16px;font-weight:600;padding:11px 20px;border-radius:8px;
+  border:1.5px solid var(--rule-strong);background:transparent;color:var(--ink-2);text-decoration:none}
+a.rc-goto:hover{background:var(--surface)}
+.rc .row button{font-size:16px}
+.rc-qr{display:flex;gap:12px;align-items:center;margin-top:14px}
+.rc-qr .rc-qr-box{width:64px;height:64px;flex:none;display:flex;align-items:center;justify-content:center;
+  border:1px dashed var(--rule-strong);border-radius:6px;font-size:14px;color:var(--ink-3)}
+.rc-qr p{font-size:14px;line-height:1.5;margin:0;color:var(--ink-3)}
+.rc-where{font-size:14px;line-height:1.5;margin:12px 0 0;color:var(--ink-2)}
+.rc-note{font-size:14px;margin:12px 0 0;color:var(--ink-3)}
 
 /* ─── Сводка по классу (экран учителя) ─────────────────────────────────── */
 .teacher{display:flex;gap:18px;align-items:center;justify-content:space-between;flex-wrap:wrap;
@@ -7914,7 +7927,7 @@ const ATLAS = {
 
 /* ═══ КОД РЕЗУЛЬТАТА ═══
    Превращает результаты диагностики ПО ВСЕМ пройденным предметам в одну строку,
-   которую родитель отправляет боту, чтобы получить сводный отчёт.
+   которую родитель вставляет в страницу отчёта, чтобы получить сводный разбор.
 
    Бэкенда нет и не будет: любой сервер означает сбор персональных данных,
    согласия родителей и совсем другой правовой контур. Поэтому результат едет
@@ -7923,13 +7936,14 @@ const ATLAS = {
    Формат:  PRG3.<base64url(JSON)>.<сумма>        — без сжатия
             PRG3Z.<base64url(deflate)>.<сумма>    — со сжатием (обычный случай)
 
-   Пять предметов без сжатия дают ~3 500 символов, а сообщение в Telegram
-   ограничено 4 096 — поэтому сжатие здесь не оптимизация, а требование.
+   Пять предметов без сжатия дают ~3 500 символов: такой код неудобно выделить
+   и перенести целиком — поэтому сжатие здесь не оптимизация, а требование.
    Где CompressionStream недоступен, отдаём несжатый вариант: он длиннее, но рабочий.
 
    ЧЕГО В КОДЕ НЕТ И НЕ ДОЛЖНО ПОЯВИТЬСЯ: имени, школы, класса, возраста, города и
    любой строки, которую набрал человек. Числовой ответ проходит rcAnswer() и остаётся
-   числом; ответ-слово и выбранный вариант хранятся НОМЕРОМ — текст отчёт восстановит
+   числом не длиннее RC_ANS_MAX знаков: телефон и номер карты в поле ответа отсекаются
+   по длине; ответ-слово и выбранный вариант хранятся НОМЕРОМ — текст отчёт восстановит
    сам из (id, seed). Поэтому по русскому языку и истории в коде тоже нет ни одного слова.
 
    Полезная нагрузка:
@@ -7946,6 +7960,7 @@ const ATLAS = {
 
 const RC_VER = 3;
 const RC_MAST_DEFAULT = 0.3;
+const RC_QR_MAX = 1200;                    // длиннее — QR с экрана телефона не снимается (R-01 §4.2)
 
 function rcB64(bytes){                     // Uint8Array → base64url без «=»
   let bin=''; for(let i=0;i<bytes.length;i++) bin += String.fromCharCode(bytes[i]);
@@ -7956,10 +7971,13 @@ function rcHash(str){                      // FNV-1a — ловит код, ск
   for(let i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h,0x01000193)>>>0; }
   return h.toString(36);
 }
-/* Ответ ученика попадает в код только как число: буквы и любой свободный текст отсекаются. */
+/* Ответ ученика попадает в код только как число: буквы и любой свободный текст отсекаются.
+   Длина ограничена тем, что вообще может быть ответом задания ОГЭ: 10 знаков хватает
+   с запасом, а номер телефона (11) и номер карты (16) уже не проходят (аудит R-19, находка 3). */
+const RC_ANS_MAX = 10;
 function rcAnswer(v){
   const t = String(v==null?'':v).trim();
-  if(!t || t.length>16) return 0;
+  if(!t || t.length>RC_ANS_MAX) return 0;
   return /^[-−]?[0-9]+([.,\/][0-9]+)?$/.test(t) ? t.replace('−','-') : 0;
 }
 /* Номер варианта — со сдвигом на 1: ноль занят под «варианта нет».
@@ -7992,7 +8010,7 @@ function rcSubject(key){
 function porogDoneSubjects(){
   return Object.keys(SUBJECTS).filter(k => ST.d[k]);
 }
-/* Готовая строка для бота. Промис: сжатие в браузере асинхронное.
+/* Готовая строка результата. Промис: сжатие в браузере асинхронное.
    null, если не пройдено ни одной диагностики. */
 async function porogCode(){
   const keys = porogDoneSubjects();
@@ -8023,43 +8041,112 @@ async function porogFillCode(){
   box.classList.add('ready');
   const btn = document.getElementById('rc-make'); if(btn) btn.remove();
   const copy = document.getElementById('rc-copy'); if(copy) copy.hidden = false;
-  const open = document.getElementById('rc-open'); if(open) open.hidden = false;
+  const where = document.getElementById('rc-where'); if(where) where.hidden = false;
+  if(CFG.reportUrl) porogFillLink(code);
 }
-/* Копирование: штатный API, при отказе — запасной путь для старых браузеров. */
-function porogCopyCode(){
-  const el = document.getElementById('rc-box'); if(!el) return;
-  const txt = el.textContent.trim();
-  if(!txt || !/^PRG/.test(txt)) return flash('Сначала соберите код');
-  const done = ()=> flash('Код скопирован — вставьте его в бота');
+/* Ссылка на страницу отчёта: код едет во фрагменте и потому не уходит на сервер
+   ни в запросе, ни в Referer, ни в журнале доступа (R-01 §1.4).
+   Схему проверяем до склейки: адрес задаём мы в исходнике, но опечатка или
+   `javascript:` в конфиге не должны доехать до href ссылки (аудит R-19, находка 2). */
+const RC_URL_OK = /^https:\/\/\S/;
+function porogReportLink(code){
+  const base = String(CFG.reportUrl || '').split('#')[0];
+  return RC_URL_OK.test(base) ? base + '#' + code : '';
+}
+/* Ссылка, «Поделиться», «Открыть страницу отчёта» и QR — только когда адрес задан.
+   Все эти элементы приходят одной веткой разметки: нет rc-link — нет и остальных. */
+function porogFillLink(code){
+  const box = document.getElementById('rc-link');
+  if(!box) return;
+  const link = porogReportLink(code);
+  box.textContent = link; box.hidden = false;
+  const goto_ = document.getElementById('rc-goto');
+  goto_.href = link; goto_.hidden = false;
+  document.getElementById('rc-copy-link').hidden = false;
+  if(typeof navigator.share === 'function') document.getElementById('rc-share').hidden = false;
+  if(link.length <= RC_QR_MAX){
+    const qr = document.getElementById('rc-qr');
+    qr.innerHTML = porogQrPlace(link); qr.hidden = false;
+  }
+}
+/* ЗАГЛУШКА, а не QR. Настоящего энкодера в проекте нет: demo/src/qr-code.js — один
+   статический SVG на фиксированный адрес демо, произвольную ссылку им не закодировать.
+   Рисовать QR с чужим содержимым нельзя, а нечитаемый QR хуже отсутствующего
+   (R-01 §3.1), поэтому здесь честное место под него — как в макете R-02 (Д-4). */
+function porogQrPlace(link){
+  return `<div class="rc-qr-box">QR</div>
+    <p>Здесь появится QR на эту ссылку: ${link.length} ${porogPlural(link.length,'символ','символа','символов')} при пороге ${RC_QR_MAX}.
+    Пока передайте ссылку кнопкой «Поделиться» или скопируйте её.</p>`;
+}
+/* Копирование: штатный API, при отказе — запасной путь для старых браузеров.
+   Демо открывают и с file://, где isSecureContext ложно, — там сразу запасной путь. */
+function porogCopyText(txt, msg){
+  const done = ()=> flash(msg);
   function fallback(){
     const ta=document.createElement('textarea'); ta.value=txt;
     ta.style.position='fixed'; ta.style.opacity='0';
     document.body.appendChild(ta); ta.select();
-    try{ document.execCommand('copy'); done(); }catch(e){ flash('Выделите код и скопируйте вручную'); }
+    try{ document.execCommand('copy'); done(); }catch(e){ flash('Выделите текст и скопируйте вручную'); }
     ta.remove();
   }
   if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(txt).then(done, fallback);
   else fallback();
 }
-/* Блок «Отчёт для родителей». Один и тот же на главной и на экране результата. */
+function porogCopyCode(){
+  const el = document.getElementById('rc-box'); if(!el) return;
+  const txt = el.textContent.trim();
+  if(!txt || !/^PRG/.test(txt)) return flash('Сначала соберите код');
+  porogCopyText(txt, 'Код скопирован целиком');
+}
+function porogCopyLink(){
+  const el = document.getElementById('rc-link'); if(!el) return;
+  const txt = el.textContent.trim();
+  if(!txt) return flash('Сначала соберите код');
+  porogCopyText(txt, 'Ссылка скопирована целиком');
+}
+/* Системное «Поделиться»: приложение выбирает человек, и нам оно не возвращается —
+   узнать, куда ушла ссылка, мы не можем по построению (R-01 крит. 37).
+   Закрытое окно обмена — не ошибка, на неё не ругаемся. */
+function porogShareLink(){
+  const el = document.getElementById('rc-link'); if(!el) return;
+  const url = el.textContent.trim();
+  if(!url) return flash('Сначала соберите код');
+  if(typeof navigator.share !== 'function') return porogCopyLink();
+  navigator.share({title:'Результат диагностики', url}).catch(e => {
+    if(!e || e.name !== 'AbortError') flash('Поделиться не вышло — скопируйте ссылку кнопкой рядом');
+  });
+}
+/* Блок «Отчёт для родителей». Один и тот же на главной и на экране результата.
+   Видимость блока зависит ТОЛЬКО от того, пройдена ли хоть одна диагностика.
+   Адрес страницы приёма кода (CFG.reportUrl) на видимость не влияет: пустой адрес
+   означает передачу кода через буфер обмена, а не спрятанную кнопку (R-01 §1.6). */
 function porogReportBlock(){
-  if(!CFG.reportBot) return '';
   const keys = porogDoneSubjects();
   if(!keys.length) return '';
   const names = keys.map(k => SUBJECTS[k].name).join(', ');
   const rest = Object.keys(SUBJECTS).length - keys.length;
+  /* Ссылочная ветка включается, только если адрес годен: пустой или не-https
+     конфиг оставляет блок на буфере обмена, а не рисует мёртвую ссылку. */
+  const url = !!porogReportLink('');
   return `
   <div class="rc">
     <h3>Отчёт для родителей</h3>
-    <p>Соберите код результата и отправьте его боту <b>${CFG.reportBot}</b>. В ответ придёт разбор:
+    <p>Соберите код результата и ${url ? 'отправьте родителям ссылку' : 'передайте его родителям'}. По коду собирается разбор:
     что уже освоено, какие пробелы стоят больше всего баллов на экзамене и что делать в ближайшие недели.</p>
     <p class="rc-subj">В отчёт войдёт: <b>${names}</b>.${rest ? ` Ещё ${rest} ${porogPlural(rest,'предмет','предмета','предметов')} можно пройти и добавить в тот же отчёт.` : ''}</p>
     <div class="rc-code" id="rc-box">код собирается по кнопке ниже</div>
+    ${url ? '<div class="rc-code rc-link" id="rc-link" hidden></div>' : ''}
     <div class="row">
       <button id="rc-make" onclick="porogFillCode()">Собрать код</button>
-      <button id="rc-copy" hidden onclick="porogCopyCode()">Скопировать код</button>
-      <button id="rc-open" class="ghost" hidden onclick="window.open('https://t.me/'+CFG.reportBot.replace('@',''),'_blank','noopener')">Открыть бота</button>
+      ${url ? `<button id="rc-share" hidden onclick="porogShareLink()">Поделиться</button>
+      <button id="rc-copy-link" hidden onclick="porogCopyLink()">Скопировать ссылку</button>
+      <a id="rc-goto" class="rc-goto" hidden target="_blank" rel="noopener" href="">Открыть страницу отчёта</a>` : ''}
+      <button id="rc-copy" ${url ? 'class="ghost" ' : ''}hidden onclick="porogCopyCode()">Скопировать код</button>
     </div>
+    ${url ? '<div class="rc-qr" id="rc-qr" hidden></div>' : ''}
+    <p class="rc-where" id="rc-where" hidden>${url
+      ? 'Отправьте родителям ссылку — она откроет отчёт по этому коду. «Скопировать код» — запасной путь, если ссылка дошла обрезанной.'
+      : 'Скопируйте код целиком и передайте родителям — по нему собирается отчёт. Тот же код принимает сводка по классу у учителя.'}</p>
     <p class="rc-note">В коде нет имени, школы, класса и возраста — только номера заданий, ответы и коды типовых ошибок.</p>
   </div>`;
 }
@@ -8174,24 +8261,32 @@ function clAgg(key){
   const rows = CL.rows.filter(r=>r[key]).map(r=>r[key]);
   if(!rows.length) return null;
   const s = SUBJECTS[key];
-  const groups = {}, errors = {}, tasks = {};
+  /* Ключи приезжают из чужого кода, поэтому карты — без прототипа: иначе ключ
+     вида `__proto__` пишет счётчики в Object.prototype (R-20). */
+  const groups = Object.create(null), errors = Object.create(null), tasks = Object.create(null);
+  const names = s.groupNames || {};
   let lo=0, hi=0, acc=0, mins=0;
   for(let pi=0; pi<rows.length; pi++){
     const r = rows[pi];
     const sc = r[1] || [];
-    lo += sc[1]||0; hi += sc[2]||0; acc += sc[3]||0; mins += r[0]||0;
+    lo += +sc[1]||0; hi += +sc[2]||0; acc += +sc[3]||0; mins += +r[0]||0;
     for(const g in (r[2]||{})){
-      const [ok, tot] = r[2][g];
+      /* Название раздела берём только из своего справочника: неизвестный ключ
+         на экран не попадает вовсе, а не печатается как есть (R-20). */
+      const v = r[2][g];
+      if(!Object.hasOwn(names, g) || !Array.isArray(v)) continue;
+      const ok = +v[0]||0, tot = +v[1]||0;
       groups[g] = groups[g] || {ok:0, n:0, weak:0, pupils:0};
       groups[g].ok += ok; groups[g].n += tot; groups[g].pupils++;
       if(tot && ok / tot < 0.5) groups[g].weak++;
     }
-    for(const it of (r[3]||[])){
-      const id = it[0], ok = it[1] === 1;
+    for(const raw of (Array.isArray(r[3]) ? r[3] : [])){
+      const it = raw || [], id = String(it[0] ?? ''), ok = it[1] === 1;
+      if(!id) continue;
       tasks[id] = tasks[id] || {n:0, bad:0};
       tasks[id].n++; if(!ok) tasks[id].bad++;
       /* Считаем учеников, а не срабатывания: один и тот же код у одного ученика — один голос. */
-      if(!ok && it[3]){ (errors[it[3]] = errors[it[3]] || new Set()).add(pi); }
+      if(!ok && it[3]){ (errors[String(it[3])] = errors[String(it[3])] || new Set()).add(pi); }
     }
   }
   const k = rows.length;
@@ -8199,13 +8294,13 @@ function clAgg(key){
     key, name:s.name, pupils:k, maxPrimary:s.maxPrimary,
     lo: Math.round(lo/k), hi: Math.round(hi/k), acc: Math.round(acc/k), mins: Math.round(mins/k),
     groups: Object.keys(groups).map(g=>({
-      g, title:(s.groupNames||{})[g] || g,
+      g, title:names[g],
       ok:groups[g].ok, n:groups[g].n,
       pct: groups[g].n ? Math.round(groups[g].ok/groups[g].n*100) : 0,
       weak: groups[g].weak, pupils: groups[g].pupils,
       exam: clExam((s.diag||[]).filter(t=>t.group===g).map(t=>t.exam))
     })).sort((a,b)=>a.pct-b.pct),
-    errors: Object.keys(errors).map(c=>({code:c, n:errors[c].size, m:MIS[c]||null}))
+    errors: Object.keys(errors).map(c=>({code:c, n:errors[c].size, m:Object.hasOwn(MIS,c)?MIS[c]:null}))
       .sort((a,b)=>b.n-a.n).slice(0, 8),
     tasks: Object.keys(tasks).map(id=>({id, ...tasks[id], t:clTask(key,id)}))
       .filter(x=>x.bad>0).sort((a,b)=>(b.bad/b.n)-(a.bad/a.n) || b.bad-a.bad).slice(0, 6)
@@ -8269,7 +8364,7 @@ function viewClass(){
       <h2>Коды учеников</h2>
       <p class="muted">По одному коду на строку. Код начинается с <code>PRG3Z.</code> — ученик видит его
       в конце диагностики и может скопировать кнопкой.</p>
-      <textarea id="cl-in" class="cl-ta" rows="7" placeholder="PRG3Z.…&#10;PRG3Z.…&#10;PRG3Z.…">${CL.codes.replace(/</g,'&lt;')}</textarea>
+      <textarea id="cl-in" class="cl-ta" rows="7" placeholder="PRG3Z.…&#10;PRG3Z.…&#10;PRG3Z.…">${esc(CL.codes)}</textarea>
       <div class="cl-actions">
         <button class="primary" onclick="clBuild()">Собрать сводку</button>
         ${CL.done?`<button class="ghost" onclick="clClear()">Очистить</button>
@@ -8280,7 +8375,7 @@ function viewClass(){
     </div>
 
     ${CL.errs.length?`<div class="card warn"><h2>Не разобрано: ${CL.errs.length}</h2>
-      <ul class="cl-err">${CL.errs.map(e=>`<li>${e}</li>`).join('')}</ul>
+      <ul class="cl-err">${CL.errs.map(e=>`<li>${esc(e)}</li>`).join('')}</ul>
       <p class="muted small">Чаще всего код скопирован не целиком — попросите прислать его одним куском.</p></div>`:''}
 
     ${CL.done && !total?`<div class="card"><p>Ни один код не разобран. Проверьте, что коды скопированы целиком.</p></div>`:''}
@@ -8298,7 +8393,7 @@ function viewClass(){
       <table class="cl-t">
         <tr><th>Раздел</th><th>Класс решил</th><th>Провалили</th><th>Задания ОГЭ</th></tr>
         ${a.groups.map(g=>`<tr>
-          <td>${g.title}</td>
+          <td>${esc(g.title)}</td>
           <td class="cl-pct">${clBar(g.pct)} ${g.pct}%</td>
           <td>${g.weak} из ${g.pupils}</td>
           <td class="muted">${g.exam||'—'}</td>
@@ -8306,17 +8401,17 @@ function viewClass(){
       </table>
 
       ${a.tasks.length?`<h3>Задания, которые чаще всего не выходят</h3>
-      <ul class="cl-list">${a.tasks.map(t=>`<li><b>${t.t?t.t.topic:t.id}</b>
+      <ul class="cl-list">${a.tasks.map(t=>`<li><b>${esc(t.t?t.t.topic:t.id)}</b>
         ${t.t&&t.t.exam?`<span class="muted">· ОГЭ № ${t.t.exam}</span>`:''}
         — ошиблись ${t.bad} из ${t.n}</li>`).join('')}</ul>`:''}
 
       ${a.errors.length?`<h3>Типовые ошибки класса</h3>
-      <ul class="cl-list">${a.errors.map(e=>`<li><b>${e.m?e.m.t:e.code}</b> — ${e.n}
+      <ul class="cl-list">${a.errors.map(e=>`<li><b>${esc(e.m?e.m.t:e.code)}</b> — ${e.n}
         ${porogPlural(e.n,'ученик','ученика','учеников')}.
         ${e.m?`<span class="muted">${e.m.d}</span>`:''}</li>`).join('')}</ul>`:''}
 
       <p class="cl-plan"><b>Что повторить в первую очередь:</b>
-      ${a.groups.slice(0,3).map(g=>g.title.toLowerCase()).join(', ')}.</p>
+      ${a.groups.slice(0,3).map(g=>esc(g.title.toLowerCase())).join(', ')}.</p>
     </div>`).join('')}
 
     ${aggs.length?`<div class="card muted small">
@@ -8330,8 +8425,7 @@ function viewClass(){
 /* ═══ КОНФИГУРАЦИЯ ═══ */
 const CFG = {
   title:'Научился',                     // название продукта (D41 от 02.09.2026)
-  tgLink:'',                            // ← ссылка на Telegram-канал, когда появится
-  reportBot:'',                         // ← @имя бота отчётов; пока пусто — блок «Отчёт родителям» не показывается
+  reportUrl:'',                         // ← адрес страницы приёма кода; пусто — блок работает через буфер обмена
   diagLen:16                            // заданий в диагностике по предмету
 };
 
@@ -9038,7 +9132,6 @@ function reportBug(){
   const step = q.type==='steps' ? ` (шаг ${(G.sub?G.sub.i:0)+1})` : '';
   const txt=`${S().name} · задание ${T.id}${step}: ${q.stem.replace(/<[^>]+>/g,'')} — ожидаемый ответ ${rightText(q)}`;
   const box=$('#bugbox');
-  if(CFG.tgLink){ window.open(CFG.tgLink,'_blank','noopener'); return; }
   box.innerHTML=`<div class="fb err" style="margin-top:12px"><h4>Спасибо, это важно</h4>
     <p style="margin:0 0 8px">Скопируйте текст ниже и пришлите нам — задание уберём из выдачи в течение суток.</p>
     <div class="code" style="display:block;padding:10px;line-height:1.5;white-space:pre-wrap">${esc(txt)}</div></div>`;
