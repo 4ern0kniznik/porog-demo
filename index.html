@@ -6,9 +6,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="description" content="Диагностика навыков ОГЭ за 20 минут и тренажёры по математике, физике, информатике, русскому языку, истории и обществознанию. Бесплатно, без регистрации.">
 <title>Научился · тренажёр ОГЭ по шести предметам</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Golos+Text:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
 :root{
   --ground:#F6F8F6; --surface:#FFFFFF; --surface-2:#EFF3F1;
@@ -60,8 +57,8 @@ header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--g
 .top-in{max-width:1120px;margin:0 auto;padding:12px 20px;display:flex;gap:16px;align-items:center;flex-wrap:wrap}
 .brand{display:flex;gap:11px;align-items:center;margin-right:auto;cursor:pointer;background:none;border:0;padding:0;text-align:left;color:inherit;font:inherit}
 .mark{width:30px;height:30px;border-radius:7px;background:var(--accent);color:var(--on-accent);
-  display:grid;place-items:center;font-family:Bitter,serif;font-weight:700;font-size:15px;flex:none}
-.brand b{font-family:Bitter,serif;font-size:16px;font-weight:700;display:block;line-height:1.2}
+  display:grid;place-items:center;font-family:Bitter,Georgia,serif;font-weight:700;font-size:15px;flex:none}
+.brand b{font-family:Bitter,Georgia,serif;font-size:16px;font-weight:700;display:block;line-height:1.2}
 .brand span{font-size:12px;color:var(--ink-3);display:block}
 .chip{display:inline-flex;align-items:center;gap:7px;padding:5px 11px;border-radius:99px;
   border:1px solid var(--rule-strong);background:var(--surface);font-size:12.5px;color:var(--ink-2)}
@@ -76,7 +73,7 @@ header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--g
 .eyebrow{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);font-weight:600}
 .meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
 .tag{font-size:11px;padding:3px 8px;border-radius:5px;background:var(--surface-2);color:var(--ink-2);
-  font-family:"JetBrains Mono",monospace;letter-spacing:.02em}
+  font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;letter-spacing:.02em}
 .tag.geo{background:var(--accent-soft);color:var(--accent-ink)}
 
 /* ── главный экран ── */
@@ -96,7 +93,7 @@ header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--g
 .facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;background:var(--rule);
   border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-top:8px}
 .fact{background:var(--surface);padding:16px 18px}
-.fact b{display:block;font-family:Bitter,serif;font-size:22px;line-height:1.1;font-variant-numeric:tabular-nums}
+.fact b{display:block;font-family:Bitter,Georgia,serif;font-size:22px;line-height:1.1;font-variant-numeric:tabular-nums}
 .fact span{font-size:12.5px;color:var(--ink-3)}
 
 /* ── задание ── */
@@ -105,7 +102,7 @@ header.top{position:sticky;top:0;z-index:30;background:color-mix(in srgb,var(--g
 .hintline{color:var(--ink-3);font-size:13.5px;margin-top:2px}
 .answer{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap}
 input[type=text]{flex:1 1 200px;min-width:0;padding:11px 14px;border:1.5px solid var(--rule-strong);border-radius:8px;
-  background:var(--surface);color:var(--ink);font-family:"JetBrains Mono",monospace;font-size:16px}
+  background:var(--surface);color:var(--ink);font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:16px}
 input[type=text]:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
 button{font-family:inherit;font-size:14.5px;font-weight:600;padding:11px 20px;border-radius:8px;
   border:1.5px solid transparent;background:var(--accent);color:var(--on-accent);cursor:pointer;transition:filter .15s}
@@ -122,7 +119,7 @@ button:disabled{opacity:.45;cursor:not-allowed}
   background:var(--surface);cursor:pointer;text-align:left;font-size:15.5px;color:var(--ink);font-family:inherit;
   font-weight:400;transition:border-color .12s,background .12s}
 .opt:hover{border-color:var(--rule-strong);background:var(--surface-2)}
-.opt .k{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3);padding-top:3px;flex:none;width:15px}
+.opt .k{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--ink-3);padding-top:3px;flex:none;width:15px}
 .opt.sel{border-color:var(--accent);background:var(--accent-soft)}
 .opt.correct{border-color:var(--moss);background:var(--moss-soft)}
 .opt.wrong{border-color:var(--clay);background:var(--clay-soft)}
@@ -132,13 +129,13 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .fb{margin-top:18px;border-radius:9px;border:1px solid;padding:16px 18px;font-size:14.5px;line-height:1.55}
 .fb.ok{border-color:var(--moss);background:var(--moss-soft)}
 .fb.err{border-color:var(--ochre);background:var(--ochre-soft)}
-.fb h4{font-family:Bitter,serif;font-size:15px;margin:0 0 10px;display:flex;gap:9px;align-items:center}
+.fb h4{font-family:Bitter,Georgia,serif;font-size:15px;margin:0 0 10px;display:flex;gap:9px;align-items:center}
 .slot{display:grid;grid-template-columns:136px 1fr;gap:4px 14px;padding:7px 0;border-top:1px dashed var(--rule-strong)}
 .slot:first-of-type{border-top:none}
 .slot dt{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:var(--ink-3);font-weight:600;padding-top:2px}
 .slot dd{margin:0;color:var(--ink)}
 @media(max-width:560px){.slot{grid-template-columns:1fr;gap:2px}}
-.code{font-family:"JetBrains Mono",monospace;font-size:11.5px;padding:2px 7px;border-radius:4px;
+.code{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;padding:2px 7px;border-radius:4px;
   background:var(--surface);border:1px solid var(--rule-strong);color:var(--ink-2)}
 .hints{margin-top:14px;display:grid;gap:7px}
 .hint{font-size:14px;padding:10px 13px;border-left:2.5px solid var(--accent);background:var(--surface-2);border-radius:0 6px 6px 0}
@@ -149,8 +146,8 @@ button:disabled{opacity:.45;cursor:not-allowed}
 .skill{display:grid;grid-template-columns:1fr 44px;gap:4px 10px;align-items:center;padding:9px 0;border-top:1px solid var(--rule)}
 .skill:first-of-type{border-top:none}
 .skill .nm{font-size:13.5px;line-height:1.3}
-.skill .nm small{display:block;font-family:"JetBrains Mono",monospace;font-size:10.5px;color:var(--ink-3)}
-.skill .pc{font-family:"JetBrains Mono",monospace;font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
+.skill .nm small{display:block;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:10.5px;color:var(--ink-3)}
+.skill .pc{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;text-align:right;font-variant-numeric:tabular-nums;color:var(--ink-2)}
 .bar{grid-column:1/-1;height:5px;border-radius:99px;background:var(--surface-2);overflow:hidden}
 .bar i{display:block;height:100%;border-radius:99px;background:var(--ink-3);transition:width .55s cubic-bezier(.2,.7,.3,1),background .3s}
 .bar i.lo{background:var(--clay)} .bar i.mid{background:var(--ochre)} .bar i.hi{background:var(--moss)}
@@ -161,26 +158,26 @@ button:disabled{opacity:.45;cursor:not-allowed}
 main{display:grid;align-content:start;gap:0}
 .rail{display:grid;gap:16px;position:sticky;top:72px}
 @media(max-width:940px){.rail{position:static}}
-.rail h3{font-size:13px;font-family:Bitter,serif;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
-.rail h3 em{font-style:normal;font-size:11px;color:var(--ink-3);font-weight:400;font-family:"Golos Text",sans-serif}
+.rail h3{font-size:13px;font-family:Bitter,Georgia,serif;margin-bottom:12px;display:flex;justify-content:space-between;align-items:baseline}
+.rail h3 em{font-style:normal;font-size:11px;color:var(--ink-3);font-weight:400;font-family:"Golos Text",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 .score{display:flex;align-items:baseline;gap:10px;margin-bottom:4px}
-.score b{font-family:Bitter,serif;font-size:36px;line-height:1;font-variant-numeric:tabular-nums}
+.score b{font-family:Bitter,Georgia,serif;font-size:36px;line-height:1;font-variant-numeric:tabular-nums}
 .score span{font-size:12.5px;color:var(--ink-3)}
 .scale{height:7px;border-radius:99px;background:var(--surface-2);position:relative;margin:14px 0 8px;overflow:hidden}
 .scale i{position:absolute;top:0;bottom:0;background:var(--accent);opacity:.85;transition:left .5s,width .5s}
-.legend{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);font-family:"JetBrains Mono",monospace}
+.legend{display:flex;justify-content:space-between;font-size:10.5px;color:var(--ink-3);font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace}
 .thr{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;border-radius:9px;border:1px solid;margin:18px 0}
 .thr.pass{border-color:var(--moss);background:var(--moss-soft)}
 .thr.fail{border-color:var(--clay);background:var(--clay-soft)}
 .thr.wait{border-color:var(--rule-strong);background:var(--surface-2)}
-.thr .ic{font-family:Bitter,serif;font-size:22px;line-height:1;flex:none}
+.thr .ic{font-family:Bitter,Georgia,serif;font-size:22px;line-height:1;flex:none}
 .thr b{display:block;font-size:15px;margin-bottom:3px}
 .thr p{margin:0;font-size:14px;color:var(--ink-2)}
 .gap-list{display:grid;gap:10px;margin:16px 0}
 .gap{display:grid;grid-template-columns:1fr auto;gap:3px 12px;padding:12px 14px;border-radius:8px;border:1px solid var(--rule);background:var(--surface-2)}
 .gap b{font-size:14.5px;font-weight:600}
 .gap small{grid-column:1/-1;font-size:12.5px;color:var(--ink-2)}
-.gap .v{font-family:"JetBrains Mono",monospace;font-size:12.5px;color:var(--clay);font-variant-numeric:tabular-nums}
+.gap .v{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;color:var(--clay);font-variant-numeric:tabular-nums}
 .gap.ok .v{color:var(--moss)}
 table.rev{width:100%;border-collapse:collapse;font-size:14px;margin-top:10px}
 table.rev th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);
@@ -210,14 +207,14 @@ table.rev td:last-child{padding-right:0}
 .chipbtn:focus-visible,.asearch:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .asearch{font:inherit;font-size:14px;padding:6px 13px;border-radius:99px;flex:1 1 190px;min-width:170px;
   border:1px solid var(--rule-strong);background:var(--surface);color:var(--ink)}
-.acount{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3);
+.acount{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--ink-3);
   white-space:nowrap;font-variant-numeric:tabular-nums;margin-left:auto}
 
 .agrp{margin-top:24px}
 .agrph{display:flex;align-items:baseline;gap:10px;padding-bottom:7px;
   border-bottom:1px solid var(--rule-strong);margin-bottom:8px}
 .agrph b{font-family:Bitter,Georgia,serif;font-size:16px}
-.agrph span{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--ink-3)}
+.agrph span{margin-left:auto;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--ink-3)}
 
 .anode{display:grid;grid-template-columns:104px 1fr auto;gap:8px 14px;align-items:center;
   padding:11px 14px;border:1px solid var(--rule);border-left-width:3px;border-radius:8px;
@@ -226,12 +223,12 @@ table.rev td:last-child{padding-right:0}
 .anode.mid{border-left-color:var(--ochre)}
 .anode.low{border-left-color:var(--clay)}
 .anode.na{border-left-color:var(--rule-strong)}
-.acode{font-family:"JetBrains Mono",monospace;font-size:11.5px;color:var(--ink-3);
+.acode{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:11.5px;color:var(--ink-3);
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .abody b{display:block;font-size:14.5px;font-weight:600;line-height:1.35}
 .abody small{display:block;font-size:12.5px;color:var(--ink-3);margin-top:2px}
 .ameta{display:flex;align-items:center;gap:7px;flex-wrap:wrap;justify-content:flex-end}
-.atag{font-family:"JetBrains Mono",monospace;font-size:11px;padding:2px 8px;border-radius:99px;
+.atag{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:11px;padding:2px 8px;border-radius:99px;
   border:1px solid var(--rule-strong);color:var(--ink-2);white-space:nowrap}
 .astat{font-size:11.5px;padding:2px 9px;border-radius:99px;white-space:nowrap}
 .astat.ok{background:var(--moss-soft);color:var(--moss)}
@@ -279,7 +276,7 @@ table.rev td:last-child{padding-right:0}
 .rc h3{font-size:18px;margin:0 0 8px}
 .rc p{font-size:16px;line-height:1.5;margin:0 0 12px;color:var(--ink-2)}
 .rc-subj{font-size:16px;margin-bottom:12px}
-.rc-code{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px;line-height:1.5;
+.rc-code{font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:14px;line-height:1.5;
   word-break:break-all;padding:12px 14px;border-radius:9px;border:1px dashed var(--rule);
   background:var(--surface);color:var(--ink-3);max-height:76px;overflow-y:auto;margin-bottom:12px}
 .rc-code.ready{border-style:solid;color:var(--ink-2);user-select:all}
@@ -307,7 +304,7 @@ a.rc-goto:hover{background:var(--surface)}
 .card.warn{border-color:#E2C79A;background:#FDF7EC}
 .muted{color:var(--ink-3)}
 .small{font-size:12.5px}
-.cl-ta{width:100%;box-sizing:border-box;font-family:'JetBrains Mono',ui-monospace,monospace;
+.cl-ta{width:100%;box-sizing:border-box;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
   font-size:12px;line-height:1.5;padding:12px 13px;border:1px solid var(--rule-strong);
   border-radius:9px;background:var(--bg);color:var(--ink);resize:vertical}
 .cl-actions{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 10px}
@@ -322,6 +319,9 @@ a.rc-goto:hover{background:var(--surface)}
   vertical-align:middle;margin-right:8px;overflow:hidden}
 .cl-bar i{display:block;height:100%;border-radius:99px}
 .cl-bar i.bad{background:#A33A2C}.cl-bar i.mid{background:#9C6209}.cl-bar i.ok{background:#0F6E62}
+/* Длинная строка из чужого кода (id задания, код ошибки, вставка учителя) переносится
+   внутри слова, а не растягивает таблицу за край экрана — дефект Д-2 тестировщика R-20. */
+.cl-list,.cl-err{overflow-wrap:anywhere;word-break:break-word}
 .cl-list{margin:6px 0 0;padding-left:18px;font-size:14px}
 .cl-list li{margin:5px 0}
 .cl-err{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:var(--ink-2)}
@@ -7942,7 +7942,7 @@ const ATLAS = {
 
    ЧЕГО В КОДЕ НЕТ И НЕ ДОЛЖНО ПОЯВИТЬСЯ: имени, школы, класса, возраста, города и
    любой строки, которую набрал человек. Числовой ответ проходит rcAnswer() и остаётся
-   числом не длиннее RC_ANS_MAX знаков: телефон и номер карты в поле ответа отсекаются
+   числом не длиннее RC_ANS_MAX знаков (8): телефон и номер карты в поле ответа отсекаются
    по длине; ответ-слово и выбранный вариант хранятся НОМЕРОМ — текст отчёт восстановит
    сам из (id, seed). Поэтому по русскому языку и истории в коде тоже нет ни одного слова.
 
@@ -7972,9 +7972,10 @@ function rcHash(str){                      // FNV-1a — ловит код, ск
   return h.toString(36);
 }
 /* Ответ ученика попадает в код только как число: буквы и любой свободный текст отсекаются.
-   Длина ограничена тем, что вообще может быть ответом задания ОГЭ: 10 знаков хватает
-   с запасом, а номер телефона (11) и номер карты (16) уже не проходят (аудит R-19, находка 3). */
-const RC_ANS_MAX = 10;
+   Длина ограничена тем, что вообще может быть ответом задания ОГЭ: измеренный максимум
+   по всем банкам — 7 знаков (аудит R-20, находка 5), берём 8 с запасом в один знак.
+   Номер телефона (11) и номер карты (16) не проходят с трёхкратным зазором. */
+const RC_ANS_MAX = 8;
 function rcAnswer(v){
   const t = String(v==null?'':v).trim();
   if(!t || t.length>RC_ANS_MAX) return 0;
@@ -8042,16 +8043,45 @@ async function porogFillCode(){
   const btn = document.getElementById('rc-make'); if(btn) btn.remove();
   const copy = document.getElementById('rc-copy'); if(copy) copy.hidden = false;
   const where = document.getElementById('rc-where'); if(where) where.hidden = false;
-  if(CFG.reportUrl) porogFillLink(code);
+  // Условие показа одно и то же, что и у разметки блока: сам porogReportLink().
+  // По CFG.reportUrl условия разойдутся на первом же адресе, который не прошёл
+  // белый список, и на странице появится href="" — ссылка сама на себя (ADR-Х1).
+  if(porogReportLink(code)) porogFillLink(code);
 }
 /* Ссылка на страницу отчёта: код едет во фрагменте и потому не уходит на сервер
    ни в запросе, ни в Referer, ни в журнале доступа (R-01 §1.4).
    Схему проверяем до склейки: адрес задаём мы в исходнике, но опечатка или
-   `javascript:` в конфиге не должны доехать до href ссылки (аудит R-19, находка 2). */
-const RC_URL_OK = /^https:\/\/\S/;
+   `javascript:` в конфиге не должны доехать до href ссылки (аудит R-19, находка 2).
+   Разбираем адрес разборщиком браузера, а не началом строки: `HTTPS://` заглавными
+   буквами — годный адрес, а `https://a` с переводом строки посередине — опечатка,
+   и оба случая проверка по префиксу разбирала неверно (аудит R-20, находки 3 и 4). */
+/* Белый список хостов страницы отчёта (ADR-Х1). Список лежит здесь, рядом
+   с проверкой, а не в CFG: предохранитель обязан стоять не там, где опечатка.
+   Сравнение — точное равенство: endsWith('nauchilsya.ru') пропускает
+   evilnauchilsya.ru, то есть воспроизводит ту же обманку, от которой ставится.
+   IDN своей нормализации не требует: new URL() отдаёт hostname в нижнем
+   регистре и в punycode, кириллическая «н» превращается в xn--auchilsya-p2h.ru
+   и в списке не находится сама собой.
+   `nauchilsya.online` по умолчанию не входит (ADR-Х2, вопрос Алексею открыт),
+   `4ern0kniznik.github.io` не входит никогда: страницы приёма кода там нет. */
+const RC_HOSTS = Object.freeze(['nauchilsya.ru', 'www.nauchilsya.ru']);
 function porogReportLink(code){
-  const base = String(CFG.reportUrl || '').split('#')[0];
-  return RC_URL_OK.test(base) ? base + '#' + code : '';
+  const raw = String(CFG.reportUrl || '').split('#')[0];
+  // Пробел, перевод строки и обратная косая в адресе — опечатка. Косая отдельно:
+  // в `https://evil.example\@nauchilsya.ru/` хост — evil.example, а строка
+  // в переписке начинается с нашего домена (аудит R-22, находка 2).
+  if(/[\s\\\u0000-\u001f]/.test(raw)) return '';
+  let u;
+  try { u = new URL(raw); } catch(e) { return ''; }
+  /* Схема о хосте не говорит ничего: `https://nauchilsya.ru@evil.example/r` —
+     годная схема, а ведёт на evil.example (аудит R-21, находка 3). Проверка
+     логина оставлена: при белом списке она избыточна, но стоит дёшево
+     и страхует неаккуратное расширение списка. */
+  if(u.username || u.password) return '';
+  // Боевой адрес отдаётся по 443 по умолчанию: порт в конфиге — признак стенда.
+  if(u.port !== '') return '';
+  if(RC_HOSTS.indexOf(u.hostname) === -1) return '';
+  return u.protocol === 'https:' ? u.href + '#' + code : '';
 }
 /* Ссылка, «Поделиться», «Открыть страницу отчёта» и QR — только когда адрес задан.
    Все эти элементы приходят одной веткой разметки: нет rc-link — нет и остальных. */
@@ -8265,17 +8295,22 @@ function clAgg(key){
      вида `__proto__` пишет счётчики в Object.prototype (R-20). */
   const groups = Object.create(null), errors = Object.create(null), tasks = Object.create(null);
   const names = s.groupNames || {};
+  /* Число из чужого кода берём только конечное: приведение со скобкой «или ноль»
+     спасает от NaN, но пропускает Infinity — и на экран учителя выезжает
+     «Infinity%» (аудит R-20, находка 7). Строка, null, массив и бесконечность
+     одинаково дают 0. */
+  const num = x => { const v = +x; return Number.isFinite(v) ? v : 0; };
   let lo=0, hi=0, acc=0, mins=0;
   for(let pi=0; pi<rows.length; pi++){
     const r = rows[pi];
     const sc = r[1] || [];
-    lo += +sc[1]||0; hi += +sc[2]||0; acc += +sc[3]||0; mins += +r[0]||0;
+    lo += num(sc[1]); hi += num(sc[2]); acc += num(sc[3]); mins += num(r[0]);
     for(const g in (r[2]||{})){
       /* Название раздела берём только из своего справочника: неизвестный ключ
          на экран не попадает вовсе, а не печатается как есть (R-20). */
       const v = r[2][g];
       if(!Object.hasOwn(names, g) || !Array.isArray(v)) continue;
-      const ok = +v[0]||0, tot = +v[1]||0;
+      const ok = num(v[0]), tot = num(v[1]);
       groups[g] = groups[g] || {ok:0, n:0, weak:0, pupils:0};
       groups[g].ok += ok; groups[g].n += tot; groups[g].pupils++;
       if(tot && ok / tot < 0.5) groups[g].weak++;
@@ -8517,7 +8552,10 @@ const $ = s => document.querySelector(s);
 const num = s => { const t=String(s).trim().replace(/\s| /g,'').replace(',','.').replace(/−/g,'-');
   return /^-?\d*\.?\d+$/.test(t) ? parseFloat(t) : NaN; };
 const fmt = n => (''+n).replace('.',',');
-const esc = s => String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+/* Кавычки экранируем наравне с угловыми скобками: esc() стоит и внутри значения
+   атрибута (`value="${esc(A.q)}"` в поиске по атласу), где кавычка закрывает
+   атрибут и открывает свой — аудит R-20, находка 2. */
+const esc = s => String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const norm = s => String(s).toLowerCase().replace(/ё/g,'е').replace(/[\s.,;]+/g,' ').trim();
 const LET = 'АБВГДЕЖ';
 function sanitizeQ(q){
