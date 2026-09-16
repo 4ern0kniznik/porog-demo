@@ -8063,7 +8063,8 @@ async function porogFillCode(){
    регистре и в punycode, кириллическая «н» превращается в xn--auchilsya-p2h.ru
    и в списке не находится сама собой.
    `nauchilsya.online` по умолчанию не входит (ADR-Х2, вопрос Алексею открыт),
-   `4ern0kniznik.github.io` не входит никогда: страницы приёма кода там нет. */
+   старый адрес демо на чужом хостинге не входит никогда: страницы приёма
+   кода там нет, а после D46 демо и вовсе живёт на nauchilsya.ru в /d/. */
 const RC_HOSTS = Object.freeze(['nauchilsya.ru', 'www.nauchilsya.ru']);
 function porogReportLink(code){
   const raw = String(CFG.reportUrl || '').split('#')[0];
@@ -8190,10 +8191,10 @@ function porogPlural(n, one, few, many){
 
 "use strict";
 /* QR-код на страницу демо. Сгенерирован 09-ops/make-qr.py — руками не править.
-   Адрес: https://4ern0kniznik.github.io/porog-demo/
+   Адрес: https://nauchilsya.ru/d/
    При смене домена перегенерировать и пересобрать демо. */
-const QR_URL = "https://4ern0kniznik.github.io/porog-demo/";
-const QR_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 33 33\" shape-rendering=\"crispEdges\" role=\"img\" aria-label=\"QR-код на страницу диагностики\"><rect width=\"33\" height=\"33\" fill=\"#fff\"/><path d=\"M2 2h7v1h-7zM13 2h1v1h-1zM16 2h1v1h-1zM18 2h1v1h-1zM20 2h1v1h-1zM24 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h2v1h-2zM13 3h1v1h-1zM16 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM30 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h2v1h-2zM14 4h1v1h-1zM16 4h1v1h-1zM18 4h1v1h-1zM21 4h2v1h-2zM24 4h1v1h-1zM26 4h3v1h-3zM30 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM10 5h2v1h-2zM15 5h1v1h-1zM18 5h2v1h-2zM22 5h1v1h-1zM24 5h1v1h-1zM26 5h3v1h-3zM30 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM12 6h2v1h-2zM18 6h1v1h-1zM21 6h2v1h-2zM24 6h1v1h-1zM26 6h3v1h-3zM30 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM13 7h2v1h-2zM16 7h1v1h-1zM18 7h1v1h-1zM24 7h1v1h-1zM30 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM22 8h1v1h-1zM24 8h7v1h-7zM10 9h1v1h-1zM12 9h1v1h-1zM14 9h1v1h-1zM17 9h2v1h-2zM20 9h3v1h-3zM2 10h1v1h-1zM8 10h1v1h-1zM10 10h1v1h-1zM12 10h1v1h-1zM14 10h3v1h-3zM19 10h1v1h-1zM21 10h1v1h-1zM23 10h2v1h-2zM27 10h3v1h-3zM2 11h6v1h-6zM9 11h1v1h-1zM13 11h2v1h-2zM16 11h2v1h-2zM19 11h5v1h-5zM26 11h1v1h-1zM28 11h2v1h-2zM2 12h1v1h-1zM4 12h1v1h-1zM6 12h4v1h-4zM14 12h1v1h-1zM16 12h2v1h-2zM20 12h1v1h-1zM22 12h2v1h-2zM2 13h1v1h-1zM4 13h3v1h-3zM10 13h3v1h-3zM14 13h1v1h-1zM16 13h2v1h-2zM20 13h2v1h-2zM25 13h1v1h-1zM27 13h1v1h-1zM2 14h1v1h-1zM4 14h1v1h-1zM8 14h2v1h-2zM17 14h1v1h-1zM22 14h1v1h-1zM24 14h2v1h-2zM30 14h1v1h-1zM2 15h2v1h-2zM6 15h1v1h-1zM9 15h2v1h-2zM12 15h1v1h-1zM15 15h1v1h-1zM17 15h2v1h-2zM21 15h2v1h-2zM24 15h3v1h-3zM29 15h2v1h-2zM4 16h1v1h-1zM6 16h1v1h-1zM8 16h2v1h-2zM11 16h1v1h-1zM16 16h3v1h-3zM22 16h3v1h-3zM27 16h2v1h-2zM4 17h2v1h-2zM9 17h2v1h-2zM13 17h2v1h-2zM17 17h1v1h-1zM22 17h2v1h-2zM26 17h1v1h-1zM28 17h1v1h-1zM30 17h1v1h-1zM2 18h2v1h-2zM6 18h4v1h-4zM11 18h1v1h-1zM13 18h4v1h-4zM19 18h1v1h-1zM21 18h1v1h-1zM25 18h1v1h-1zM27 18h2v1h-2zM2 19h3v1h-3zM12 19h1v1h-1zM14 19h2v1h-2zM17 19h2v1h-2zM20 19h3v1h-3zM24 19h3v1h-3zM28 19h3v1h-3zM2 20h3v1h-3zM8 20h3v1h-3zM13 20h2v1h-2zM17 20h2v1h-2zM20 20h3v1h-3zM26 20h2v1h-2zM30 20h1v1h-1zM2 21h1v1h-1zM4 21h2v1h-2zM7 21h1v1h-1zM13 21h2v1h-2zM16 21h1v1h-1zM20 21h3v1h-3zM24 21h3v1h-3zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h1v1h-1zM12 22h1v1h-1zM14 22h2v1h-2zM17 22h10v1h-10zM28 22h3v1h-3zM10 23h1v1h-1zM13 23h1v1h-1zM15 23h3v1h-3zM19 23h2v1h-2zM22 23h1v1h-1zM26 23h2v1h-2zM2 24h7v1h-7zM12 24h8v1h-8zM21 24h2v1h-2zM24 24h1v1h-1zM26 24h3v1h-3zM2 25h1v1h-1zM8 25h1v1h-1zM11 25h1v1h-1zM13 25h1v1h-1zM16 25h3v1h-3zM20 25h3v1h-3zM26 25h1v1h-1zM30 25h1v1h-1zM2 26h1v1h-1zM4 26h3v1h-3zM8 26h1v1h-1zM11 26h1v1h-1zM15 26h2v1h-2zM18 26h1v1h-1zM21 26h7v1h-7zM29 26h1v1h-1zM2 27h1v1h-1zM4 27h3v1h-3zM8 27h1v1h-1zM11 27h3v1h-3zM17 27h1v1h-1zM19 27h2v1h-2zM22 27h2v1h-2zM27 27h2v1h-2zM30 27h1v1h-1zM2 28h1v1h-1zM4 28h3v1h-3zM8 28h1v1h-1zM17 28h2v1h-2zM20 28h1v1h-1zM22 28h8v1h-8zM2 29h1v1h-1zM8 29h1v1h-1zM17 29h1v1h-1zM21 29h1v1h-1zM26 29h1v1h-1zM28 29h1v1h-1zM30 29h1v1h-1zM2 30h7v1h-7zM10 30h4v1h-4zM15 30h1v1h-1zM19 30h1v1h-1zM21 30h1v1h-1zM25 30h4v1h-4z\" fill=\"#14201C\"/></svg>";
+const QR_URL = "https://nauchilsya.ru/d/";
+const QR_SVG = "<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 29 29\" shape-rendering=\"crispEdges\" role=\"img\" aria-label=\"QR-код на страницу диагностики\"><rect width=\"29\" height=\"29\" fill=\"#fff\"/><path d=\"M2 2h7v1h-7zM10 2h3v1h-3zM14 2h3v1h-3zM20 2h7v1h-7zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h2v1h-2zM14 3h3v1h-3zM18 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h3v1h-3zM8 4h1v1h-1zM10 4h1v1h-1zM12 4h1v1h-1zM14 4h5v1h-5zM20 4h1v1h-1zM22 4h3v1h-3zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h3v1h-3zM8 5h1v1h-1zM11 5h1v1h-1zM13 5h5v1h-5zM20 5h1v1h-1zM22 5h3v1h-3zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h3v1h-3zM8 6h1v1h-1zM10 6h2v1h-2zM13 6h4v1h-4zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h3v1h-3zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM14 7h3v1h-3zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h7v1h-7zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h7v1h-7zM14 9h4v1h-4zM2 10h1v1h-1zM5 10h7v1h-7zM13 10h1v1h-1zM16 10h2v1h-2zM19 10h1v1h-1zM22 10h1v1h-1zM24 10h3v1h-3zM3 11h3v1h-3zM10 11h5v1h-5zM17 11h1v1h-1zM21 11h5v1h-5zM2 12h1v1h-1zM5 12h1v1h-1zM7 12h2v1h-2zM11 12h1v1h-1zM13 12h1v1h-1zM15 12h3v1h-3zM19 12h2v1h-2zM23 12h1v1h-1zM26 12h1v1h-1zM2 13h2v1h-2zM6 13h2v1h-2zM9 13h2v1h-2zM20 13h7v1h-7zM4 14h2v1h-2zM8 14h3v1h-3zM18 14h1v1h-1zM20 14h2v1h-2zM26 14h1v1h-1zM2 15h3v1h-3zM6 15h2v1h-2zM10 15h2v1h-2zM14 15h2v1h-2zM17 15h3v1h-3zM22 15h1v1h-1zM25 15h1v1h-1zM2 16h2v1h-2zM6 16h1v1h-1zM8 16h3v1h-3zM15 16h3v1h-3zM19 16h2v1h-2zM22 16h5v1h-5zM2 17h1v1h-1zM4 17h4v1h-4zM9 17h4v1h-4zM14 17h1v1h-1zM18 17h4v1h-4zM23 17h2v1h-2zM26 17h1v1h-1zM2 18h1v1h-1zM4 18h1v1h-1zM8 18h1v1h-1zM10 18h1v1h-1zM12 18h5v1h-5zM18 18h5v1h-5zM24 18h2v1h-2zM10 19h4v1h-4zM15 19h1v1h-1zM18 19h1v1h-1zM22 19h1v1h-1zM24 19h2v1h-2zM2 20h7v1h-7zM10 20h1v1h-1zM12 20h1v1h-1zM14 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM26 20h1v1h-1zM2 21h1v1h-1zM8 21h1v1h-1zM10 21h4v1h-4zM15 21h1v1h-1zM17 21h2v1h-2zM22 21h1v1h-1zM26 21h1v1h-1zM2 22h1v1h-1zM4 22h3v1h-3zM8 22h1v1h-1zM10 22h1v1h-1zM13 22h2v1h-2zM16 22h7v1h-7zM2 23h1v1h-1zM4 23h3v1h-3zM8 23h1v1h-1zM10 23h3v1h-3zM14 23h1v1h-1zM16 23h1v1h-1zM18 23h3v1h-3zM25 23h2v1h-2zM2 24h1v1h-1zM4 24h3v1h-3zM8 24h1v1h-1zM12 24h2v1h-2zM17 24h3v1h-3zM22 24h5v1h-5zM2 25h1v1h-1zM8 25h1v1h-1zM12 25h1v1h-1zM19 25h4v1h-4zM24 25h3v1h-3zM2 26h7v1h-7zM10 26h1v1h-1zM12 26h1v1h-1zM14 26h1v1h-1zM16 26h1v1h-1zM18 26h1v1h-1zM23 26h1v1h-1zM26 26h1v1h-1z\" fill=\"#14201C\"/></svg>";
 
 "use strict";
 /* ═══ СВОДКА ПО КЛАССУ ═══
@@ -8342,7 +8343,11 @@ function clAgg(key){
   };
 }
 
-/* ── QR во весь экран: учителю удобно вывести его на доску ────────────── */
+/* ── QR во весь экран: учителю удобно вывести его на доску ──────────────
+   QR_URL проходит через esc() наравне с тем, что вставил учитель: кавычка
+   в адресе вырывалась из href и дописывала тегу обработчик (аудит R-26,
+   находка 2). От чужого хоста и «javascript:» esc() не спасает — их не пускает
+   сторож сборки demo/qr_guard.py, это разные двери. */
 function clQR(on){
   let el = document.getElementById('qr-full');
   if(on){
@@ -8351,7 +8356,7 @@ function clQR(on){
       el.id = 'qr-full';
       el.onclick = () => clQR(false);
       el.innerHTML = `<div class="qr-box">${typeof QR_SVG!=='undefined'?QR_SVG:''}
-        <p>${typeof QR_URL!=='undefined'?QR_URL.replace(/^https?:\/\//,''):''}</p>
+        <p>${typeof QR_URL!=='undefined'?esc(QR_URL.replace(/^https?:\/\//,'')):''}</p>
         <span>нажмите, чтобы закрыть</span></div>`;
       document.body.appendChild(el);
     }
@@ -8389,7 +8394,7 @@ function viewClass(){
         </ol>
         <div class="cl-qr">
           <button class="qr-thumb" onclick="clQR(true)" title="Показать во весь экран">${typeof QR_SVG!=='undefined'?QR_SVG:''}</button>
-          <a class="cl-url" href="${typeof QR_URL!=='undefined'?QR_URL:'#'}">${typeof QR_URL!=='undefined'?QR_URL.replace(/^https?:\/\//,''):''}</a>
+          <a class="cl-url" href="${typeof QR_URL!=='undefined'?esc(QR_URL):'#'}">${typeof QR_URL!=='undefined'?esc(QR_URL.replace(/^https?:\/\//,'')):''}</a>
           <button class="ghost small" onclick="clQR(true)">Показать во весь экран</button>
         </div>
       </div>
